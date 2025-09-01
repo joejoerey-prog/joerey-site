@@ -22,12 +22,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-/* -----------------------------
-   Helpers (fallback image)
------------------------------- */
+/* ---------- helpers ---------- */
 const FALLBACK_IMG =
   "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-
 function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
   const img = e.currentTarget;
   if (img.src !== FALLBACK_IMG) {
@@ -37,9 +34,7 @@ function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
   }
 }
 
-/* -----------------------------
-   Site data
------------------------------- */
+/* ---------- site data ---------- */
 const site = {
   name: "Joe Rey Photography",
   location: "Cambridgeshire, UK",
@@ -49,7 +44,7 @@ const site = {
     clickasnap: "https://www.clickasnap.com/profile/joereyphotos",
   },
   hero: {
-    image: "/photos/Gap.jpg", // public/photos/Gap.jpg
+    image: "/photos/Gap.jpg",
     headline: "Story-driven images that actually feel like the moment",
     sub: "A tight selection from my Clickasnap uploads — refreshed as I add more.",
     ctaPrimary: { label: "View portfolio", href: "#portfolio" },
@@ -57,9 +52,6 @@ const site = {
   },
 };
 
-/* -----------------------------
-   Portfolio data
------------------------------- */
 type GalleryImage = { src: string; page: string; alt: string };
 
 const gallery: GalleryImage[] = [
@@ -78,7 +70,6 @@ const gallery: GalleryImage[] = [
     page: "https://www.clickasnap.com/image/51671",
     alt: "Sycamore Gap — Hadrian’s Wall",
   },
-  // a couple of safe externals to pad out the grid
   {
     src: "https://images.unsplash.com/photo-1516569422685-5c1a181e1115?q=80&w=1400&auto=format&fit=crop",
     page: site.social.clickasnap,
@@ -91,11 +82,8 @@ const gallery: GalleryImage[] = [
   },
 ];
 
-/* -----------------------------
-   Page
------------------------------- */
+/* ---------- page ---------- */
 export default function Page() {
-  // Lightbox
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -112,15 +100,14 @@ export default function Page() {
 
   return (
     <main className="bg-neutral-950 text-neutral-100 min-h-dvh">
-      {/* Header with nav (Portfolio / About / Contact / Shop) */}
       <Header />
 
-      {/* Hero */}
+      {/* ---------- HERO ---------- */}
       <section
         id="hero"
         className="relative w-full h-screen flex flex-col items-center justify-center text-center"
       >
-        {/* Background image */}
+        {/* background */}
         <img
           src={site.hero.image}
           alt="Hero background"
@@ -130,21 +117,19 @@ export default function Page() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
 
-        {/* Floating logo over hero (centered, visible) */}
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
+        {/* FLOATING LOGO — bigger and left-side */}
+        <div className="absolute z-20 top-16 left-6 md:top-20 md:left-16 xl:left-28">
           <img
             src="/photos/logo.png"
             alt="Joe Rey Photography logo"
-            className="h-28 w-auto drop-shadow-lg"
+            className="h-44 md:h-52 w-auto drop-shadow-2xl"
             referrerPolicy="no-referrer"
           />
         </div>
 
-        {/* Hero copy */}
+        {/* hero copy */}
         <div className="relative z-10 max-w-3xl px-4">
-          <h1 className="text-4xl sm:text-6xl font-bold text-white">
-            {site.hero.headline}
-          </h1>
+          <h1 className="text-4xl sm:text-6xl font-bold text-white">{site.hero.headline}</h1>
           <p className="mt-4 text-lg text-neutral-200">{site.hero.sub}</p>
           <div className="mt-6 flex justify-center gap-4">
             <a
@@ -163,11 +148,8 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Portfolio */}
-      <section
-        id="portfolio"
-        className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
-      >
+      {/* ---------- PORTFOLIO ---------- */}
+      <section id="portfolio" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
         <p className="text-neutral-400 mt-2">
           A small selection. Each image opens a larger preview; click through to Clickasnap.
@@ -182,7 +164,7 @@ export default function Page() {
               rel="noreferrer"
               className="group block overflow-hidden rounded-xl ring-1 ring-neutral-800 hover:ring-neutral-600"
               onClick={(e) => {
-                e.preventDefault(); // open lightbox first
+                e.preventDefault();
                 setIndex(i);
                 setOpen(true);
               }}
@@ -214,33 +196,30 @@ export default function Page() {
         </div>
       </section>
 
-      {/* About */}
-      <section
-        id="about"
-        className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
-      >
+      {/* ---------- ABOUT ---------- */}
+      <section id="about" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div>
             <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
             <div className="text-neutral-300 mt-4 space-y-4 leading-relaxed">
               <p>
-                Picked up a camera in 2015, got serious in 2016 with a photography
-                diploma. What started as a hobby turned into a full-blown obsession.
+                Picked up a camera in 2015, got serious in 2016 with a photography diploma. What
+                started as a hobby turned into a full-blown obsession.
               </p>
               <p>
-                I chase light, landscapes, macro worlds, and the occasional dog portrait.
-                No single genre holds me down — nature, architecture, wildlife, macro —
-                if it looks good, it’s fair game.
+                I chase light, landscapes, macro worlds, and the occasional dog portrait. No single
+                genre holds me down — nature, architecture, wildlife, macro — if it looks good,
+                it’s fair game.
               </p>
               <p>
-                My aim? To pause time. A dew-covered petal, mist rolling over Cambridge,
-                a split-second you’d otherwise miss. Tiny worlds, big feelings, and
-                sometimes just a good excuse to step away from a screen.
+                My aim? To pause time. A dew-covered petal, mist rolling over Cambridge, a
+                split-second you’d otherwise miss. Tiny worlds, big feelings, and sometimes just a
+                good excuse to step away from a screen.
               </p>
               <p>
-                Prints, canvases, and downloads are ready. Browse the feed, pick a
-                favourite, or surprise yourself. Dreaming of a gallery show someday —
-                and stubborn enough to make it happen.
+                Prints, canvases, and downloads are ready. Browse the feed, pick a favourite, or
+                surprise yourself. Dreaming of a gallery show someday — and stubborn enough to make
+                it happen.
               </p>
             </div>
 
@@ -259,12 +238,7 @@ export default function Page() {
               </Card>
             </div>
 
-            <a
-              href={site.social.clickasnap}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block mt-6"
-            >
+            <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="inline-block mt-6">
               <Button variant="secondary" className="gap-2">
                 View full Clickasnap <ExternalLink className="h-4 w-4" />
               </Button>
@@ -285,40 +259,25 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Contact */}
-      <section
-        id="contact"
-        className="scroll-mt-24 bg-neutral-900/40 border-t border-neutral-800"
-      >
+      {/* ---------- CONTACT ---------- */}
+      <section id="contact" className="scroll-mt-24 bg-neutral-900/40 border-t border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2">
-              <h2 className="text-2xl sm:text-3xl font-semibold">
-                Let’s make something good
-              </h2>
+              <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
               <p className="text-neutral-400 mt-2 max-w-2xl">
                 Drop your idea, dates, and any reference images. I’ll reply within 24 hours.
               </p>
 
-              <form
-                className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4"
-                onSubmit={(e) => e.preventDefault()}
-              >
+              <form className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4" onSubmit={(e) => e.preventDefault()}>
                 <Input placeholder="Your name" required />
                 <Input type="email" placeholder="Email address" required />
                 <Input className="sm:col-span-2" placeholder="Subject" />
-                <Textarea
-                  className="sm:col-span-2"
-                  rows={5}
-                  placeholder="Tell me about the shoot…"
-                />
+                <Textarea className="sm:col-span-2" rows={5} placeholder="Tell me about the shoot…" />
                 <div className="sm:col-span-2 flex items-center gap-4">
                   <Button type="submit">Send inquiry</Button>
                   <p className="text-neutral-400 text-sm">
-                    or email{" "}
-                    <a className="underline" href={`mailto:${site.email}`}>
-                      {site.email}
-                    </a>
+                    or email <a className="underline" href={`mailto:${site.email}`}>{site.email}</a>
                   </p>
                 </div>
               </form>
@@ -327,9 +286,7 @@ export default function Page() {
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-neutral-300">
                 <Mail className="h-4 w-4" />
-                <a className="underline" href={`mailto:${site.email}`}>
-                  {site.email}
-                </a>
+                <a className="underline" href={`mailto:${site.email}`}>{site.email}</a>
               </div>
               <div className="flex items-center gap-2 text-neutral-300">
                 <MapPin className="h-4 w-4" />
@@ -337,23 +294,13 @@ export default function Page() {
               </div>
               <div className="flex items-center gap-2 text-neutral-300">
                 <ExternalLink className="h-4 w-4" />
-                <a
-                  className="underline"
-                  href={site.social.clickasnap}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a className="underline" href={site.social.clickasnap} target="_blank" rel="noreferrer">
                   Clickasnap
                 </a>
               </div>
               <div className="flex items-center gap-2 text-neutral-300">
                 <ExternalLink className="h-4 w-4" />
-                <a
-                  className="underline"
-                  href={site.social.instagram}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a className="underline" href={site.social.instagram} target="_blank" rel="noreferrer">
                   Instagram
                 </a>
               </div>
@@ -362,13 +309,11 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* ---------- LIGHTBOX ---------- */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-base">
-              {gallery[index]?.alt}
-            </DialogTitle>
+            <DialogTitle className="text-base">{gallery[index]?.alt}</DialogTitle>
           </DialogHeader>
 
           <div className="relative">
@@ -384,9 +329,7 @@ export default function Page() {
               <Button
                 variant="secondary"
                 size="icon"
-                onClick={() =>
-                  setIndex((i) => (i - 1 + gallery.length) % gallery.length)
-                }
+                onClick={() => setIndex((i) => (i - 1 + gallery.length) % gallery.length)}
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
