@@ -120,4 +120,23 @@
     @apply bg-background text-foreground;
   }
 }
+html { scroll-behavior: smooth; }/* --- Image sanity + portrait helper --- */
+@layer base {
+  /* Keep images from picking up weird inherited styles */
+  img {
+    border: 0;
+    height: auto;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+@layer components {
+  /* Reusable circular headshot */
+  .portrait {
+    @apply w-48 h-48 rounded-full object-cover ring-2 ring-neutral-700 shadow-lg;
+  }
+}
+
+/* Already added earlier — leave it in place */
 html { scroll-behavior: smooth; }
