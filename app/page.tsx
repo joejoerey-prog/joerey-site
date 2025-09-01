@@ -1,126 +1,101 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import Header from "@/components/Header";
+import React, { useEffect, useState } from 'react';
+import Header from '@/components/Header';
+import { ExternalLink } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import {
-  ExternalLink,
-  Mail,
-  MapPin,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-function useRemoteGallery(url: string) {
-  const [data, setData] = React.useState<any[]>([]);
+/* ---------- types ---------- */
+type GalleryImage = { src: string; page: string; alt: string };
 
-  React.useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((json) => setData(json))
-      .catch(() => setData([]));
-  }, [url]);
-
-  return data;
-}
 /* ---------- helpers ---------- */
 const FALLBACK_IMG =
-  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+
 function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
   const img = e.currentTarget;
   if (img.src !== FALLBACK_IMG) {
     img.src = FALLBACK_IMG;
-    img.style.background = "linear-gradient(135deg,#222 0%, #333 100%)";
-    img.style.objectFit = "cover";
+    img.style.background = 'linear-gradient(135deg,#222,#333)';
+    img.style.objectFit = 'cover';
   }
 }
 
-/* ---------- site data ---------- */
-const site = {
-  name: "Joe Rey Photography",
-  location: "Cambridgeshire, UK",
-  email: "joereyphotography@hotmail.com",
-  social: {
-    instagram: "https://instagram.com/joe.rey.photos",
-    clickasnap: "https://www.clickasnap.com/profile/joereyphotos",
-  },
-  hero: {
-    image: "/photos/Gap.jpg",
-    headline: "Story-driven images that actually feel like the moment",
-    sub: "A tight selection from my Clickasnap uploads — refreshed as I add more.",
-    ctaPrimary: { label: "View portfolio", href: "#portfolio" },
-    ctaSecondary: { label: "Book a shoot", href: "#contact" },
-  },
-};
-
-/* ---------- gallery via /gallery.json ---------- */
-type GalleryImage = { src: string; page: string; alt: string };
-
-// Tiny fallback so the page never looks broken if JSON fails to load
-
+/** Fetch gallery.json (client-side). If anything fails, return a tiny fallback. */
 function useRemoteGallery(url: string) {
-  const [items, setItems] = React.useState<GalleryImage[]>(fallbackGallery);
-  React.useEffect(() => {
+  const [items, setItems] = useState<GalleryImage[]>([]);
+
+  useEffect(() => {
     let alive = true;
-    fetch(url, { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
+    fetch(url, { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
       .then((arr: GalleryImage[]) => {
         if (alive && Array.isArray(arr)) setItems(arr);
       })
-      .catch(() => {});
+      .catch(() => {
+        // single safe fallback item so the grid never renders empty
+        setItems([
+          {
+            src: '/photos/leaf-macro.jpg',
+            page: 'https://www.clickasnap.com/image/11925045',
+            alt: 'Leaf in detail — macro venation',
+          },
+        ]);
+      });
     return () => {
       alive = false;
     };
   }, [url]);
+
   return items;
 }
 
-/* ---------- page ---------- */
-export default function Page() {
-  const gallery = useRemoteGallery("/gallery.json");
+/* ---------- site data ---------- */
+const site = {
+  name: 'Joe Rey Photography',
+  location: 'Cambridgeshire, UK',
+  email: 'joereyphotography@hotmail.com',
+  social: {
+    instagram: 'https://instagram.com/joe.rey.photography',
+    clickasnap: 'https://www.clickasnap.com/profile/joereyphotos',
+  },
+  hero: {
+    image: '/photos/Gap.jpg', // make sure this file exists
+    headline: 'Story-driven images that actually feel like the moment',
+    sub: 'A tight selection from my Clickasnap uploads — refreshed as I add more.',
+    ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
+    ctaSecondary: { label: 'Book a shoot', href: '#contact' },
+  },
+};
 
+export default function Page() {
+  const gallery = useRemoteGallery('/gallery.json');
+
+  // lightbox state
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
-// DEBUG: prove what we loaded
-useEffect(() => {
-  console.log(
-    'Gallery items:',
-    Array.isArray(gallery) ? gallery.length : 'not an array',
-    gallery
-  );
-}, [gallery]);
+
+  // keyboard close / next / prev when lightbox is open
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!open) return;
-      if (e.key === "ArrowRight") setIndex((i) => (i + 1) % gallery.length);
-      if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + gallery.length) % gallery.length);
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === 'ArrowRight')
+        setIndex((i) => (i + 1) % gallery.length);
+      if (e.key === 'ArrowLeft')
+        setIndex((i) => (i - 1 + gallery.length) % gallery.length);
+      if (e.key === 'Escape') setOpen(false);
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [open, gallery.length]);
 
   return (
-    <main className="bg-neutral-950 text-neutral-100 min-h-dvh">
-      {/* Header with nav (Portfolio / About / Contact / Shop) */}
+    <main className="min-h-dvh bg-neutral-950 text-neutral-100">
+      {/* Fixed header (nav) */}
       <Header />
 
-      {/* ---------- HERO ---------- */}
-      <section
-        id="hero"
-        className="relative w-full h-screen flex flex-col items-center justify-center text-center"
-      >
-        {/* background */}
+      {/* Hero */}
+      <section id="hero" className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex items-center justify-center">
+        {/* hero image */}
         <img
           src={site.hero.image}
           alt="Hero background"
@@ -128,32 +103,35 @@ useEffect(() => {
           referrerPolicy="no-referrer"
           onError={onImgError}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
+        {/* dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
 
-        {/* floating logo — bigger and left-side */}
-        <div className="absolute z-20 top-16 left-6 md:top-20 md:left-16 xl:left-28">
-          <img
-            src="/photos/logo.png"
-            alt="Joe Rey Photography logo"
-            className="h-44 md:h-52 w-auto drop-shadow-2xl"
-            referrerPolicy="no-referrer"
-          />
-        </div>
+        {/* BIG logo on the photo (top-left on the image area) */}
+        <img
+          src="/photos/logo.png"            // <- put your PNG at public/photos/logo.png
+          alt="Joe Rey Photography logo"
+          className="absolute top-16 left-6 sm:left-10 w-[180px] sm:w-[220px] md:w-[260px] drop-shadow-lg"
+          referrerPolicy="no-referrer"
+          onError={onImgError}
+        />
 
-        {/* hero copy */}
-        <div className="relative z-10 max-w-3xl px-4">
-          <h1 className="text-4xl sm:text-6xl font-bold text-white">{site.hero.headline}</h1>
-          <p className="mt-4 text-lg text-neutral-200">{site.hero.sub}</p>
-          <div className="mt-6 flex justify-center gap-4">
+        {/* hero text + buttons */}
+        <div className="relative z-10 max-w-3xl px-4 text-center">
+          <h1 className="text-3xl sm:text-5xl font-bold text-white">
+            {site.hero.headline}
+          </h1>
+          <p className="mt-3 text-neutral-300">{site.hero.sub}</p>
+
+          <div className="mt-6 flex justify-center gap-3">
             <a
               href={site.hero.ctaPrimary.href}
-              className="px-6 py-3 bg-white text-black font-semibold rounded-lg shadow hover:bg-neutral-200"
+              className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200"
             >
               {site.hero.ctaPrimary.label}
             </a>
             <a
               href={site.hero.ctaSecondary.href}
-              className="px-6 py-3 bg-neutral-800 text-white font-semibold rounded-lg shadow hover:bg-neutral-700"
+              className="px-6 py-3 rounded-lg bg-neutral-900/80 ring-1 ring-white/20 hover:bg-neutral-800"
             >
               {site.hero.ctaSecondary.label}
             </a>
@@ -161,224 +139,231 @@ useEffect(() => {
         </div>
       </section>
 
-    <section
-  id="portfolio"
-  className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
->
-  <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-  <p className="text-neutral-400 mt-2">
-    A small selection. Each image opens a larger preview; click through to
-    Clickasnap for the full page.
-  </p>
+      {/* ---- PORTFOLIO ---- */}
+      <section
+        id="portfolio"
+        className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+      >
+        <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
+        <p className="text-neutral-400 mt-2">
+          A small selection. Each image opens a larger preview; click through to
+          Clickasnap for the full post.
+        </p>
 
-  {/*
-    If you ever need to debug, uncomment this:
-    <p className="text-xs text-red-400 mt-2">
-      DEBUG: {Array.isArray(gallery) ? gallery.length : 0} items
-    </p>
-  */}
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.isArray(gallery) &&
+            gallery.map((img, i) => (
+              <a
+                key={i}
+                href={img.page}
+                target="_blank"
+                rel="noreferrer"
+                className="group block overflow-hidden rounded-xl ring-1 ring-neutral-800"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIndex(i);
+                  setOpen(true);
+                }}
+                title="Open larger preview (then view on Clickasnap)"
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  referrerPolicy="no-referrer"
+                  onError={onImgError}
+                  loading="lazy"
+                />
+                <div className="px-3 py-2 text-sm text-neutral-300">
+                  {img.alt}
+                </div>
+              </a>
+            ))}
+        </div>
 
-  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {Array.isArray(gallery) && gallery.length > 0 ? (
-      gallery.map((img, i) => (
-        <a
-          key={i}
-          href={img.page}
-          target="_blank"
-          rel="noreferrer"
-          className="group block overflow-hidden rounded-xl ring-1 ring-neutral-800 bg-neutral-900/40"
-          title="Open on Clickasnap"
-          onClick={(e) => {
-            // If you also use a lightbox elsewhere, keep these 2 lines.
-            // If not, they do no harm.
-            e.preventDefault();
-            setIndex?.(i);
-            setOpen?.(true);
-          }}
-        >
-          <img
-            src={img.src}
-            alt={img.alt}
-            className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-            referrerPolicy="no-referrer"
-            onError={onImgError}
-          />
-          <div className="px-3 py-2 text-sm text-neutral-300">{img.alt}</div>
-        </a>
-      ))
-    ) : (
-      <div className="col-span-full text-neutral-400">
-        No images yet. Add files to <code>public/photos</code> and list them in{" "}
-        <code>/gallery.json</code>.
-      </div>
-    )}
-  </div>
-</section>
+        {/* View full profile button */}
+        <div className="mt-8">
+          <a
+            href={site.social.clickasnap}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white"
+          >
+            View full Clickasnap profile
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        </div>
+      </section>
 
-      {/* ---------- ABOUT ---------- */}
-      <section id="about" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
-            <div className="text-neutral-300 mt-4 space-y-4 leading-relaxed">
-              <p>
-                Picked up a camera in 2015, got serious in 2016 with a photography diploma. What
-                started as a hobby turned into a full-blown obsession.
-              </p>
-              <p>
-                I chase light, landscapes, macro worlds, and the occasional dog portrait. No single
-                genre holds me down — nature, architecture, wildlife, macro — if it looks good,
-                it’s fair game.
-              </p>
-              <p>
-                My aim? To pause time. A dew-covered petal, mist rolling over Cambridge, a
-                split-second you’d otherwise miss. Tiny worlds, big feelings, and sometimes just a
-                good excuse to step away from a screen.
-              </p>
-              <p>
-                Prints, canvases, and downloads are ready. Browse the feed, pick a favourite, or
-                surprise yourself. Dreaming of a gallery show someday — and stubborn enough to make
-                it happen.
-              </p>
+      {/* ---- ABOUT ---- */}
+      <section
+        id="about"
+        className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+      >
+        <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <div className="md:col-span-2 space-y-4 text-neutral-300">
+            <p>
+              Picked up a camera in 2015, got serious in 2016 with a photography
+              diploma. What started as a hobby turned into a full-blown
+              obsession.
+            </p>
+            <p>
+              I chase light, landscapes, macro worlds, and the occasional dog
+              portrait. No single genre holds me down—nature, architecture,
+              wildlife, macro—if it looks good, it’s fair game.
+            </p>
+            <p>
+              My aim? To pause time. A dew-covered petal, mist rolling over
+              Cambridge, a split-second that vanishes before you even notice it.
+              Tiny worlds, big feelings, and sometimes just a good excuse to
+              step away from the screen.
+            </p>
+            <p>
+              Want something on your walls or screens? Prints, canvases, and
+              downloads are ready. Browse the feed, pick a favourite, or surprise
+              yourself. Dreaming of a gallery show someday—and stubborn enough to
+              make it happen.
+            </p>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+                <p className="text-sm text-neutral-400">Based in</p>
+                <p className="text-lg">{site.location}</p>
+              </div>
+              <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+                <p className="text-sm text-neutral-400">Turnaround</p>
+                <p className="text-lg">3–7 days</p>
+              </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <Card className="rounded-2xl">
-                <CardContent className="p-4">
-                  <p className="text-sm text-neutral-400">Based in</p>
-                  <p className="text-lg">{site.location}</p>
-                </CardContent>
-              </Card>
-              <Card className="rounded-2xl">
-                <CardContent className="p-4">
-                  <p className="text-sm text-neutral-400">Turnaround</p>
-                  <p className="text-lg">3–7 days</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="inline-block mt-6">
-              <Button variant="secondary" className="gap-2">
-                View full Clickasnap <ExternalLink className="h-4 w-4" />
-              </Button>
+            <a
+              href={site.social.clickasnap}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white"
+            >
+              View full Clickasnap profile
+              <ExternalLink className="h-4 w-4" />
             </a>
           </div>
 
-          <div className="flex md:justify-end justify-center">
-            <div className="flex flex-col items-center gap-3">
-              <img
-                src="/photos/me.jpg"
-                alt="Portrait of Joe Rey"
-                className="w-40 h-40 object-cover rounded-full ring-2 ring-neutral-700"
-                referrerPolicy="no-referrer"
-                onError={onImgError}
-              />
-            </div>
+          {/* Portrait / BTS */}
+          <div className="relative">
+            <img
+              src="/photos/me.jpg" // put a portrait at public/photos/me.jpg
+              alt="Portrait of Joe Rey"
+              className="w-full h-96 object-cover rounded-2xl ring-1 ring-neutral-800"
+              referrerPolicy="no-referrer"
+              onError={onImgError}
+              loading="lazy"
+            />
           </div>
         </div>
       </section>
 
-      {/* ---------- CONTACT ---------- */}
-      <section id="contact" className="scroll-mt-24 bg-neutral-900/40 border-t border-neutral-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div className="lg:col-span-2">
-              <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
-              <p className="text-neutral-400 mt-2 max-w-2xl">
-                Drop your idea, dates, and any reference images. I’ll reply within 24 hours.
-              </p>
+      {/* ---- CONTACT ---- */}
+      <section
+        id="contact"
+        className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-neutral-800"
+      >
+        <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
-              <form className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4" onSubmit={(e) => e.preventDefault()}>
-                <Input placeholder="Your name" required />
-                <Input type="email" placeholder="Email address" required />
-                <Input className="sm:col-span-2" placeholder="Subject" />
-                <Textarea className="sm:col-span-2" rows={5} placeholder="Tell me about the shoot…" />
-                <div className="sm:col-span-2 flex items-center gap-4">
-                  <Button type="submit">Send inquiry</Button>
-                  <p className="text-neutral-400 text-sm">
-                    or email <a className="underline" href={`mailto:${site.email}`}>{site.email}</a>
-                  </p>
-                </div>
-              </form>
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* simple “send inquiry” form (no backend; it’s just UI) */}
+          <form
+            className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.currentTarget as HTMLFormElement;
+              const name = (form.elements.namedItem('name') as HTMLInputElement)?.value || '';
+              const email = (form.elements.namedItem('email') as HTMLInputElement)?.value || '';
+              const subject = (form.elements.namedItem('subject') as HTMLInputElement)?.value || '';
+              const msg = (form.elements.namedItem('message') as HTMLTextAreaElement)?.value || '';
+              const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
+              const subjectEnc = encodeURIComponent(subject || 'Enquiry from joerey-site');
+              window.location.href = `mailto:${site.email}?subject=${subjectEnc}&body=${body}`;
+            }}
+          >
+            <input
+              name="name"
+              placeholder="Your name"
+              required
+              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email address"
+              required
+              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
+            <input
+              name="subject"
+              placeholder="Subject"
+              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
+            <textarea
+              name="message"
+              rows={5}
+              placeholder="Tell me about the shoot…"
+              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
+            <div className="sm:col-span-2">
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200"
+              >
+                Send inquiry
+              </button>
             </div>
+          </form>
 
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 text-neutral-300">
-                <Mail className="h-4 w-4" />
-                <a className="underline" href={`mailto:${site.email}`}>{site.email}</a>
-              </div>
-              <div className="flex items-center gap-2 text-neutral-300">
-                <MapPin className="h-4 w-4" />
-                <span>{site.location}</span>
-              </div>
-              <div className="flex items-center gap-2 text-neutral-300">
-                <ExternalLink className="h-4 w-4" />
-                <a className="underline" href={site.social.clickasnap} target="_blank" rel="noreferrer">
+          {/* quick contact cards */}
+          <div className="space-y-3">
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+              <p className="text-sm text-neutral-400">Email</p>
+              <a
+                href={`mailto:${site.email}`}
+                className="underline"
+              >
+                {site.email}
+              </a>
+            </div>
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+              <p className="text-sm text-neutral-400">Based in</p>
+              <p className="text-lg">{site.location}</p>
+            </div>
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+              <p className="text-sm text-neutral-400 mb-1">Links</p>
+              <div className="flex flex-col gap-2">
+                <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">
+                  Instagram
+                </a>
+                <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="underline">
                   Clickasnap
                 </a>
               </div>
-              <div className="flex items-center gap-2 text-neutral-300">
-                <ExternalLink className="h-4 w-4" />
-                <a className="underline" href={site.social.instagram} target="_blank" rel="noreferrer">
-                  Instagram
-                </a>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- LIGHTBOX ---------- */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle className="text-base">{gallery[index]?.alt}</DialogTitle>
-          </DialogHeader>
-
-          <div className="relative">
-            <img
-              src={gallery[index]?.src ?? FALLBACK_IMG}
-              alt={gallery[index]?.alt ?? ""}
-              className="w-full max-h-[70vh] object-contain"
-              referrerPolicy="no-referrer"
-              onError={onImgError}
-            />
-
-            <div className="absolute inset-y-0 left-0 flex items-center">
-              <Button
-                variant="secondary"
-                size="icon"
-                onClick={() => setIndex((i) => (i - 1 + gallery.length) % gallery.length)}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="absolute inset-y-0 right-0 flex items-center">
-              <Button
-                variant="secondary"
-                size="icon"
-                onClick={() => setIndex((i) => (i + 1) % gallery.length)}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          <Separator />
-          <div className="flex justify-between text-sm text-neutral-400">
-            <span>{gallery[index]?.alt}</span>
-            <a
-              href={gallery[index]?.page}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 hover:underline"
-            >
-              View on Clickasnap <ExternalLink className="h-4 w-4" />
-            </a>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* ---- Lightbox overlay ---- */}
+      {open && gallery[index] && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setOpen(false)}
+        >
+          <img
+            src={gallery[index].src}
+            alt={gallery[index].alt}
+            className="max-w-[90vw] max-h-[80vh] object-contain"
+            referrerPolicy="no-referrer"
+            onError={onImgError}
+          />
+        </div>
+      )}
     </main>
   );
 }
