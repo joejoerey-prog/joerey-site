@@ -33,5 +33,15 @@
     "src": "/photos/man-sunset.jpeg",
     "page": "https://www.clickasnap.com/image/12047021",
     "alt": "Silhouette of a man at sunset"
+  },
+  {
+    "src": "/photos/swans.jpeg",
+    "page": "https://www.clickasnap.com/image/1068665",
+    "alt": "Swans on a lake at sunset"
+  },
+  {
+    "src": "/photos/waterways.jpeg",
+    "page": "https://www.clickasnap.com/image/1068777",
+    "alt": "Venetian waterways"
   }
 ]
