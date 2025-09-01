@@ -91,7 +91,14 @@ export default function Page() {
 
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
-
+// DEBUG: prove what we loaded
+useEffect(() => {
+  console.log(
+    'Gallery items:',
+    Array.isArray(gallery) ? gallery.length : 'not an array',
+    gallery
+  );
+}, [gallery]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!open) return;
@@ -154,53 +161,60 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ---------- PORTFOLIO ---------- */}
-      <section id="portfolio" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-        <p className="text-neutral-400 mt-2">
-          A small selection. Each image opens a larger preview; click through to Clickasnap.
-        </p>
+    <section
+  id="portfolio"
+  className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+>
+  <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
+  <p className="text-neutral-400 mt-2">
+    A small selection. Each image opens a larger preview; click through to
+    Clickasnap for the full page.
+  </p>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {gallery.map((img, i) => (
-            <a
-              key={i}
-              href={img.page}
-              target="_blank"
-              rel="noreferrer"
-              className="group block overflow-hidden rounded-xl ring-1 ring-neutral-800 hover:ring-neutral-600"
-              onClick={(e) => {
-                e.preventDefault();
-                setIndex(i);
-                setOpen(true);
-              }}
-              title="Open larger preview (then view on Clickasnap)"
-            >
-              <img
-                src={img.src}
-                alt={img.alt}
-                className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
-                referrerPolicy="no-referrer"
-                onError={onImgError}
-                loading="lazy"
-              />
-              <div className="px-3 py-2 text-sm text-neutral-300">{img.alt}</div>
-            </a>
-          ))}
-        </div>
+  {/*
+    If you ever need to debug, uncomment this:
+    <p className="text-xs text-red-400 mt-2">
+      DEBUG: {Array.isArray(gallery) ? gallery.length : 0} items
+    </p>
+  */}
 
-        <div className="mt-8">
-          <a
-            href={site.social.clickasnap}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
-          >
-            <ExternalLink className="h-4 w-4" />
-            View full Clickasnap profile
-          </a>
-        </div>
-      </section>
+  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {Array.isArray(gallery) && gallery.length > 0 ? (
+      gallery.map((img, i) => (
+        <a
+          key={i}
+          href={img.page}
+          target="_blank"
+          rel="noreferrer"
+          className="group block overflow-hidden rounded-xl ring-1 ring-neutral-800 bg-neutral-900/40"
+          title="Open on Clickasnap"
+          onClick={(e) => {
+            // If you also use a lightbox elsewhere, keep these 2 lines.
+            // If not, they do no harm.
+            e.preventDefault();
+            setIndex?.(i);
+            setOpen?.(true);
+          }}
+        >
+          <img
+            src={img.src}
+            alt={img.alt}
+            className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onError={onImgError}
+          />
+          <div className="px-3 py-2 text-sm text-neutral-300">{img.alt}</div>
+        </a>
+      ))
+    ) : (
+      <div className="col-span-full text-neutral-400">
+        No images yet. Add files to <code>public/photos</code> and list them in{" "}
+        <code>/gallery.json</code>.
+      </div>
+    )}
+  </div>
+</section>
 
       {/* ---------- ABOUT ---------- */}
       <section id="about" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
