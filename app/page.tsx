@@ -21,7 +21,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+function useRemoteGallery(url: string) {
+  const [data, setData] = React.useState<any[]>([]);
 
+  React.useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((json) => setData(json))
+      .catch(() => setData([]));
+  }, [url]);
+
+  return data;
+}
 /* ---------- helpers ---------- */
 const FALLBACK_IMG =
   "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
@@ -56,13 +67,6 @@ const site = {
 type GalleryImage = { src: string; page: string; alt: string };
 
 // Tiny fallback so the page never looks broken if JSON fails to load
-const fallbackGallery: GalleryImage[] = [
-  {
-    src: "/photos/leaf-macro.jpg",
-    page: "https://www.clickasnap.com/image/11925045",
-    alt: "Leaf in detail — macro venation",
-  },
-];
 
 function useRemoteGallery(url: string) {
   const [items, setItems] = React.useState<GalleryImage[]>(fallbackGallery);
