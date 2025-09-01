@@ -67,7 +67,7 @@ const site = {
   email: "joereyphotography@hotmail.com",
   hero: {
     image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop",
+    "/photos/Gap.jpg", 
     kicker: "JOE REY PHOTOGRAPHY",
     headline: "Story-driven images that actually feel like the moment",
     sub: "A tight selection from my Clickasnap uploads — refreshed as I add more.",
@@ -261,7 +261,7 @@ export default function JoeReyPhotographySite() {
           <img
             src={site.hero.image}
             alt="Hero"
-            className="w-full h-[70vh] object-cover opacity-60"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             referrerPolicy="no-referrer"
             onError={onImgError}
           />
