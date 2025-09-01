@@ -410,33 +410,55 @@ export default function JoeReyPhotographySite() {
 
       {/* About */}
       <section id="about" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
-            <p className="text-neutral-300 mt-3 leading-relaxed">
-              I don’t stick to one genre — landscapes, macro, architecture, aviation — if it looks good, it’s fair game.
-              Here’s a curated set from my Clickasnap uploads. For the full archive, visit my profile.
-            </p>
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <Card className="rounded-2xl"><CardContent className="p-4"><p className="text-sm text-neutral-400">Based in</p><p className="text-lg">{site.location}</p></CardContent></Card>
-              <Card className="rounded-2xl"><CardContent className="p-4"><p className="text-sm text-neutral-400">Turnaround</p><p className="text-lg">3–7 days</p></CardContent></Card>
-            </div>
-            <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="inline-block mt-6">
-              <Button variant="secondary" className="gap-2">View full Clickasnap <ExternalLink className="h-4 w-4" /></Button>
-            </a>
-          </div>
-          <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1526178613552-2b45c6c302f1?q=80&w=1400&auto=format&fit=crop"
-              alt="Behind the scenes — Joe shooting on location"
-              className="w-full h-96 object-cover rounded-2xl ring-1 ring-neutral-800"
-              referrerPolicy="no-referrer"
-              onError={onImgError}
-            />
-            <Badge className="absolute top-3 left-3">BTS</Badge>
-          </div>
-        </div>
-      </section>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div>
+      <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
+     <p className="text-neutral-300 mt-3 leading-relaxed space-y-4">
+  Picked up a camera in 2015, got serious in 2016 with a photography diploma. What started as a hobby turned into a full-blown obsession.
+  <br /><br />
+  I chase light, landscapes, macro worlds, and the occasional dog portrait. No single genre holds me down—nature, architecture, wildlife, macro—if it looks good, it’s fair game.
+  <br /><br />
+  My aim? To pause time. A dew-covered petal, mist rolling over Cambridge, a split-second that vanishes before you even notice it. Tiny worlds, big feelings, and sometimes just a good excuse to step away from the screen.
+  <br /><br />
+  Want something on your walls or screens? Prints, canvases, and downloads are ready. Browse the feed, pick a favourite, or surprise yourself. Dreaming of a gallery show someday—and stubborn enough to make it happen.
+</p>
+      <div className="mt-6 grid grid-cols-2 gap-4">
+        <Card className="rounded-2xl">
+          <CardContent className="p-4">
+            <p className="text-sm text-neutral-400">Based in</p>
+            <p className="text-lg">{site.location}</p>
+          </CardContent>
+        </Card>
+        <Card className="rounded-2xl">
+          <CardContent className="p-4">
+            <p className="text-sm text-neutral-400">Turnaround</p>
+            <p className="text-lg">3–7 days</p>
+          </CardContent>
+        </Card>
+      </div>
+      <a
+        href={site.social.clickasnap}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-block mt-6"
+      >
+        <Button variant="secondary" className="gap-2">
+          View full Clickasnap <ExternalLink className="h-4 w-4" />
+        </Button>
+      </a>
+    </div>
+    <div className="relative">
+      <img
+        src="https://images.unsplash.com/photo-1526178613552-2b45c6c302f1?q=80&w=1400&auto=format&fit=crop"
+        alt="Behind the scenes — Joe shooting on location"
+        className="w-full h-96 object-cover rounded-2xl ring-1 ring-neutral-800"
+        referrerPolicy="no-referrer"
+        onError={onImgError}
+      />
+      <Badge className="absolute top-3 left-3">BTS</Badge>
+    </div>
+  </div>
+</section>
 
       {/* Contact */}
       <section id="contact" className="scroll-mt-24 bg-neutral-900/40 border-t border-neutral-800">
