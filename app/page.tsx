@@ -52,38 +52,39 @@ const site = {
   },
 };
 
+/* ---------- gallery via /gallery.json ---------- */
 type GalleryImage = { src: string; page: string; alt: string };
 
-const gallery: GalleryImage[] = [
+// Tiny fallback so the page never looks broken if JSON fails to load
+const fallbackGallery: GalleryImage[] = [
   {
     src: "/photos/leaf-macro.jpg",
     page: "https://www.clickasnap.com/image/11925045",
     alt: "Leaf in detail — macro venation",
   },
-  {
-    src: "/photos/insect-thistle.jpg",
-    page: "https://www.clickasnap.com/image/11956423",
-    alt: "Macro insect on thistle bloom",
-  },
-  {
-    src: "/photos/Gap.jpg",
-    page: "https://www.clickasnap.com/image/51671",
-    alt: "Sycamore Gap — Hadrian’s Wall",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1516569422685-5c1a181e1115?q=80&w=1400&auto=format&fit=crop",
-    page: site.social.clickasnap,
-    alt: "Mist over field at dawn",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop",
-    page: site.social.clickasnap,
-    alt: "Desert ridge at golden hour",
-  },
 ];
+
+function useRemoteGallery(url: string) {
+  const [items, setItems] = React.useState<GalleryImage[]>(fallbackGallery);
+  React.useEffect(() => {
+    let alive = true;
+    fetch(url, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((arr: GalleryImage[]) => {
+        if (alive && Array.isArray(arr)) setItems(arr);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [url]);
+  return items;
+}
 
 /* ---------- page ---------- */
 export default function Page() {
+  const gallery = useRemoteGallery("/gallery.json");
+
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -96,10 +97,11 @@ export default function Page() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, gallery.length]);
 
   return (
     <main className="bg-neutral-950 text-neutral-100 min-h-dvh">
+      {/* Header with nav (Portfolio / About / Contact / Shop) */}
       <Header />
 
       {/* ---------- HERO ---------- */}
@@ -117,7 +119,7 @@ export default function Page() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
 
-        {/* FLOATING LOGO — bigger and left-side */}
+        {/* floating logo — bigger and left-side */}
         <div className="absolute z-20 top-16 left-6 md:top-20 md:left-16 xl:left-28">
           <img
             src="/photos/logo.png"
