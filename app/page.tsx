@@ -7,9 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ExternalLink, Mail, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import {
+  ExternalLink,
+  Mail,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 /* -----------------------------
    Helpers (fallback image)
@@ -38,7 +49,7 @@ const site = {
     clickasnap: "https://www.clickasnap.com/profile/joereyphotos",
   },
   hero: {
-    image: "/photos/Gap.jpg", // must exist in public/photos
+    image: "/photos/Gap.jpg", // public/photos/Gap.jpg
     headline: "Story-driven images that actually feel like the moment",
     sub: "A tight selection from my Clickasnap uploads — refreshed as I add more.",
     ctaPrimary: { label: "View portfolio", href: "#portfolio" },
@@ -47,18 +58,18 @@ const site = {
 };
 
 /* -----------------------------
-   Portfolio data (local + safe externals)
+   Portfolio data
 ------------------------------ */
 type GalleryImage = { src: string; page: string; alt: string };
 
 const gallery: GalleryImage[] = [
   {
-    src: "/photos/leaf-macro.jpg", // public/photos/leaf-macro.jpg
+    src: "/photos/leaf-macro.jpg",
     page: "https://www.clickasnap.com/image/11925045",
     alt: "Leaf in detail — macro venation",
   },
   {
-    src: "/photos/insect-thistle.jpg", // public/photos/insect-thistle.jpg
+    src: "/photos/insect-thistle.jpg",
     page: "https://www.clickasnap.com/image/11956423",
     alt: "Macro insect on thistle bloom",
   },
@@ -67,14 +78,15 @@ const gallery: GalleryImage[] = [
     page: "https://www.clickasnap.com/image/51671",
     alt: "Sycamore Gap — Hadrian’s Wall",
   },
+  // a couple of safe externals to pad out the grid
   {
     src: "https://images.unsplash.com/photo-1516569422685-5c1a181e1115?q=80&w=1400&auto=format&fit=crop",
-    page: "https://www.clickasnap.com/profile/joereyphotos",
+    page: site.social.clickasnap,
     alt: "Mist over field at dawn",
   },
   {
     src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop",
-    page: "https://www.clickasnap.com/profile/joereyphotos",
+    page: site.social.clickasnap,
     alt: "Desert ridge at golden hour",
   },
 ];
@@ -100,14 +112,15 @@ export default function Page() {
 
   return (
     <main className="bg-neutral-950 text-neutral-100 min-h-dvh">
-      {/* Header with PNG logo + nav */}
+      {/* Header with nav (Portfolio / About / Contact / Shop) */}
       <Header />
 
       {/* Hero */}
       <section
         id="hero"
-        className="relative w-full h-screen flex flex-col items-center justify-center text-center pt-24"
+        className="relative w-full h-screen flex flex-col items-center justify-center text-center"
       >
+        {/* Background image */}
         <img
           src={site.hero.image}
           alt="Hero background"
@@ -115,7 +128,19 @@ export default function Page() {
           referrerPolicy="no-referrer"
           onError={onImgError}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/60" />
+
+        {/* Floating logo over hero (centered, visible) */}
+        <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
+          <img
+            src="/photos/logo.png"
+            alt="Joe Rey Photography logo"
+            className="h-28 w-auto drop-shadow-lg"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+
+        {/* Hero copy */}
         <div className="relative z-10 max-w-3xl px-4">
           <h1 className="text-4xl sm:text-6xl font-bold text-white">
             {site.hero.headline}
@@ -144,7 +169,9 @@ export default function Page() {
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-        <p className="text-neutral-400 mt-2">Each image opens the Clickasnap page.</p>
+        <p className="text-neutral-400 mt-2">
+          A small selection. Each image opens a larger preview; click through to Clickasnap.
+        </p>
 
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {gallery.map((img, i) => (
@@ -339,8 +366,11 @@ export default function Page() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-base">{gallery[index]?.alt}</DialogTitle>
+            <DialogTitle className="text-base">
+              {gallery[index]?.alt}
+            </DialogTitle>
           </DialogHeader>
+
           <div className="relative">
             <img
               src={gallery[index]?.src ?? FALLBACK_IMG}
@@ -349,11 +379,14 @@ export default function Page() {
               referrerPolicy="no-referrer"
               onError={onImgError}
             />
+
             <div className="absolute inset-y-0 left-0 flex items-center">
               <Button
                 variant="secondary"
                 size="icon"
-                onClick={() => setIndex((i) => (i - 1 + gallery.length) % gallery.length)}
+                onClick={() =>
+                  setIndex((i) => (i - 1 + gallery.length) % gallery.length)
+                }
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
@@ -368,6 +401,7 @@ export default function Page() {
               </Button>
             </div>
           </div>
+
           <Separator />
           <div className="flex justify-between text-sm text-neutral-400">
             <span>{gallery[index]?.alt}</span>
