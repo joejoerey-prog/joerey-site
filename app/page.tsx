@@ -1,18 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ExternalLink, Mail, MapPin } from "lucide-react";
-import JRLogo from "@/components/ui/JRLogo";
+import { ExternalLink, Mail, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 /* -----------------------------
-   Helpers
+   Helpers (fallback image)
 ------------------------------ */
-
 const FALLBACK_IMG =
   "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
@@ -20,8 +21,7 @@ function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
   const img = e.currentTarget;
   if (img.src !== FALLBACK_IMG) {
     img.src = FALLBACK_IMG;
-    img.style.background =
-      "linear-gradient(135deg,#222 0%, #333 100%)";
+    img.style.background = "linear-gradient(135deg,#222 0%, #333 100%)";
     img.style.objectFit = "cover";
   }
 }
@@ -29,17 +29,16 @@ function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
 /* -----------------------------
    Site data
 ------------------------------ */
-
 const site = {
   name: "Joe Rey Photography",
   location: "Cambridgeshire, UK",
   email: "joereyphotography@hotmail.com",
   social: {
-    instagram: "https://instagram.com/joe.rey.photography",
+    instagram: "https://instagram.com/joe.rey.photos",
     clickasnap: "https://www.clickasnap.com/profile/joereyphotos",
   },
   hero: {
-    image: "/photos/Gap.jpg",
+    image: "/photos/Gap.jpg", // must exist in public/photos
     headline: "Story-driven images that actually feel like the moment",
     sub: "A tight selection from my Clickasnap uploads — refreshed as I add more.",
     ctaPrimary: { label: "View portfolio", href: "#portfolio" },
@@ -48,20 +47,67 @@ const site = {
 };
 
 /* -----------------------------
+   Portfolio data (local + safe externals)
+------------------------------ */
+type GalleryImage = { src: string; page: string; alt: string };
+
+const gallery: GalleryImage[] = [
+  {
+    src: "/photos/leaf-macro.jpg", // public/photos/leaf-macro.jpg
+    page: "https://www.clickasnap.com/image/11925045",
+    alt: "Leaf in detail — macro venation",
+  },
+  {
+    src: "/photos/insect-thistle.jpg", // public/photos/insect-thistle.jpg
+    page: "https://www.clickasnap.com/image/11956423",
+    alt: "Macro insect on thistle bloom",
+  },
+  {
+    src: "/photos/Gap.jpg",
+    page: "https://www.clickasnap.com/image/51671",
+    alt: "Sycamore Gap — Hadrian’s Wall",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1516569422685-5c1a181e1115?q=80&w=1400&auto=format&fit=crop",
+    page: "https://www.clickasnap.com/profile/joereyphotos",
+    alt: "Mist over field at dawn",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop",
+    page: "https://www.clickasnap.com/profile/joereyphotos",
+    alt: "Desert ridge at golden hour",
+  },
+];
+
+/* -----------------------------
    Page
 ------------------------------ */
-
 export default function Page() {
+  // Lightbox
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!open) return;
+      if (e.key === "ArrowRight") setIndex((i) => (i + 1) % gallery.length);
+      if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + gallery.length) % gallery.length);
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
     <main className="bg-neutral-950 text-neutral-100 min-h-dvh">
-      {/* Fixed header with logo */}
+      {/* Header with PNG logo + nav */}
       <Header />
 
       {/* Hero */}
-   <section
-  id="hero"
-  className="relative w-full h-screen flex flex-col items-center justify-center pt-24"
-> 
+      <section
+        id="hero"
+        className="relative w-full h-screen flex flex-col items-center justify-center text-center pt-24"
+      >
         <img
           src={site.hero.image}
           alt="Hero background"
@@ -69,7 +115,7 @@ export default function Page() {
           referrerPolicy="no-referrer"
           onError={onImgError}
         />
-       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
         <div className="relative z-10 max-w-3xl px-4">
           <h1 className="text-4xl sm:text-6xl font-bold text-white">
             {site.hero.headline}
@@ -92,18 +138,43 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Portfolio placeholder so the hero buttons work.
-          You can replace this with your grid later. */}
+      {/* Portfolio */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-        <p className="text-neutral-400 mt-2">
-          Linking out to your Clickasnap shop for now.
-        </p>
+        <p className="text-neutral-400 mt-2">Each image opens the Clickasnap page.</p>
 
-        <div className="mt-6">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {gallery.map((img, i) => (
+            <a
+              key={i}
+              href={img.page}
+              target="_blank"
+              rel="noreferrer"
+              className="group block overflow-hidden rounded-xl ring-1 ring-neutral-800 hover:ring-neutral-600"
+              onClick={(e) => {
+                e.preventDefault(); // open lightbox first
+                setIndex(i);
+                setOpen(true);
+              }}
+              title="Open larger preview (then view on Clickasnap)"
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+                onError={onImgError}
+                loading="lazy"
+              />
+              <div className="px-3 py-2 text-sm text-neutral-300">{img.alt}</div>
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-8">
           <a
             href={site.social.clickasnap}
             target="_blank"
@@ -111,7 +182,7 @@ export default function Page() {
             className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800"
           >
             <ExternalLink className="h-4 w-4" />
-            View full Clickasnap
+            View full Clickasnap profile
           </a>
         </div>
       </section>
@@ -122,7 +193,6 @@ export default function Page() {
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          {/* Text */}
           <div>
             <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
             <div className="text-neutral-300 mt-4 space-y-4 leading-relaxed">
@@ -174,7 +244,6 @@ export default function Page() {
             </a>
           </div>
 
-          {/* Portrait + small logo */}
           <div className="flex md:justify-end justify-center">
             <div className="flex flex-col items-center gap-3">
               <img
@@ -184,7 +253,6 @@ export default function Page() {
                 referrerPolicy="no-referrer"
                 onError={onImgError}
               />
-              <JRLogo className="h-8 w-auto text-neutral-300" />
             </div>
           </div>
         </div>
@@ -197,7 +265,6 @@ export default function Page() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Form */}
             <div className="lg:col-span-2">
               <h2 className="text-2xl sm:text-3xl font-semibold">
                 Let’s make something good
@@ -230,7 +297,6 @@ export default function Page() {
               </form>
             </div>
 
-            {/* Details */}
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-neutral-300">
                 <Mail className="h-4 w-4" />
@@ -268,6 +334,54 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      {/* Lightbox */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle className="text-base">{gallery[index]?.alt}</DialogTitle>
+          </DialogHeader>
+          <div className="relative">
+            <img
+              src={gallery[index]?.src ?? FALLBACK_IMG}
+              alt={gallery[index]?.alt ?? ""}
+              className="w-full max-h-[70vh] object-contain"
+              referrerPolicy="no-referrer"
+              onError={onImgError}
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center">
+              <Button
+                variant="secondary"
+                size="icon"
+                onClick={() => setIndex((i) => (i - 1 + gallery.length) % gallery.length)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="absolute inset-y-0 right-0 flex items-center">
+              <Button
+                variant="secondary"
+                size="icon"
+                onClick={() => setIndex((i) => (i + 1) % gallery.length)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <Separator />
+          <div className="flex justify-between text-sm text-neutral-400">
+            <span>{gallery[index]?.alt}</span>
+            <a
+              href={gallery[index]?.page}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 hover:underline"
+            >
+              View on Clickasnap <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
