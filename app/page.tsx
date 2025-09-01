@@ -27,7 +27,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import JRLogo from "@/components/JRLogo";
+import JRLogo from "@/components/ui/JRLogo";
 
 /* --------------------------------------------------------
    Image fallback for grumpy CDNs
@@ -168,41 +168,44 @@ export default function Page() {
         <JRLogo className="h-12 w-auto text-white" />
       </header>
 
-      {/* Hero */}
-      <section
-        id="hero"
-        className="relative min-h-[72vh] flex items-center"
+      {/* Hero Section */}
+<section
+  id="hero"
+  className="relative w-full h-screen flex flex-col items-center justify-center text-center pt-24"
+>
+  {/* Background image */}
+  <img
+    src={site.hero.image}
+    alt="Hero background"
+    className="absolute inset-0 w-full h-full object-cover"
+  />
+
+  {/* Dark overlay so text is readable */}
+  <div className="absolute inset-0 bg-black/50" />
+
+  {/* Content */}
+  <div className="relative z-10 max-w-3xl px-4">
+    <h1 className="text-4xl sm:text-6xl font-bold text-white">
+      {site.hero.headline}
+    </h1>
+    <p className="mt-4 text-lg text-neutral-200">{site.hero.sub}</p>
+
+    <div className="mt-6 flex justify-center gap-4">
+      <a
+        href="#portfolio"
+        className="px-6 py-3 bg-white text-black font-semibold rounded-lg shadow hover:bg-neutral-200"
       >
-        <img
-          src={site.hero.image}
-          alt="Hero"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-          referrerPolicy="no-referrer"
-          onError={onImgError}
-        />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          {site.hero.kicker ? (
-            <p className="tracking-widest text-neutral-200/80 text-xs mb-2">{site.hero.kicker}</p>
-          ) : null}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight text-white drop-shadow">
-            {site.hero.headline}
-          </h1>
-          <p className="mt-4 max-w-2xl text-neutral-200">
-            {site.hero.sub}
-          </p>
-          <div className="mt-6 flex gap-3">
-            <a href={site.hero.ctaPrimary.href}>
-              <Button size="lg">{site.hero.ctaPrimary.label}</Button>
-            </a>
-            <a href={site.hero.ctaSecondary.href}>
-              <Button size="lg" variant="secondary">
-                {site.hero.ctaSecondary.label}
-              </Button>
-            </a>
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
-      </section>
+        {site.hero.ctaPrimary.label}
+      </a>
+      <a
+        href="#contact"
+        className="px-6 py-3 bg-neutral-800 text-white font-semibold rounded-lg shadow hover:bg-neutral-700"
+      >
+        {site.hero.ctaSecondary.label}
+      </a>
+    </div>
+  </div>
+</section>
 
       {/* Portfolio */}
       <section id="portfolio" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
