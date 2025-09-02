@@ -365,7 +365,7 @@ export default function Page() {
             onError={onImgError}
           />
         </div>
-      )}
-    </main>
-  );
+  )}
+</main>
+);
 }
