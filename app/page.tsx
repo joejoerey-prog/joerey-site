@@ -1,43 +1,35 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Image from "next/image";
+import React, { useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import { ExternalLink } from 'lucide-react';
 
 /* ---------- types ---------- */
 type GalleryImage = { src: string; page: string; alt: string };
 
-/* ---------- helpers ---------- */
-const FALLBACK_IMG =
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-
-function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
-  const img = e.currentTarget as HTMLImageElement;
-  if (img.src !== FALLBACK_IMG) {
-    img.src = FALLBACK_IMG;
-    img.style.background = 'linear-gradient(135deg,#222,#333)';
-    img.style.objectFit = 'cover';
-  }
+/* ---------- tiny helper ---------- */
+function classNames(...xs: Array<string | false | null | undefined>) {
+  return xs.filter(Boolean).join(' ');
 }
 
-/** Fetch gallery.json (client-side). If anything fails, return a tiny fallback. */
+/* ---------- fetch gallery.json (client-side) ---------- */
 function useRemoteGallery(url: string) {
-  const [items, setItems] = useState<GalleryImage[]>([]);
-
+  const [items, setItems] = React.useState<GalleryImage[]>([]);
   useEffect(() => {
     let alive = true;
     fetch(url, { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : Promise.reject(r)))
+      .then(r => (r.ok ? r.json() : Promise.reject(r)))
       .then((arr: GalleryImage[]) => {
         if (alive && Array.isArray(arr)) setItems(arr);
       })
       .catch(() => {
+        // minimal safe fallback so the page is never empty
         setItems([
           {
             src: '/photos/leaf-macro.jpg',
-            page: 'https://www.clickasnap.com/image/11925045',
-            alt: 'Leaf in detail — macro venation',
+            page: 'https://www.clickasnap.com/',
+            alt: 'Leaf macro',
           },
         ]);
       });
@@ -45,7 +37,6 @@ function useRemoteGallery(url: string) {
       alive = false;
     };
   }, [url]);
-
   return items;
 }
 
@@ -59,7 +50,8 @@ const site = {
     clickasnap: 'https://www.clickasnap.com/profile/joereyphotos',
   },
   hero: {
-    image: '/photos/Gap.jpg',
+    image: '/photos/Gap.jpg', // keep this in /public/photos
+    logo: '/photos/logo.png', // top-left logo
     headline: 'Story-driven images that actually feel like the moment',
     sub: 'A tight selection from my Clickasnap uploads — refreshed as I add more.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
@@ -70,20 +62,12 @@ const site = {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  const [open, setOpen] = useState(false);
-  const [index, setIndex] = useState(0);
-
-  // keyboard close / next / prev when lightbox is open
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (!open) return;
-      if (e.key === 'ArrowRight') setIndex((i) => (i + 1) % gallery.length);
-      if (e.key === 'ArrowLeft') setIndex((i) => (i - 1 + gallery.length) % gallery.length);
-      if (e.key === 'Escape') setOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, gallery.length]);
+  // strictly pick the first 9 valid local images
+  const topNine = useMemo(() => {
+    return gallery
+      .filter(g => g && g.src && g.page && g.alt)
+      .slice(0, 9);
+  }, [gallery]);
 
   return (
     <main className="min-h-dvh bg-neutral-950 text-neutral-100">
@@ -92,68 +76,90 @@ export default function Page() {
       {/* ===== HERO ===== */}
       <section
         id="hero"
-        className="hero relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex items-center justify-center text-center text-white"
-        style={{
-          backgroundImage: `url(${site.hero.image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
+        className="relative w-full min-h-[72vh] sm:min-h-[78vh] md:min-h-[82vh] grid place-items-center text-center overflow-hidden"
       >
-        <div className="absolute inset-0 bg-black/50" />
+        {/* background image */}
+        <div
+          className="absolute inset-0 -z-10"
+          style={{
+            backgroundImage: `url(${site.hero.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        {/* dark overlay for readability */}
+        <div className="absolute inset-0 -z-10 bg-black/45" />
 
-        <div className="text-wrap">
-          <h1>{site.hero.headline}</h1>
-          <p>{site.hero.sub}</p>
+        {/* logo top-left */}
+        <div className="absolute top-6 left-6 sm:top-10 sm:left-10">
+          <Image
+            src={site.hero.logo}
+            alt="Joe Rey Photography"
+            width={260}
+            height={60}
+            className="w-[180px] sm:w-[220px] md:w-[260px] h-auto"
+            priority
+          />
         </div>
 
-        <div className="cta-row">
-          <a className="btn" href={site.hero.ctaPrimary.href}>
-            {site.hero.ctaPrimary.label}
-          </a>
-          <a className="btn" href={site.hero.ctaSecondary.href}>
-            {site.hero.ctaSecondary.label}
-          </a>
+        {/* hero copy */}
+        <div className="max-w-3xl px-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight tracking-tight">
+            {site.hero.headline}
+          </h1>
+          <p className="mt-3 text-neutral-300">{site.hero.sub}</p>
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+            <a className="btn" href={site.hero.ctaPrimary.href}>
+              {site.hero.ctaPrimary.label}
+            </a>
+            <a className="btn" href={site.hero.ctaSecondary.href}>
+              {site.hero.ctaSecondary.label}
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* ===== PORTFOLIO ===== */}
+      {/* ===== PORTFOLIO (3×3 squares) ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
         <p className="text-neutral-400 mt-2">
-          A small selection. Each image opens a larger preview; click through to Clickasnap for the full post.
+          Nine equal squares. Click a tile to view on Clickasnap.
         </p>
 
-        <div className="portfolio-grid">
-          {Array.isArray(gallery) &&
-            gallery.map((img, i) => (
-              <a
-                key={i}
-                href={img.page}
-                target="_blank"
-                rel="noreferrer"
-                className="group block overflow-hidden rounded-xl ring-1 ring-neutral-800"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIndex(i);
-                  setOpen(true);
-                }}
-                title="Open larger preview (then view on Clickasnap)"
+        {/* 3x3: on laptop/desktop 3 columns; on tablet 2; on phone 1 */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {topNine.map((img, i) => (
+            <a
+              key={i}
+              href={img.page}
+              target="_blank"
+              rel="noreferrer"
+              className="group block relative w-full pb-[100%] overflow-hidden rounded-2xl ring-1 ring-neutral-800"
+              title="Open on Clickasnap"
+            >
+              {/* square via pb-[100%], image fills via fill */}
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                priority={i < 3}
+              />
+              <span
+                className={classNames(
+                  'pointer-events-none absolute inset-x-0 bottom-0 p-3 text-sm',
+                  'bg-gradient-to-t from-black/60 to-transparent text-neutral-200'
+                )}
               >
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  width={500}
-                  height={300}
-                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  onError={onImgError}
-                  loading="lazy"
-                />
-                <div className="px-3 py-2 text-sm text-neutral-300">{img.alt}</div>
-              </a>
-            ))}
+                {img.alt}
+              </span>
+            </a>
+          ))}
+          {/* If fewer than 9 items, we just render what we have. No blank boxes, no lies. */}
         </div>
 
         <div className="mt-8">
@@ -177,10 +183,23 @@ export default function Page() {
         <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           <div className="md:col-span-2 space-y-4 text-neutral-300">
-            <p>Picked up a camera in 2015, got serious in 2016 with a photography diploma. What started as a hobby turned into a full-blown obsession.</p>
-            <p>I chase light, landscapes, macro worlds, and the occasional dog portrait. No single genre holds me down — nature, architecture, wildlife, macro — if it looks good, it’s fair game.</p>
-            <p>My aim? To pause time. A dew-covered petal, mist rolling over Cambridge, a split-second that vanishes before you even notice it.</p>
-            <p>Want something on your walls or screens? Prints, canvases, and downloads are ready. Browse the feed, pick a favourite, or surprise yourself.</p>
+            <p>
+              Picked up a camera in 2015, got serious in 2016 with a photography diploma.
+              What started as a hobby turned into a full-blown obsession.
+            </p>
+            <p>
+              I chase light, landscapes, macro worlds, and the occasional dog portrait.
+              No single genre holds me down — nature, architecture, wildlife, macro —
+              if it looks good, it’s fair game.
+            </p>
+            <p>
+              My aim? To pause time. A dew-covered petal, mist rolling over Cambridge,
+              a split-second that vanishes before you even notice it.
+            </p>
+            <p>
+              Want something on your walls or screens? Prints, canvases, and downloads are ready.
+              Browse the feed, pick a favourite, or surprise yourself.
+            </p>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
@@ -204,15 +223,13 @@ export default function Page() {
             </a>
           </div>
 
-          <div className="relative">
+          <div className="relative w-full h-96">
             <Image
               src="/photos/me.jpg"
               alt="Portrait of Joe Rey"
-              width={400}
-              height={600}
-              className="w-full h-96 object-cover rounded-2xl ring-1 ring-neutral-800"
-              onError={onImgError}
-              loading="lazy"
+              fill
+              className="object-cover rounded-2xl ring-1 ring-neutral-800"
+              priority={false}
             />
           </div>
         </div>
@@ -226,6 +243,7 @@ export default function Page() {
         <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* no backend: just opens mail client */}
           <form
             className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
             onSubmit={(e) => {
@@ -270,23 +288,6 @@ export default function Page() {
           </div>
         </div>
       </section>
-
-      {/* ===== LIGHTBOX ===== */}
-      {open && (
-        <div
-          className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4"
-          onClick={() => setOpen(false)}
-        >
-          <Image
-            src={gallery[index].src}
-            alt={gallery[index].alt}
-            width={900}
-            height={700}
-            className="max-w-[90vw] max-h-[80vh] object-contain"
-            onError={onImgError}
-          />
-        </div>
-      )}
     </main>
   );
 }
