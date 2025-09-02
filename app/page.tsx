@@ -53,7 +53,7 @@ const site = {
     image: '/photos/Gap.jpg', // keep this in /public/photos
     logo: '/photos/logo.png', // top-left logo
     headline: 'Story-driven images that actually feel like the moment',
-    sub: 'A tight selection from my Clickasnap uploads — refreshed as I add more.',
+    sub: 'A hand-picked set of favourites from my Clickasnap portfolio.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
     ctaSecondary: { label: 'Book a shoot', href: '#contact' },
   },
