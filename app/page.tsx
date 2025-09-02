@@ -73,51 +73,52 @@ export default function Page() {
     <main className="min-h-dvh bg-neutral-950 text-neutral-100">
       <Header />
 
-      {/* ===== HERO ===== */}
-      <section
-        id="hero"
-        className="relative w-full min-h-[72vh] sm:min-h-[78vh] md:min-h-[82vh] grid place-items-center text-center overflow-hidden"
+     {/* ===== HERO ===== */}
+<section
+  id="hero"
+  className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex flex-col items-center justify-center text-center text-white"
+  style={{
+    backgroundImage: `url(${site.hero.image})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  {/* dark overlay */}
+  <div className="absolute inset-0 bg-black/50" />
+
+  {/* logo top-left */}
+  <div className="absolute top-6 left-6 sm:top-10 sm:left-10 z-10">
+    <Image
+      src="/photos/logo.png"
+      alt="Joe Rey Photography"
+      width={260}
+      height={60}
+      className="w-[140px] sm:w-[200px] md:w-[260px] h-auto"
+      priority
+    />
+  </div>
+
+  {/* hero text + buttons */}
+  <div className="relative z-10 max-w-3xl px-6 pt-24 sm:pt-0">
+    <h1 className="text-3xl sm:text-5xl font-bold">{site.hero.headline}</h1>
+    <p className="mt-3 text-lg text-neutral-300">{site.hero.sub}</p>
+
+    <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        className="btn bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-neutral-200"
+        href={site.hero.ctaPrimary.href}
       >
-        {/* background image */}
-        <div
-          className="absolute inset-0 -z-10"
-          style={{
-            backgroundImage: `url(${site.hero.image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        {/* dark overlay for readability */}
-        <div className="absolute inset-0 -z-10 bg-black/45" />
-
-        {/* logo top-left */}
-        <div className="absolute top-6 left-6 sm:top-10 sm:left-10">
-          <Image
-            src={site.hero.logo}
-            alt="Joe Rey Photography"
-            width={260}
-            height={60}
-            className="w-[180px] sm:w-[220px] md:w-[260px] h-auto"
-            priority
-          />
-        </div>
-
-        {/* hero copy */}
-        <div className="max-w-3xl px-6">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight tracking-tight">
-            {site.hero.headline}
-          </h1>
-          <p className="mt-3 text-neutral-300">{site.hero.sub}</p>
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
-            <a className="btn" href={site.hero.ctaPrimary.href}>
-              {site.hero.ctaPrimary.label}
-            </a>
-            <a className="btn" href={site.hero.ctaSecondary.href}>
-              {site.hero.ctaSecondary.label}
-            </a>
-          </div>
-        </div>
-      </section>
+        {site.hero.ctaPrimary.label}
+      </a>
+      <a
+        className="btn bg-neutral-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-neutral-800"
+        href={site.hero.ctaSecondary.href}
+      >
+        {site.hero.ctaSecondary.label}
+      </a>
+    </div>
+  </div>
+</section> 
 
       {/* ===== PORTFOLIO (3×3 squares) ===== */}
       <section
