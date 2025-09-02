@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from "next/image";
 import Header from '@/components/Header';
 import { ExternalLink } from 'lucide-react';
 
@@ -12,7 +13,7 @@ const FALLBACK_IMG =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
 function onImgError(e: React.SyntheticEvent<HTMLImageElement>) {
-  const img = e.currentTarget;
+  const img = e.currentTarget as HTMLImageElement;
   if (img.src !== FALLBACK_IMG) {
     img.src = FALLBACK_IMG;
     img.style.background = 'linear-gradient(135deg,#222,#333)';
@@ -32,7 +33,6 @@ function useRemoteGallery(url: string) {
         if (alive && Array.isArray(arr)) setItems(arr);
       })
       .catch(() => {
-        // single safe fallback item so the grid never renders empty
         setItems([
           {
             src: '/photos/leaf-macro.jpg',
@@ -59,7 +59,7 @@ const site = {
     clickasnap: 'https://www.clickasnap.com/profile/joereyphotos',
   },
   hero: {
-    image: '/photos/Gap.jpg', // make sure this file exists
+    image: '/photos/Gap.jpg',
     headline: 'Story-driven images that actually feel like the moment',
     sub: 'A tight selection from my Clickasnap uploads — refreshed as I add more.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
@@ -70,7 +70,6 @@ const site = {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  // lightbox state
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -78,10 +77,8 @@ export default function Page() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!open) return;
-      if (e.key === 'ArrowRight')
-        setIndex((i) => (i + 1) % gallery.length);
-      if (e.key === 'ArrowLeft')
-        setIndex((i) => (i - 1 + gallery.length) % gallery.length);
+      if (e.key === 'ArrowRight') setIndex((i) => (i + 1) % gallery.length);
+      if (e.key === 'ArrowLeft') setIndex((i) => (i - 1 + gallery.length) % gallery.length);
       if (e.key === 'Escape') setOpen(false);
     };
     window.addEventListener('keydown', onKey);
@@ -90,62 +87,43 @@ export default function Page() {
 
   return (
     <main className="min-h-dvh bg-neutral-950 text-neutral-100">
-      {/* Fixed header (nav) */}
       <Header />
 
-      {/* Hero */}
-    <section
-  id="hero"
-  className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex items-center justify-center text-center text-white"
-  style={{
-    backgroundImage: `url(${site.hero.image})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-  {/* dark overlay */}
-  <div className="absolute inset-0 bg-black/50" />
+      {/* ===== HERO ===== */}
+      <section
+        id="hero"
+        className="hero relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex items-center justify-center text-center text-white"
+        style={{
+          backgroundImage: `url(${site.hero.image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-black/50" />
 
-  {/* big logo */}
-  <img
-    src="/photos/logo.png"
-    alt="Joe Rey Photography logo"
-    className="absolute top-16 left-6 sm:left-10 w-[180px] sm:w-[220px] md:w-[260px] drop-shadow-lg"
-    referrerPolicy="no-referrer"
-    onError={onImgError}
-  />
+        <div className="text-wrap">
+          <h1>{site.hero.headline}</h1>
+          <p>{site.hero.sub}</p>
+        </div>
 
-  {/* hero text + buttons go here */}
-</section> 
+        <div className="cta-row">
+          <a className="btn" href={site.hero.ctaPrimary.href}>
+            {site.hero.ctaPrimary.label}
+          </a>
+          <a className="btn" href={site.hero.ctaSecondary.href}>
+            {site.hero.ctaSecondary.label}
+          </a>
+        </div>
+      </section>
 
-
-  {/* optional logo */}
-  {/* <img src="/file.svg" alt="Joe Rey Photography" className="logo" /> */}
-
-  <div className="text-wrap">
-    <h1>{site.hero.headline}</h1>
-    <p>{site.hero.sub}</p>
-  </div>
-
-  <div className="cta-row">
-    <a className="btn" href={site.hero.ctaPrimary.href}>
-      {site.hero.ctaPrimary.label}
-    </a>
-    <a className="btn" href={site.hero.ctaSecondary.href}>
-      {site.hero.ctaSecondary.label}
-    </a>
-  </div>
-</section>
-
-      {/* ---- PORTFOLIO ---- */}
+      {/* ===== PORTFOLIO ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
         <p className="text-neutral-400 mt-2">
-          A small selection. Each image opens a larger preview; click through to
-          Clickasnap for the full post.
+          A small selection. Each image opens a larger preview; click through to Clickasnap for the full post.
         </p>
 
         <div className="portfolio-grid">
@@ -164,22 +142,20 @@ export default function Page() {
                 }}
                 title="Open larger preview (then view on Clickasnap)"
               >
-                <img
+                <Image
                   src={img.src}
                   alt={img.alt}
+                  width={500}
+                  height={300}
                   className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  referrerPolicy="no-referrer"
                   onError={onImgError}
                   loading="lazy"
                 />
-                <div className="px-3 py-2 text-sm text-neutral-300">
-                  {img.alt}
-                </div>
+                <div className="px-3 py-2 text-sm text-neutral-300">{img.alt}</div>
               </a>
             ))}
         </div>
 
-        {/* View full profile button */}
         <div className="mt-8">
           <a
             href={site.social.clickasnap}
@@ -193,7 +169,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ---- ABOUT ---- */}
+      {/* ===== ABOUT ===== */}
       <section
         id="about"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
@@ -201,28 +177,10 @@ export default function Page() {
         <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           <div className="md:col-span-2 space-y-4 text-neutral-300">
-            <p>
-              Picked up a camera in 2015, got serious in 2016 with a photography
-              diploma. What started as a hobby turned into a full-blown
-              obsession.
-            </p>
-            <p>
-              I chase light, landscapes, macro worlds, and the occasional dog
-              portrait. No single genre holds me down—nature, architecture,
-              wildlife, macro—if it looks good, it’s fair game.
-            </p>
-            <p>
-              My aim? To pause time. A dew-covered petal, mist rolling over
-              Cambridge, a split-second that vanishes before you even notice it.
-              Tiny worlds, big feelings, and sometimes just a good excuse to
-              step away from the screen.
-            </p>
-            <p>
-              Want something on your walls or screens? Prints, canvases, and
-              downloads are ready. Browse the feed, pick a favourite, or surprise
-              yourself. Dreaming of a gallery show someday—and stubborn enough to
-              make it happen.
-            </p>
+            <p>Picked up a camera in 2015, got serious in 2016 with a photography diploma. What started as a hobby turned into a full-blown obsession.</p>
+            <p>I chase light, landscapes, macro worlds, and the occasional dog portrait. No single genre holds me down — nature, architecture, wildlife, macro — if it looks good, it’s fair game.</p>
+            <p>My aim? To pause time. A dew-covered petal, mist rolling over Cambridge, a split-second that vanishes before you even notice it.</p>
+            <p>Want something on your walls or screens? Prints, canvases, and downloads are ready. Browse the feed, pick a favourite, or surprise yourself.</p>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
@@ -246,13 +204,13 @@ export default function Page() {
             </a>
           </div>
 
-          {/* Portrait / BTS */}
           <div className="relative">
-            <img
-              src="/photos/me.jpg" // put a portrait at public/photos/me.jpg
+            <Image
+              src="/photos/me.jpg"
               alt="Portrait of Joe Rey"
+              width={400}
+              height={600}
               className="w-full h-96 object-cover rounded-2xl ring-1 ring-neutral-800"
-              referrerPolicy="no-referrer"
               onError={onImgError}
               loading="lazy"
             />
@@ -260,7 +218,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ---- CONTACT ---- */}
+      {/* ===== CONTACT ===== */}
       <section
         id="contact"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-neutral-800"
@@ -268,7 +226,6 @@ export default function Page() {
         <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* simple “send inquiry” form (no backend; it’s just UI) */}
           <form
             className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
             onSubmit={(e) => {
@@ -283,50 +240,21 @@ export default function Page() {
               window.location.href = `mailto:${site.email}?subject=${subjectEnc}&body=${body}`;
             }}
           >
-            <input
-              name="name"
-              placeholder="Your name"
-              required
-              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
-            <input
-              name="email"
-              type="email"
-              placeholder="Email address"
-              required
-              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
-            <input
-              name="subject"
-              placeholder="Subject"
-              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
-            <textarea
-              name="message"
-              rows={5}
-              placeholder="Tell me about the shoot…"
-              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
+            <input name="name" placeholder="Your name" required className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
+            <input name="email" type="email" placeholder="Email address" required className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
+            <input name="subject" placeholder="Subject" className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
+            <textarea name="message" rows={5} placeholder="Tell me about the shoot…" className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
             <div className="sm:col-span-2">
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200"
-              >
+              <button type="submit" className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200">
                 Send inquiry
               </button>
             </div>
           </form>
 
-          {/* quick contact cards */}
           <div className="space-y-3">
             <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400">Email</p>
-              <a
-                href={`mailto:${site.email}`}
-                className="underline"
-              >
-                {site.email}
-              </a>
+              <a href={`mailto:${site.email}`} className="underline">{site.email}</a>
             </div>
             <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400">Based in</p>
@@ -335,33 +263,30 @@ export default function Page() {
             <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400 mb-1">Links</p>
               <div className="flex flex-col gap-2">
-                <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">
-                  Instagram
-                </a>
-                <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="underline">
-                  Clickasnap
-                </a>
+                <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">Instagram</a>
+                <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="underline">Clickasnap</a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-  {/* ---- Lightbox / preview ---- */}
-{open && (
-  <div
-    className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4"
-    onClick={() => setOpen(false)}
-  >
-    <img
-      src={gallery[index].src}
-      alt={gallery[index].alt}
-      className="max-w-[90vw] max-h-[80vh] object-contain"
-      referrerPolicy="no-referrer"
-      onError={onImgError}
-    />
-  </div>
-  )}
-</main>
+      {/* ===== LIGHTBOX ===== */}
+      {open && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4"
+          onClick={() => setOpen(false)}
+        >
+          <Image
+            src={gallery[index].src}
+            alt={gallery[index].alt}
+            width={900}
+            height={700}
+            className="max-w-[90vw] max-h-[80vh] object-contain"
+            onError={onImgError}
+          />
+        </div>
+      )}
+    </main>
   );
 }
