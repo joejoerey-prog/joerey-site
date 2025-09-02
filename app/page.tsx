@@ -94,35 +94,31 @@ export default function Page() {
       <Header />
 
       {/* Hero */}
-      <section id="hero" className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex items-center justify-center">
-        {/* hero image */}
-        <img
-          src={site.hero.image}
-          alt="Hero background"
-          className="absolute inset-0 w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-          onError={onImgError}
-        />
-        {/* dark overlay */}
-        <div className="absolute inset-0 bg-black/50" />
-
-        {/* BIG logo on the photo (top-left on the image area) */}
-        <img
-          src="/photos/logo.png"            // <- put your PNG at public/photos/logo.png
-          alt="Joe Rey Photography logo"
-          className="absolute top-16 left-6 sm:left-10 w-[180px] sm:w-[220px] md:w-[260px] drop-shadow-lg"
-          referrerPolicy="no-referrer"
-          onError={onImgError}
-        />
-
-   <section
-  className="hero"
+    <section
+  id="hero"
+  className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex items-center justify-center text-center text-white"
   style={{
     backgroundImage: `url(${site.hero.image})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
   }}
 >
+  {/* dark overlay */}
+  <div className="absolute inset-0 bg-black/50" />
+
+  {/* big logo */}
+  <img
+    src="/photos/logo.png"
+    alt="Joe Rey Photography logo"
+    className="absolute top-16 left-6 sm:left-10 w-[180px] sm:w-[220px] md:w-[260px] drop-shadow-lg"
+    referrerPolicy="no-referrer"
+    onError={onImgError}
+  />
+
+  {/* hero text + buttons go here */}
+</section> 
+
+
   {/* optional logo */}
   {/* <img src="/file.svg" alt="Joe Rey Photography" className="logo" /> */}
 
@@ -351,21 +347,21 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ---- Lightbox overlay ---- */}
-      {open && gallery[index] && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setOpen(false)}
-        >
-          <img
-            src={gallery[index].src}
-            alt={gallery[index].alt}
-            className="max-w-[90vw] max-h-[80vh] object-contain"
-            referrerPolicy="no-referrer"
-            onError={onImgError}
-          />
-        </div>
+  {/* ---- Lightbox / preview ---- */}
+{open && (
+  <div
+    className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4"
+    onClick={() => setOpen(false)}
+  >
+    <img
+      src={gallery[index].src}
+      alt={gallery[index].alt}
+      className="max-w-[90vw] max-h-[80vh] object-contain"
+      referrerPolicy="no-referrer"
+      onError={onImgError}
+    />
+  </div>
   )}
 </main>
-);
+  );
 }
