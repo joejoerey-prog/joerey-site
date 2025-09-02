@@ -115,29 +115,31 @@ export default function Page() {
           onError={onImgError}
         />
 
-        {/* hero text + buttons */}
-        <div className="relative z-10 max-w-3xl px-4 text-center">
-          <h1 className="text-3xl sm:text-5xl font-bold text-white">
-            {site.hero.headline}
-          </h1>
-          <p className="mt-3 text-neutral-300">{site.hero.sub}</p>
+   <section
+  className="hero"
+  style={{
+    backgroundImage: `url(${site.hero.image})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  {/* optional logo */}
+  {/* <img src="/file.svg" alt="Joe Rey Photography" className="logo" /> */}
 
-          <div className="mt-6 flex justify-center gap-3">
-            <a
-              href={site.hero.ctaPrimary.href}
-              className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200"
-            >
-              {site.hero.ctaPrimary.label}
-            </a>
-            <a
-              href={site.hero.ctaSecondary.href}
-              className="px-6 py-3 rounded-lg bg-neutral-900/80 ring-1 ring-white/20 hover:bg-neutral-800"
-            >
-              {site.hero.ctaSecondary.label}
-            </a>
-          </div>
-        </div>
-      </section>
+  <div className="text-wrap">
+    <h1>{site.hero.headline}</h1>
+    <p>{site.hero.sub}</p>
+  </div>
+
+  <div className="cta-row">
+    <a className="btn" href={site.hero.ctaPrimary.href}>
+      {site.hero.ctaPrimary.label}
+    </a>
+    <a className="btn" href={site.hero.ctaSecondary.href}>
+      {site.hero.ctaSecondary.label}
+    </a>
+  </div>
+</section>
 
       {/* ---- PORTFOLIO ---- */}
       <section
@@ -150,7 +152,7 @@ export default function Page() {
           Clickasnap for the full post.
         </p>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="portfolio-grid">
           {Array.isArray(gallery) &&
             gallery.map((img, i) => (
               <a

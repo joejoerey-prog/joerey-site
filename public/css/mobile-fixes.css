@@ -1,0 +1,84 @@
+
+/* === Mobile Fixes: drop-in override ===
+   Include AFTER your main stylesheet. Safe, minimal, and class-agnostic.
+   Targets small screens without you rewriting the site.
+================================================== */
+
+/* 1) Sensible viewport sizing including iOS Safari */
+:root { --page-padding: clamp(16px, 4vw, 28px); }
+
+html { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+*, *::before, *::after { box-sizing: inherit; }
+
+/* Media helpers */
+@media (max-width: 900px) { :root { --page-padding: clamp(16px, 5vw, 24px); } }
+@media (max-width: 600px) { :root { --page-padding: clamp(14px, 5.5vw, 22px); } }
+
+/* 2) Core layout & typography that scales nicely on phones */
+body { margin: 0; padding: 0; line-height: 1.5; word-break: break-word; }
+main, section, header, footer { padding-left: var(--page-padding); padding-right: var(--page-padding); }
+img, video { max-width: 100%; height: auto; display: block; }
+
+/* Fluid type that never gets silly */
+h1 { font-size: clamp(28px, 8vw, 56px); line-height: 1.1; margin: 0.25em 0; }
+h2 { font-size: clamp(22px, 6vw, 36px); line-height: 1.2; margin: 0.75em 0 0.4em; }
+p, li { font-size: clamp(16px, 4.2vw, 19px); }
+
+/* 3) Navigation: bigger tap targets on mobile */
+nav a, header a { padding: 12px 10px; display: inline-block; }
+@media (max-width: 680px) {
+  nav { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(6px); background: color-mix(in srgb, #000 25%, transparent); }
+  nav a, header a { padding: 14px 12px; margin-right: 2px; }
+}
+
+/* 4) Hero fixes (text readability + logo overlap) */
+.hero { position: relative; min-height: 60svh; display: grid; place-items: center; text-align: center; }
+.hero::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.55)); }
+.hero > * { position: relative; z-index: 1; }
+.hero .logo, .hero img.logo { max-width: clamp(120px, 35vw, 200px); height: auto; }
+@media (max-width: 640px) {
+  .hero .logo, .hero img.logo { position: absolute; top: 12px; left: 12px; }
+}
+/* Optional text card if your headings sit over busy images */
+.hero .text-wrap { background: rgba(0,0,0,0.45); padding: 12px 14px; border-radius: 14px; color: #fff; max-width: 60ch; margin-inline: auto; }
+
+/* 5) Buttons: stack and go full width on phones */
+a.button, .btn, button, .cta { display: inline-block; padding: 14px 18px; border-radius: 12px; font-weight: 600; text-align: center; }
+.cta-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+@media (max-width: 640px) {
+  .cta-row { display: grid; grid-template-columns: 1fr; }
+  a.button, .btn, button, .cta { width: 100%; }
+}
+
+/* 6) Portfolio/grid: collapse to 1–2 columns on mobile, 3–4 on desktop */
+.gallery, .grid, .cards, .portfolio-grid { display: grid; gap: 14px; }
+.gallery, .grid, .cards, .portfolio-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1024px) {
+  .gallery, .grid, .cards, .portfolio-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 780px) {
+  .gallery, .grid, .cards, .portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .gallery, .grid, .cards, .portfolio-grid { grid-template-columns: 1fr; }
+}
+
+/* Card polish */
+.card, .tile { border-radius: 14px; overflow: hidden; background: #111; color: #fff; }
+.card img, .tile img { width: 100%; height: auto; display: block; }
+.card .body, .tile .body { padding: 12px; }
+
+/* 7) Spacing sanity */
+section { padding-block: clamp(24px, 8vw, 56px); }
+header.site { padding-top: max(var(--page-padding), env(safe-area-inset-top)); }
+footer { padding-bottom: max(20px, env(safe-area-inset-bottom)); opacity: 0.9; }
+
+/* 8) Accessibility: contrast on light-over-image text */
+.text-on-image, .overlay-text { text-shadow: 0 2px 14px rgba(0,0,0,0.55); color: #fff; }
+
+/* 9) Misc odds and ends */
+iframe, embed { max-width: 100%; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px; }
+blockquote { margin: 0; padding-left: 14px; border-left: 3px solid rgba(255,255,255,0.25); }

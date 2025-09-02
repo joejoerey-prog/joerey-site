@@ -10,7 +10,6 @@ export default function JRLogo({ className = "h-6 w-auto" }: JRLogoProps) {
       aria-label="Joe Rey Photography"
     >
       <title>Joe Rey Photography</title>
-
       {/* Wordmark */}
       <text
         x="20"
@@ -23,8 +22,7 @@ export default function JRLogo({ className = "h-6 w-auto" }: JRLogoProps) {
       >
         JOE REY
       </text>
-
-      {/* Little camera/aperture mark on the right */}
+      {/* Small camera/aperture mark */}
       <circle
         cx="360"
         cy="40"
