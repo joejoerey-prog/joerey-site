@@ -62,7 +62,7 @@ const site = {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  // take first 9 valid items only (strict 3×3)
+  // exactly first 9 valid items for a strict 3×3
   const nine = useMemo(
     () => gallery.filter(g => g?.src && g?.page && g?.alt).slice(0, 9),
     [gallery]
@@ -119,7 +119,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ===== PORTFOLIO (clean 3×3) ===== */}
+      {/* ===== PORTFOLIO (clean 3×3, square tiles) ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
@@ -127,7 +127,7 @@ export default function Page() {
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
 
-        {/* strict 3 columns, even gaps, square tiles */}
+        {/* strict 3 columns, even gaps; tiles forced square with aspect-square */}
         <div className="mt-8 grid grid-cols-3 gap-6">
           {nine.map((img, i) => (
             <a
@@ -135,9 +135,8 @@ export default function Page() {
               href={img.page}
               target="_blank"
               rel="noreferrer"
-              className="group relative block w-full overflow-hidden rounded-2xl ring-1 ring-neutral-800"
+              className="group relative block overflow-hidden rounded-2xl ring-1 ring-neutral-800 aspect-square"
               title="Open on Clickasnap"
-              style={{ aspectRatio: '1 / 1' }} // square tile
             >
               <Image
                 src={img.src}
@@ -200,14 +199,13 @@ export default function Page() {
               and city views — available as prints, canvases, and downloads.
             </p>
 
-            {/* info cards: make "Based in" wider, tidy heights */}
+            {/* info cards: wider “Based in”, no silly wrapping */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
-              {/* span full width on small so "Cambridgeshire" fits easily */}
-              <div className="sm:col-span-2 md:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[104px] flex flex-col justify-center">
+              <div className="sm:col-span-2 md:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[110px] min-w-[260px] flex flex-col justify-center">
                 <p className="text-sm text-neutral-400">Based in</p>
-                <p className="text-xl leading-snug break-words">{site.location}</p>
+                <p className="text-xl leading-snug break-keep">{site.location}</p>
               </div>
-              <div className="rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[104px] flex flex-col justify-center">
+              <div className="rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[110px] flex flex-col justify-center">
                 <p className="text-sm text-neutral-400">Turnaround</p>
                 <p className="text-lg leading-snug">3–7 days</p>
               </div>
@@ -244,10 +242,11 @@ export default function Page() {
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* form left */}
+        {/* 1 col on mobile, 2 cols on lg: form = 2fr, cards = 1fr */}
+        <div className="mt-6 grid grid-cols-1 gap-8 lg:[grid-template-columns:2fr_1fr]">
+          {/* form */}
           <form
-            className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
             onSubmit={(e) => {
               e.preventDefault();
               const form = e.currentTarget as HTMLFormElement;
@@ -294,7 +293,7 @@ export default function Page() {
             </div>
           </form>
 
-          {/* contact cards right — single column, even spacing */}
+          {/* right-hand contact cards: tidy, stacked, even */}
           <div className="grid grid-cols-1 gap-4 items-stretch">
             <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col justify-between">
               <div>
@@ -307,7 +306,7 @@ export default function Page() {
 
             <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col justify-center">
               <p className="text-sm text-neutral-400">Based in</p>
-              <p className="text-lg">{site.location}</p>
+              <p className="text-lg">Cambridgeshire, UK</p>
             </div>
 
             <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col">
