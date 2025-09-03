@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import { ExternalLink } from 'lucide-react';
@@ -9,13 +9,13 @@ import { ExternalLink } from 'lucide-react';
 type GalleryImage = { src: string; page: string; alt: string };
 
 /* ---------- tiny helper ---------- */
-function cx(...xs: Array<string | false | null | undefined>) {
+function classNames(...xs: Array<string | false | null | undefined>) {
   return xs.filter(Boolean).join(' ');
 }
 
 /* ---------- fetch gallery.json (client-side) ---------- */
 function useRemoteGallery(url: string) {
-  const [items, setItems] = useState<GalleryImage[]>([]);
+  const [items, setItems] = React.useState<GalleryImage[]>([]);
   useEffect(() => {
     let alive = true;
     fetch(url, { cache: 'no-store' })
@@ -24,12 +24,12 @@ function useRemoteGallery(url: string) {
         if (alive && Array.isArray(arr)) setItems(arr);
       })
       .catch(() => {
-        // minimal fallback so the page is never empty
+        // minimal safe fallback so the page is never empty
         setItems([
           {
             src: '/photos/leaf-macro.jpg',
             page: 'https://www.clickasnap.com/',
-            alt: 'Dew on leaf, UK, close-up detail',
+            alt: 'Leaf macro',
           },
         ]);
       });
@@ -50,10 +50,11 @@ const site = {
     clickasnap: 'https://www.clickasnap.com/profile/joereyphotos',
   },
   hero: {
-    image: '/photos/Gap.jpg',
-    logo: '/photos/logo.png',
-    headline: 'Photography across the UK & Europe',
-    sub: 'Landscapes, cityscapes, and macro — curated favourites. Prints and downloads available.',
+    image: '/photos/Gap.jpg', // keep this in /public/photos
+    logo: '/photos/logo.png', // top-left logo
+    // SEO-friendly H1
+    headline: 'Joe Rey Photography | UK landscapes, cityscapes, macro, prints',
+    sub: 'A hand-picked set of favourites from my Clickasnap portfolio.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
     ctaSecondary: { label: 'Book a shoot', href: '#contact' },
   },
@@ -62,11 +63,12 @@ const site = {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  // exactly first 9 valid items for a strict 3×3
-  const nine = useMemo(
-    () => gallery.filter(g => g?.src && g?.page && g?.alt).slice(0, 9),
-    [gallery]
-  );
+  // strictly pick the first 9 valid local images
+  const topNine = useMemo(() => {
+    return gallery
+      .filter(g => g && g.src && g.page && g.alt)
+      .slice(0, 9);
+  }, [gallery]);
 
   return (
     <main className="min-h-dvh bg-neutral-950 text-neutral-100">
@@ -76,20 +78,20 @@ export default function Page() {
       <section
         id="hero"
         className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex flex-col items-center justify-center text-center text-white"
-        aria-label="Hero"
         style={{
           backgroundImage: `url(${site.hero.image})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
+        {/* dark overlay */}
         <div className="absolute inset-0 bg-black/50" />
 
         {/* logo top-left */}
         <div className="absolute top-6 left-6 sm:top-10 sm:left-10 z-10">
           <Image
-            src={site.hero.logo}
-            alt="Joe Rey Photography logo"
+            src="/photos/logo.png"
+            alt="Joe Rey Photography"
             width={260}
             height={60}
             className="w-[140px] sm:w-[200px] md:w-[260px] h-auto"
@@ -119,35 +121,35 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ===== PORTFOLIO (clean 3×3, square tiles) ===== */}
+      {/* ===== PORTFOLIO (3×3 squares) ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
-        aria-label="Featured portfolio"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
 
-        {/* strict 3 columns, even gaps; tiles forced square with aspect-square */}
-        <div className="mt-8 grid grid-cols-3 gap-6">
-          {nine.map((img, i) => (
+        {/* 3x3: on laptop/desktop 3 columns; on tablet 2; on phone 1 */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {topNine.map((img, i) => (
             <a
               key={i}
               href={img.page}
               target="_blank"
               rel="noreferrer"
-              className="group relative block overflow-hidden rounded-2xl ring-1 ring-neutral-800 aspect-square"
+              className="group block relative w-full pb-[100%] overflow-hidden rounded-2xl ring-1 ring-neutral-800"
               title="Open on Clickasnap"
             >
+              {/* square via pb-[100%], image fills via fill */}
               <Image
                 src={img.src}
                 alt={img.alt}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 33vw, 33vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 priority={i < 3}
               />
               <span
-                className={cx(
+                className={classNames(
                   'pointer-events-none absolute inset-x-0 bottom-0 p-3 text-sm',
                   'bg-gradient-to-t from-black/60 to-transparent text-neutral-200'
                 )}
@@ -156,6 +158,7 @@ export default function Page() {
               </span>
             </a>
           ))}
+          {/* If fewer than 9 items, we just render what we have. No blank boxes, no lies. */}
         </div>
 
         <div className="mt-8">
@@ -175,39 +178,36 @@ export default function Page() {
       <section
         id="about"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
-        aria-label="About Joe"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
-
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          {/* text column */}
-          <div className="md:col-span-2 space-y-4 text-neutral-300 leading-relaxed">
+          <div className="md:col-span-2 space-y-4 text-neutral-300">
             <p>
-              I’m Joe Rey, a UK photographer travelling across the UK and Europe. I started in 2015,
-              earned a photography diploma in 2016, and never looked back.
+              Picked up a camera in 2015, got serious in 2016 with a photography diploma.
+              What started as a hobby turned into a full-blown obsession.
             </p>
             <p>
-              My work covers landscapes, cityscapes, macro, architecture, animals, and the occasional
-              dog portrait. If it looks good, it’s fair game.
+              I chase light, landscapes, macro worlds, and the occasional dog portrait.
+              No single genre holds me down — nature, architecture, wildlife, macro —
+              if it looks good, it’s fair game.
             </p>
             <p>
-              I aim to capture moments that would otherwise disappear: dawn light on mountain lakes,
-              mist on city streets, or a dew-covered flower.
+              My aim? To pause time. A dew-covered petal, mist rolling over Cambridge,
+              a split-second that vanishes before you even notice it.
             </p>
             <p>
-              This site is my portfolio and print shop. You’ll find galleries of landscapes, macro studies,
-              and city views — available as prints, canvases, and downloads.
+              Want something on your walls or screens? Prints, canvases, and downloads are ready.
+              Browse the feed, pick a favourite, or surprise yourself.
             </p>
 
-            {/* info cards: wider “Based in”, no silly wrapping */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
-              <div className="sm:col-span-2 md:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[110px] min-w-[260px] flex flex-col justify-center">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
                 <p className="text-sm text-neutral-400">Based in</p>
-                <p className="text-xl leading-snug break-keep">{site.location}</p>
+                <p className="text-lg">{site.location}</p>
               </div>
-              <div className="rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[110px] flex flex-col justify-center">
+              <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
                 <p className="text-sm text-neutral-400">Turnaround</p>
-                <p className="text-lg leading-snug">3–7 days</p>
+                <p className="text-lg">3–7 days</p>
               </div>
             </div>
 
@@ -222,13 +222,13 @@ export default function Page() {
             </a>
           </div>
 
-          {/* portrait */}
           <div className="relative w-full h-96">
             <Image
               src="/photos/me.jpg"
               alt="Portrait of Joe Rey"
               fill
               className="object-cover rounded-2xl ring-1 ring-neutral-800"
+              priority={false}
             />
           </div>
         </div>
@@ -238,15 +238,13 @@ export default function Page() {
       <section
         id="contact"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-neutral-800"
-        aria-label="Contact"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
-        {/* 1 col on mobile, 2 cols on lg: form = 2fr, cards = 1fr */}
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:[grid-template-columns:2fr_1fr]">
-          {/* form */}
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* no backend: just opens mail client */}
           <form
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
             onSubmit={(e) => {
               e.preventDefault();
               const form = e.currentTarget as HTMLFormElement;
@@ -255,69 +253,35 @@ export default function Page() {
               const subject = (form.elements.namedItem('subject') as HTMLInputElement)?.value || '';
               const msg = (form.elements.namedItem('message') as HTMLTextAreaElement)?.value || '';
               const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
-              const subjectEnc = encodeURIComponent(subject || 'Enquiry from joereyphotography.com');
+              const subjectEnc = encodeURIComponent(subject || 'Enquiry from joerey-site');
               window.location.href = `mailto:${site.email}?subject=${subjectEnc}&body=${body}`;
             }}
           >
-            <input
-              name="name"
-              placeholder="Your name"
-              required
-              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
-            <input
-              name="email"
-              type="email"
-              placeholder="Email address"
-              required
-              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
-            <input
-              name="subject"
-              placeholder="Subject"
-              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
-            <textarea
-              name="message"
-              rows={5}
-              placeholder="Tell me about the shoot…"
-              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
-            />
+            <input name="name" placeholder="Your name" required className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
+            <input name="email" type="email" placeholder="Email address" required className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
+            <input name="subject" placeholder="Subject" className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
+            <textarea name="message" rows={5} placeholder="Tell me about the shoot…" className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
             <div className="sm:col-span-2">
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200"
-              >
+              <button type="submit" className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200">
                 Send inquiry
               </button>
             </div>
           </form>
 
-          {/* right-hand contact cards: tidy, stacked, even */}
-          <div className="grid grid-cols-1 gap-4 items-stretch">
-            <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col justify-between">
-              <div>
-                <p className="text-sm text-neutral-400">Email</p>
-                <a href={`mailto:${site.email}`} className="underline break-words">
-                  {site.email}
-                </a>
-              </div>
+          <div className="space-y-3">
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+              <p className="text-sm text-neutral-400">Email</p>
+              <a href={`mailto:${site.email}`} className="underline">{site.email}</a>
             </div>
-
-            <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col justify-center">
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400">Based in</p>
-              <p className="text-lg">Cambridgeshire, UK</p>
+              <p className="text-lg">{site.location}</p>
             </div>
-
-            <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col">
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400 mb-1">Links</p>
-              <div className="flex flex-col gap-2 mt-1">
-                <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">
-                  Instagram
-                </a>
-                <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="underline">
-                  Clickasnap
-                </a>
+              <div className="flex flex-col gap-2">
+                <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">Instagram</a>
+                <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="underline">Clickasnap</a>
               </div>
             </div>
           </div>
@@ -326,4 +290,3 @@ export default function Page() {
     </main>
   );
 }
-// preview-build trigger
