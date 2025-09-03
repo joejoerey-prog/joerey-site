@@ -9,7 +9,7 @@ import { ExternalLink } from 'lucide-react';
 type GalleryImage = { src: string; page: string; alt: string };
 
 /* ---------- tiny helper ---------- */
-function classNames(...xs: Array<string | false | null | undefined>) {
+function cx(...xs: Array<string | false | null | undefined>) {
   return xs.filter(Boolean).join(' ');
 }
 
@@ -24,7 +24,7 @@ function useRemoteGallery(url: string) {
         if (alive && Array.isArray(arr)) setItems(arr);
       })
       .catch(() => {
-        // minimal safe fallback so the page is never empty
+        // minimal fallback so the page is never empty
         setItems([
           {
             src: '/photos/leaf-macro.jpg',
@@ -62,9 +62,9 @@ const site = {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  // exactly first 9 valid items
-  const topNine = useMemo(
-    () => gallery.filter(g => g && g.src && g.page && g.alt).slice(0, 9),
+  // take first 9 valid items only (strict 3×3)
+  const nine = useMemo(
+    () => gallery.filter(g => g?.src && g?.page && g?.alt).slice(0, 9),
     [gallery]
   );
 
@@ -119,37 +119,36 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ===== PORTFOLIO (exact 3×3, tidy spacing) ===== */}
+      {/* ===== PORTFOLIO (clean 3×3) ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
         aria-label="Featured portfolio"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-        <p className="text-neutral-400 mt-2">Three rows of three. Click a tile to view on Clickasnap.</p>
 
-        {/* fixed 3 columns at all sizes for a strict 3×3 */}
-        <div className="mt-8 grid grid-cols-3 gap-5">
-          {topNine.map((img, i) => (
+        {/* strict 3 columns, even gaps, square tiles */}
+        <div className="mt-8 grid grid-cols-3 gap-6">
+          {nine.map((img, i) => (
             <a
               key={i}
               href={img.page}
               target="_blank"
               rel="noreferrer"
-              className="group relative block w-full pb-[100%] overflow-hidden rounded-2xl ring-1 ring-neutral-800"
+              className="group relative block w-full overflow-hidden rounded-2xl ring-1 ring-neutral-800"
               title="Open on Clickasnap"
+              style={{ aspectRatio: '1 / 1' }} // square tile
             >
-              {/* square via padding trick; image fills via fill */}
               <Image
                 src={img.src}
                 alt={img.alt}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                sizes="33vw"
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 33vw, 33vw"
                 priority={i < 3}
               />
               <span
-                className={classNames(
+                className={cx(
                   'pointer-events-none absolute inset-x-0 bottom-0 p-3 text-sm',
                   'bg-gradient-to-t from-black/60 to-transparent text-neutral-200'
                 )}
@@ -158,6 +157,18 @@ export default function Page() {
               </span>
             </a>
           ))}
+        </div>
+
+        <div className="mt-8">
+          <a
+            href={site.social.clickasnap}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white"
+          >
+            View full Clickasnap profile
+            <ExternalLink className="h-4 w-4" />
+          </a>
         </div>
       </section>
 
@@ -168,8 +179,10 @@ export default function Page() {
         aria-label="About Joe"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
+
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          <div className="md:col-span-2 space-y-4 text-neutral-300">
+          {/* text column */}
+          <div className="md:col-span-2 space-y-4 text-neutral-300 leading-relaxed">
             <p>
               I’m Joe Rey, a UK photographer travelling across the UK and Europe. I started in 2015,
               earned a photography diploma in 2016, and never looked back.
@@ -187,15 +200,16 @@ export default function Page() {
               and city views — available as prints, canvases, and downloads.
             </p>
 
-            {/* info cards: bigger "Based in" box and even card heights */}
-            <div className="grid grid-cols-2 gap-4 items-stretch">
-              <div className="col-span-2 sm:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[96px] flex flex-col justify-center">
+            {/* info cards: make "Based in" wider, tidy heights */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
+              {/* span full width on small so "Cambridgeshire" fits easily */}
+              <div className="sm:col-span-2 md:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[104px] flex flex-col justify-center">
                 <p className="text-sm text-neutral-400">Based in</p>
-                <p className="text-xl leading-tight">{site.location}</p>
+                <p className="text-xl leading-snug break-words">{site.location}</p>
               </div>
-              <div className="col-span-2 sm:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[96px] flex flex-col justify-center">
+              <div className="rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[104px] flex flex-col justify-center">
                 <p className="text-sm text-neutral-400">Turnaround</p>
-                <p className="text-lg">3–7 days</p>
+                <p className="text-lg leading-snug">3–7 days</p>
               </div>
             </div>
 
@@ -210,6 +224,7 @@ export default function Page() {
             </a>
           </div>
 
+          {/* portrait */}
           <div className="relative w-full h-96">
             <Image
               src="/photos/me.jpg"
@@ -230,7 +245,7 @@ export default function Page() {
         <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* form left, cards right — make cards tidy and even */}
+          {/* form left */}
           <form
             className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
             onSubmit={(e) => {
@@ -279,12 +294,14 @@ export default function Page() {
             </div>
           </form>
 
-          {/* tidy, even-height cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4 items-stretch">
+          {/* contact cards right — single column, even spacing */}
+          <div className="grid grid-cols-1 gap-4 items-stretch">
             <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col justify-between">
               <div>
                 <p className="text-sm text-neutral-400">Email</p>
-                <a href={`mailto:${site.email}`} className="underline break-all">{site.email}</a>
+                <a href={`mailto:${site.email}`} className="underline break-words">
+                  {site.email}
+                </a>
               </div>
             </div>
 
@@ -295,7 +312,7 @@ export default function Page() {
 
             <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col">
               <p className="text-sm text-neutral-400 mb-1">Links</p>
-              <div className="flex flex-col gap-2 mt-auto">
+              <div className="flex flex-col gap-2 mt-1">
                 <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">
                   Instagram
                 </a>
