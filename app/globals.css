@@ -140,3 +140,4 @@ html { scroll-behavior: smooth; }/* --- Image sanity + portrait helper --- */
 
 /* Already added earlier — leave it in place */
 html { scroll-behavior: smooth; }
+ @import "./css/mobile-fixes.css";

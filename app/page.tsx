@@ -5,6 +5,27 @@ import Image from 'next/image';
 import Header from '@/components/Header';
 import { ExternalLink } from 'lucide-react';
 
+/* ---------- page SEO ---------- */
+export const metadata = {
+  title: 'Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints',
+  description:
+    'Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.',
+  openGraph: {
+    title: 'Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints',
+    description:
+      'Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.',
+    url: 'https://joereyphotography.com/',
+    siteName: 'Joe Rey Photography',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints',
+    description:
+      'Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.',
+  },
+};
+
 /* ---------- types ---------- */
 type GalleryImage = { src: string; page: string; alt: string };
 
@@ -16,7 +37,7 @@ function classNames(...xs: Array<string | false | null | undefined>) {
 /* ---------- fetch gallery.json (client-side) ---------- */
 function useRemoteGallery(url: string) {
   const [items, setItems] = React.useState<GalleryImage[]>([]);
-  useEffect(() => {
+  React.useEffect(() => {
     let alive = true;
     fetch(url, { cache: 'no-store' })
       .then(r => (r.ok ? r.json() : Promise.reject(r)))
@@ -29,7 +50,7 @@ function useRemoteGallery(url: string) {
           {
             src: '/photos/leaf-macro.jpg',
             page: 'https://www.clickasnap.com/',
-            alt: 'Leaf macro',
+            alt: 'Dew on leaf macro, UK, close-up detail',
           },
         ]);
       });
@@ -43,7 +64,7 @@ function useRemoteGallery(url: string) {
 /* ---------- site data ---------- */
 const site = {
   name: 'Joe Rey Photography',
-  location: 'Cambridgeshire, UK',
+  location: 'Cambridgeshire, UK', // base location for About/Contact
   email: 'joereyphotography@hotmail.com',
   social: {
     instagram: 'https://instagram.com/joe.rey.photography',
@@ -52,8 +73,8 @@ const site = {
   hero: {
     image: '/photos/Gap.jpg', // keep this in /public/photos
     logo: '/photos/logo.png', // top-left logo
-    headline: 'Story-driven images that actually feel like the moment',
-    sub: 'A hand-picked set of favourites from my Clickasnap portfolio.',
+    headline: 'Photography across the UK & Europe', // clear H1
+    sub: 'Landscapes, cityscapes, and macro — curated favourites. Prints and downloads available.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
     ctaSecondary: { label: 'Book a shoot', href: '#contact' },
   },
@@ -62,7 +83,7 @@ const site = {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  // strictly pick the first 9 valid local images
+  // strictly pick the first 9 valid images
   const topNine = useMemo(() => {
     return gallery
       .filter(g => g && g.src && g.page && g.alt)
@@ -73,64 +94,66 @@ export default function Page() {
     <main className="min-h-dvh bg-neutral-950 text-neutral-100">
       <Header />
 
-     {/* ===== HERO ===== */}
-<section
-  id="hero"
-  className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex flex-col items-center justify-center text-center text-white"
-  style={{
-    backgroundImage: `url(${site.hero.image})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-  {/* dark overlay */}
-  <div className="absolute inset-0 bg-black/50" />
-
-  {/* logo top-left */}
-  <div className="absolute top-6 left-6 sm:top-10 sm:left-10 z-10">
-    <Image
-      src="/photos/logo.png"
-      alt="Joe Rey Photography"
-      width={260}
-      height={60}
-      className="w-[140px] sm:w-[200px] md:w-[260px] h-auto"
-      priority
-    />
-  </div>
-
-  {/* hero text + buttons */}
-  <div className="relative z-10 max-w-3xl px-6 pt-24 sm:pt-0">
-    <h1 className="text-3xl sm:text-5xl font-bold">{site.hero.headline}</h1>
-    <p className="mt-3 text-lg text-neutral-300">{site.hero.sub}</p>
-
-    <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-      <a
-        className="btn bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-neutral-200"
-        href={site.hero.ctaPrimary.href}
+      {/* ===== HERO ===== */}
+      <section
+        id="hero"
+        className="relative w-full h-[72vh] sm:h-[78vh] md:h-[82vh] flex flex-col items-center justify-center text-center text-white"
+        aria-label="Hero"
+        style={{
+          backgroundImage: `url(${site.hero.image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
       >
-        {site.hero.ctaPrimary.label}
-      </a>
-      <a
-        className="btn bg-neutral-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-neutral-800"
-        href={site.hero.ctaSecondary.href}
-      >
-        {site.hero.ctaSecondary.label}
-      </a>
-    </div>
-  </div>
-</section> 
+        {/* dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+
+        {/* logo top-left */}
+        <div className="absolute top-6 left-6 sm:top-10 sm:left-10 z-10">
+          <Image
+            src={site.hero.logo}
+            alt="Joe Rey Photography logo"
+            width={260}
+            height={60}
+            className="w-[140px] sm:w-[200px] md:w-[260px] h-auto"
+            priority
+          />
+        </div>
+
+        {/* hero text + buttons */}
+        <div className="relative z-10 max-w-3xl px-6 pt-24 sm:pt-0">
+          <h1 className="text-3xl sm:text-5xl font-bold">{site.hero.headline}</h1>
+          <p className="mt-3 text-lg text-neutral-300">{site.hero.sub}</p>
+
+          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              className="btn bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-neutral-200"
+              href={site.hero.ctaPrimary.href}
+            >
+              {site.hero.ctaPrimary.label}
+            </a>
+            <a
+              className="btn bg-neutral-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-neutral-800"
+              href={site.hero.ctaSecondary.href}
+            >
+              {site.hero.ctaSecondary.label}
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* ===== PORTFOLIO (3×3 squares) ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+        aria-label="Featured portfolio"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
         <p className="text-neutral-400 mt-2">
           Nine equal squares. Click a tile to view on Clickasnap.
         </p>
 
-        {/* 3x3: on laptop/desktop 3 columns; on tablet 2; on phone 1 */}
+        {/* 3x3 grid */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {topNine.map((img, i) => (
             <a
@@ -144,7 +167,7 @@ export default function Page() {
               {/* square via pb-[100%], image fills via fill */}
               <Image
                 src={img.src}
-                alt={img.alt}
+                alt={img.alt} // expect alt to contain subject, place, country, detail
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -160,7 +183,6 @@ export default function Page() {
               </span>
             </a>
           ))}
-          {/* If fewer than 9 items, we just render what we have. No blank boxes, no lies. */}
         </div>
 
         <div className="mt-8">
@@ -180,26 +202,26 @@ export default function Page() {
       <section
         id="about"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+        aria-label="About Joe"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">About Joe</h2>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           <div className="md:col-span-2 space-y-4 text-neutral-300">
             <p>
-              Picked up a camera in 2015, got serious in 2016 with a photography diploma.
-              What started as a hobby turned into a full-blown obsession.
+              I’m Joe Rey, a UK photographer travelling across the UK and Europe. I started in 2015,
+              earned a photography diploma in 2016, and never looked back.
             </p>
             <p>
-              I chase light, landscapes, macro worlds, and the occasional dog portrait.
-              No single genre holds me down — nature, architecture, wildlife, macro —
-              if it looks good, it’s fair game.
+              My work covers landscapes, cityscapes, macro, architecture, animals, and the occasional
+              dog portrait. If it looks good, it’s fair game.
             </p>
             <p>
-              My aim? To pause time. A dew-covered petal, mist rolling over Cambridge,
-              a split-second that vanishes before you even notice it.
+              I aim to capture moments that would otherwise disappear: dawn light on mountain lakes,
+              mist on city streets, or a dew-covered flower.
             </p>
             <p>
-              Want something on your walls or screens? Prints, canvases, and downloads are ready.
-              Browse the feed, pick a favourite, or surprise yourself.
+              This site is my portfolio and print shop. You’ll find galleries of landscapes, macro studies,
+              and city views — available as prints, canvases, and downloads.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
@@ -230,7 +252,6 @@ export default function Page() {
               alt="Portrait of Joe Rey"
               fill
               className="object-cover rounded-2xl ring-1 ring-neutral-800"
-              priority={false}
             />
           </div>
         </div>
@@ -240,6 +261,7 @@ export default function Page() {
       <section
         id="contact"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-neutral-800"
+        aria-label="Contact"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
@@ -255,7 +277,7 @@ export default function Page() {
               const subject = (form.elements.namedItem('subject') as HTMLInputElement)?.value || '';
               const msg = (form.elements.namedItem('message') as HTMLTextAreaElement)?.value || '';
               const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
-              const subjectEnc = encodeURIComponent(subject || 'Enquiry from joerey-site');
+              const subjectEnc = encodeURIComponent(subject || 'Enquiry from joereyphotography.com');
               window.location.href = `mailto:${site.email}?subject=${subjectEnc}&body=${body}`;
             }}
           >
