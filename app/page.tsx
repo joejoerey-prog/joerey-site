@@ -50,9 +50,9 @@ const site = {
     clickasnap: 'https://www.clickasnap.com/profile/joereyphotos',
   },
   hero: {
-    image: '/photos/Gap.jpg', // keep this in /public/photos
-    logo: '/photos/logo.png', // top-left logo
-    headline: 'Photography across the UK & Europe', // clear H1 text
+    image: '/photos/Gap.jpg',
+    logo: '/photos/logo.png',
+    headline: 'Photography across the UK & Europe',
     sub: 'Landscapes, cityscapes, and macro — curated favourites. Prints and downloads available.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
     ctaSecondary: { label: 'Book a shoot', href: '#contact' },
@@ -62,7 +62,7 @@ const site = {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  // strictly pick the first 9 valid images
+  // exactly first 9 valid items
   const topNine = useMemo(
     () => gallery.filter(g => g && g.src && g.page && g.alt).slice(0, 9),
     [gallery]
@@ -83,7 +83,6 @@ export default function Page() {
           backgroundPosition: 'center',
         }}
       >
-        {/* dark overlay */}
         <div className="absolute inset-0 bg-black/50" />
 
         {/* logo top-left */}
@@ -120,35 +119,33 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ===== PORTFOLIO (3×3 squares) ===== */}
+      {/* ===== PORTFOLIO (exact 3×3, tidy spacing) ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
         aria-label="Featured portfolio"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-        <p className="text-neutral-400 mt-2">
-          Nine equal squares. Click a tile to view on Clickasnap.
-        </p>
+        <p className="text-neutral-400 mt-2">Three rows of three. Click a tile to view on Clickasnap.</p>
 
-        {/* 3x3 grid */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* fixed 3 columns at all sizes for a strict 3×3 */}
+        <div className="mt-8 grid grid-cols-3 gap-5">
           {topNine.map((img, i) => (
             <a
               key={i}
               href={img.page}
               target="_blank"
               rel="noreferrer"
-              className="group block relative w-full pb-[100%] overflow-hidden rounded-2xl ring-1 ring-neutral-800"
+              className="group relative block w-full pb-[100%] overflow-hidden rounded-2xl ring-1 ring-neutral-800"
               title="Open on Clickasnap"
             >
-              {/* square via pb-[100%], image fills via fill */}
+              {/* square via padding trick; image fills via fill */}
               <Image
                 src={img.src}
-                alt={img.alt} // alt should include subject, place, country, detail
+                alt={img.alt}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="33vw"
                 priority={i < 3}
               />
               <span
@@ -161,18 +158,6 @@ export default function Page() {
               </span>
             </a>
           ))}
-        </div>
-
-        <div className="mt-8">
-          <a
-            href={site.social.clickasnap}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white"
-          >
-            View full Clickasnap profile
-            <ExternalLink className="h-4 w-4" />
-          </a>
         </div>
       </section>
 
@@ -202,12 +187,13 @@ export default function Page() {
               and city views — available as prints, canvases, and downloads.
             </p>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+            {/* info cards: bigger "Based in" box and even card heights */}
+            <div className="grid grid-cols-2 gap-4 items-stretch">
+              <div className="col-span-2 sm:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[96px] flex flex-col justify-center">
                 <p className="text-sm text-neutral-400">Based in</p>
-                <p className="text-lg">{site.location}</p>
+                <p className="text-xl leading-tight">{site.location}</p>
               </div>
-              <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+              <div className="col-span-2 sm:col-span-1 rounded-2xl ring-1 ring-neutral-800 p-5 min-h-[96px] flex flex-col justify-center">
                 <p className="text-sm text-neutral-400">Turnaround</p>
                 <p className="text-lg">3–7 days</p>
               </div>
@@ -244,7 +230,7 @@ export default function Page() {
         <h2 className="text-2xl sm:text-3xl font-semibold">Let’s make something good</h2>
 
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* no backend: just opens mail client */}
+          {/* form left, cards right — make cards tidy and even */}
           <form
             className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
             onSubmit={(e) => {
@@ -293,20 +279,23 @@ export default function Page() {
             </div>
           </form>
 
-          <div className="space-y-3">
-            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
-              <p className="text-sm text-neutral-400">Email</p>
-              <a href={`mailto:${site.email}`} className="underline">
-                {site.email}
-              </a>
+          {/* tidy, even-height cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4 items-stretch">
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col justify-between">
+              <div>
+                <p className="text-sm text-neutral-400">Email</p>
+                <a href={`mailto:${site.email}`} className="underline break-all">{site.email}</a>
+              </div>
             </div>
-            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col justify-center">
               <p className="text-sm text-neutral-400">Based in</p>
               <p className="text-lg">{site.location}</p>
             </div>
-            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
+
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-5 h-full flex flex-col">
               <p className="text-sm text-neutral-400 mb-1">Links</p>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 mt-auto">
                 <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">
                   Instagram
                 </a>
