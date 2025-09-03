@@ -20,15 +20,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints",
+  title: "Joe Rey Photography | UK landscapes, cityscapes, macro, prints",
   description:
-    "Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
+    "Joe Rey Photography across the UK: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
   metadataBase: new URL("https://www.joereyphotography.com"),
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints",
+    title: "Joe Rey Photography | UK landscapes, cityscapes, macro, prints",
     description:
-      "Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
+      "Joe Rey Photography across the UK: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
     url: "https://www.joereyphotography.com",
     siteName: "Joe Rey Photography",
     images: [{ url: "/photos/logo.png", width: 1200, height: 630 }],
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints",
+    title: "Joe Rey Photography | UK landscapes, cityscapes, macro, prints",
     description:
-      "Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
+      "Joe Rey Photography across the UK: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
     images: ["/photos/logo.png"],
   },
 };
