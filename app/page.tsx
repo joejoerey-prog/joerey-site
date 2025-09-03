@@ -1,30 +1,9 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import { ExternalLink } from 'lucide-react';
-
-/* ---------- page SEO ---------- */
-export const metadata = {
-  title: 'Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints',
-  description:
-    'Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.',
-  openGraph: {
-    title: 'Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints',
-    description:
-      'Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.',
-    url: 'https://joereyphotography.com/',
-    siteName: 'Joe Rey Photography',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints',
-    description:
-      'Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.',
-  },
-};
 
 /* ---------- types ---------- */
 type GalleryImage = { src: string; page: string; alt: string };
@@ -36,8 +15,8 @@ function classNames(...xs: Array<string | false | null | undefined>) {
 
 /* ---------- fetch gallery.json (client-side) ---------- */
 function useRemoteGallery(url: string) {
-  const [items, setItems] = React.useState<GalleryImage[]>([]);
-  React.useEffect(() => {
+  const [items, setItems] = useState<GalleryImage[]>([]);
+  useEffect(() => {
     let alive = true;
     fetch(url, { cache: 'no-store' })
       .then(r => (r.ok ? r.json() : Promise.reject(r)))
@@ -50,7 +29,7 @@ function useRemoteGallery(url: string) {
           {
             src: '/photos/leaf-macro.jpg',
             page: 'https://www.clickasnap.com/',
-            alt: 'Dew on leaf macro, UK, close-up detail',
+            alt: 'Dew on leaf, UK, close-up detail',
           },
         ]);
       });
@@ -64,7 +43,7 @@ function useRemoteGallery(url: string) {
 /* ---------- site data ---------- */
 const site = {
   name: 'Joe Rey Photography',
-  location: 'Cambridgeshire, UK', // base location for About/Contact
+  location: 'Cambridgeshire, UK',
   email: 'joereyphotography@hotmail.com',
   social: {
     instagram: 'https://instagram.com/joe.rey.photography',
@@ -73,7 +52,7 @@ const site = {
   hero: {
     image: '/photos/Gap.jpg', // keep this in /public/photos
     logo: '/photos/logo.png', // top-left logo
-    headline: 'Photography across the UK & Europe', // clear H1
+    headline: 'Photography across the UK & Europe', // clear H1 text
     sub: 'Landscapes, cityscapes, and macro — curated favourites. Prints and downloads available.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
     ctaSecondary: { label: 'Book a shoot', href: '#contact' },
@@ -84,11 +63,10 @@ export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
   // strictly pick the first 9 valid images
-  const topNine = useMemo(() => {
-    return gallery
-      .filter(g => g && g.src && g.page && g.alt)
-      .slice(0, 9);
-  }, [gallery]);
+  const topNine = useMemo(
+    () => gallery.filter(g => g && g.src && g.page && g.alt).slice(0, 9),
+    [gallery]
+  );
 
   return (
     <main className="min-h-dvh bg-neutral-950 text-neutral-100">
@@ -167,7 +145,7 @@ export default function Page() {
               {/* square via pb-[100%], image fills via fill */}
               <Image
                 src={img.src}
-                alt={img.alt} // expect alt to contain subject, place, country, detail
+                alt={img.alt} // alt should include subject, place, country, detail
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -281,12 +259,35 @@ export default function Page() {
               window.location.href = `mailto:${site.email}?subject=${subjectEnc}&body=${body}`;
             }}
           >
-            <input name="name" placeholder="Your name" required className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
-            <input name="email" type="email" placeholder="Email address" required className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
-            <input name="subject" placeholder="Subject" className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
-            <textarea name="message" rows={5} placeholder="Tell me about the shoot…" className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800" />
+            <input
+              name="name"
+              placeholder="Your name"
+              required
+              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email address"
+              required
+              className="px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
+            <input
+              name="subject"
+              placeholder="Subject"
+              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
+            <textarea
+              name="message"
+              rows={5}
+              placeholder="Tell me about the shoot…"
+              className="sm:col-span-2 px-3 py-2 rounded-lg bg-neutral-900 ring-1 ring-neutral-800"
+            />
             <div className="sm:col-span-2">
-              <button type="submit" className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200">
+              <button
+                type="submit"
+                className="px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-neutral-200"
+              >
                 Send inquiry
               </button>
             </div>
@@ -295,7 +296,9 @@ export default function Page() {
           <div className="space-y-3">
             <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400">Email</p>
-              <a href={`mailto:${site.email}`} className="underline">{site.email}</a>
+              <a href={`mailto:${site.email}`} className="underline">
+                {site.email}
+              </a>
             </div>
             <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400">Based in</p>
@@ -304,8 +307,12 @@ export default function Page() {
             <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400 mb-1">Links</p>
               <div className="flex flex-col gap-2">
-                <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">Instagram</a>
-                <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="underline">Clickasnap</a>
+                <a href={site.social.instagram} target="_blank" rel="noreferrer" className="underline">
+                  Instagram
+                </a>
+                <a href={site.social.clickasnap} target="_blank" rel="noreferrer" className="underline">
+                  Clickasnap
+                </a>
               </div>
             </div>
           </div>

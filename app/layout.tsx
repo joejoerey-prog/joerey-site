@@ -20,23 +20,25 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Joe Rey Photography",
-  description: "Story-driven images that actually feel like the moment.",
+  title: "Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints",
+  description:
+    "Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
   metadataBase: new URL("https://www.joereyphotography.com"),
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Joe Rey Photography",
-    description: "Story-driven images that actually feel like the moment.",
+    title: "Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints",
+    description:
+      "Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
     url: "https://www.joereyphotography.com",
     siteName: "Joe Rey Photography",
-    // your logo as the preview image
     images: [{ url: "/photos/logo.png", width: 1200, height: 630 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Joe Rey Photography",
-    description: "Story-driven images that actually feel like the moment.",
+    title: "Joe Rey Photography | UK & Europe landscapes, cityscapes, macro, prints",
+    description:
+      "Photography across the UK & Europe: landscapes, cityscapes, and macro. Browse galleries, order prints, or book a session.",
     images: ["/photos/logo.png"],
   },
 };
@@ -48,7 +50,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         {children}
       </body>
     </html>
