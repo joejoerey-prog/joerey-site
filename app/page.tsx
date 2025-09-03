@@ -126,9 +126,7 @@ export default function Page() {
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
         <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-        <p className="text-neutral-400 mt-2">
-          Nine equal squares. Click a tile to view on Clickasnap.
-        </p>
+       
 
         {/* 3x3: on laptop/desktop 3 columns; on tablet 2; on phone 1 */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
