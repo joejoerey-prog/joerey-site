@@ -273,10 +273,10 @@ export default function Page() {
               <p className="text-sm text-neutral-400">Email</p>
               <a href={`mailto:${site.email}`} className="underline">{site.email}</a>
             </div>
-            <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
-              <p className="text-sm text-neutral-400">Based in</p>
-              <p className="text-lg">{site.location}</p>
-            </div>
+            <div className="rounded-2xl ring-1 ring-neutral-800 p-4 min-w-[260px] md:min-w-[280px]">
+  <p className="text-sm text-neutral-400">Based in</p>
+  <p className="text-lg leading-snug whitespace-nowrap">{site.location}</p>
+</div>
             <div className="rounded-2xl ring-1 ring-neutral-800 p-4">
               <p className="text-sm text-neutral-400 mb-1">Links</p>
               <div className="flex flex-col gap-2">
