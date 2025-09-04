@@ -18,12 +18,14 @@ function useRemoteGallery(url: string) {
   const [items, setItems] = React.useState<GalleryImage[]>([]);
   useEffect(() => {
     let alive = true;
-    fetch(url, { cache: 'no-store' })
+    const controller = new AbortController();
+    fetch(url, { cache: 'no-store', signal: controller.signal })
       .then(r => (r.ok ? r.json() : Promise.reject(r)))
       .then((arr: GalleryImage[]) => {
         if (alive && Array.isArray(arr)) setItems(arr);
       })
-      .catch(() => {
+      .catch(err => {
+        if (err.name === 'AbortError') return;
         // minimal safe fallback so the page is never empty
         setItems([
           {
@@ -35,6 +37,7 @@ function useRemoteGallery(url: string) {
       });
     return () => {
       alive = false;
+      controller.abort();
     };
   }, [url]);
   return items;
