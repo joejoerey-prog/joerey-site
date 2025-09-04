@@ -230,6 +230,7 @@ export default function Page() {
               src="/photos/me.jpg"
               alt="Portrait of Joe Rey"
               fill
+              sizes="(max-width: 768px) 100vw, 33vw"
               className="object-cover rounded-2xl ring-1 ring-neutral-800"
               priority={false}
             />
