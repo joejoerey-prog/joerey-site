@@ -4,6 +4,7 @@ import React, { useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import { ExternalLink } from 'lucide-react';
+import { site } from '@/lib/site';
 
 /* ---------- types ---------- */
 type GalleryImage = { src: string; page: string; alt: string };
@@ -43,25 +44,6 @@ function useRemoteGallery(url: string) {
   return items;
 }
 
-/* ---------- site data ---------- */
-const site = {
-  name: 'Joe Rey Photography',
-  location: 'Cambridgeshire, UK',
-  email: 'joereyphotography@hotmail.com',
-  social: {
-    instagram: 'https://instagram.com/joe.rey.photography',
-    clickasnap: 'https://www.clickasnap.com/profile/joereyphotos',
-  },
-  hero: {
-    image: '/photos/Gap.jpg', // keep this in /public/photos
-    logo: '/photos/logo.png', // top-left logo
-  headline: 'Joe Rey Photography',
-  tagline: 'UK landscapes, cityscapes, macro, prints',
-    sub: 'A hand-picked set of favourites from my Clickasnap portfolio.',
-    ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
-    ctaSecondary: { label: 'Book a shoot', href: '#contact' },
-  },
-};
 
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
@@ -103,12 +85,14 @@ export default function Page() {
   </div>
 
   {/* hero text + buttons */}
-  <div className="relative z-10 max-w-3xl px-6 pt-24 sm:pt-0">
-    <h1 className="text-3xl sm:text-5xl font-bold">
-      <span className="block">{site.name}</span>
-      <span className="block">{site.hero.headline}</span>
-    </h1>
-    <p className="mt-3 text-lg text-neutral-300">{site.hero.sub}</p>
+    <div className="relative z-10 max-w-3xl px-6 pt-24 sm:pt-0">
+      <h1 className="text-3xl sm:text-5xl font-bold">{site.hero.headline}</h1>
+      {site.hero.tagline && (
+        <p className="mt-2 text-2xl sm:text-3xl font-semibold">
+          {site.hero.tagline}
+        </p>
+      )}
+      <p className="mt-3 text-lg text-neutral-300">{site.hero.sub}</p>
 
     <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
       <a
