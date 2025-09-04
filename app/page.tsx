@@ -48,11 +48,9 @@ function useRemoteGallery(url: string) {
 export default function Page() {
   const gallery = useRemoteGallery('/gallery.json');
 
-  // strictly pick the first 9 valid local images
-  const topNine = useMemo(() => {
-    return gallery
-      .filter(g => g && g.src && g.page && g.alt)
-      .slice(0, 9);
+  // include all valid local images
+  const galleryItems = useMemo(() => {
+    return gallery.filter(g => g && g.src && g.page && g.alt);
   }, [gallery]);
 
   return (
@@ -111,17 +109,17 @@ export default function Page() {
   </div>
 </section> 
 
-      {/* ===== PORTFOLIO (3×3 squares) ===== */}
+      {/* ===== GALLERY ===== */}
       <section
         id="portfolio"
         className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
       >
-        <h2 className="text-2xl sm:text-3xl font-semibold">Featured portfolio</h2>
-       
+        <h2 className="text-2xl sm:text-3xl font-semibold">Gallery</h2>
 
-        {/* 3x3: on laptop/desktop 3 columns; on tablet 2; on phone 1 */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {topNine.map((img, i) => (
+
+        {/* responsive grid: on desktop 3 columns; on tablet 2; on phone 1 */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {galleryItems.map((img, i) => (
             <a
               key={i}
               href={img.page}
@@ -149,7 +147,7 @@ export default function Page() {
               </span>
             </a>
           ))}
-          {/* If fewer than 9 items, we just render what we have. No blank boxes, no lies. */}
+          {/* Render all available items. No blank boxes, no lies. */}
         </div>
 
         <div className="mt-8">
