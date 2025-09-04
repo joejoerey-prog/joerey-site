@@ -55,7 +55,7 @@ const site = {
   hero: {
     image: '/photos/Gap.jpg', // keep this in /public/photos
     logo: '/photos/logo.png', // top-left logo
-    headline: 'Story-driven images that actually feel like the moment',
+    headline: 'Joe Rey Photography | UK landscapes, cityscapes, macro, prints',
     sub: 'A hand-picked set of favourites from my Clickasnap portfolio.',
     ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
     ctaSecondary: { label: 'Book a shoot', href: '#contact' },

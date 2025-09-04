@@ -21,12 +21,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Joe Rey Photography",
-  description: "Story-driven images that actually feel like the moment.",
+  description: "Joe Rey Photography | UK landscapes, cityscapes, macro, prints",
   metadataBase: new URL("https://www.joereyphotography.com"),
   alternates: { canonical: "/" },
   openGraph: {
     title: "Joe Rey Photography",
-    description: "Story-driven images that actually feel like the moment.",
+    description: "Joe Rey Photography | UK landscapes, cityscapes, macro, prints",
     url: "https://www.joereyphotography.com",
     siteName: "Joe Rey Photography",
     // your logo as the preview image
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Joe Rey Photography",
-    description: "Story-driven images that actually feel like the moment.",
+    description: "Joe Rey Photography | UK landscapes, cityscapes, macro, prints",
     images: ["/photos/logo.png"],
   },
 };
