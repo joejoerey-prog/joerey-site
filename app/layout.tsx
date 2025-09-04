@@ -3,8 +3,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import Analytics from "@/components/Analytics";
-import * as gtag from "@/lib/gtag";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,26 +50,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {gtag.GA_ID && (
-          <>
-            <Script
-              id="ga-loader"
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_ID}`}
-            />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gtag.GA_ID}', { page_path: window.location.pathname });
-              `}
-            </Script>
-          </>
-        )}
+        {/* Google tag (gtag.js) */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-M4MY7K2G4B" />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-M4MY7K2G4B');
+          `}
+        </Script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {gtag.GA_ID && <Analytics />}
         {children}
       </body>
     </html>
