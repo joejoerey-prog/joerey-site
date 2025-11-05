@@ -27,7 +27,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== CAROUSEL ===== */}
-      <section className="w-full flex justify-center mb-16">
+      <section className="w-full flex justify-center mb-16 relative">
         <div className="w-full max-w-4xl px-4">
           <Swiper
             modules={[Autoplay, Pagination, Navigation]}
@@ -39,6 +39,7 @@ export default function HomePage() {
             slidesPerView={1}
             loop
             speed={1200}
+            className="custom-swiper"
           >
             {galleriesData.galleries.map((gallery, index) => {
               const preview = gallery.images[0]?.image;
@@ -56,7 +57,7 @@ export default function HomePage() {
                           fill
                           className="object-contain"
                           unoptimized={false}
-                          priority={index === 0} // Preload first image
+                          priority={index === 0}
                           sizes="(max-width: 768px) 100vw, 50vw"
                         />
                       )}
@@ -116,6 +117,19 @@ export default function HomePage() {
       <footer className="py-10 text-center text-[#f5efe7b3] text-sm border-t border-[#6b5550] w-full">
         © {new Date().getFullYear()} Joe Rey Photography
       </footer>
+
+      {/* ===== SWIPER ARROW STYLES ===== */}
+      <style jsx global>{`
+        .swiper-button-prev,
+        .swiper-button-next {
+          color: #f5efe7 !important;
+          transition: color 0.3s ease;
+        }
+        .swiper-button-prev:hover,
+        .swiper-button-next:hover {
+          color: #d8cfc6 !important;
+        }
+      `}</style>
     </main>
   );
 }
