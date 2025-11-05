@@ -65,9 +65,11 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
                   src={img.image}
                   alt={img.caption || gallery.title}
                   fill
-                  className="object-contain transition-transform duration-200 hover:scale-105"
+                  className="object-cover transition-transform duration-200 hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  unoptimized
+                  priority={i < 3}     // preload first few images
+                  quality={75}          // reduce payload size
+                  loading="lazy"        // lazy-load off-screen images
                 />
               </div>
 
