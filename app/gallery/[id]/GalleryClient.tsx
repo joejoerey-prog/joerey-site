@@ -8,7 +8,23 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 
-export default function GalleryClient({ gallery }: { gallery: any }) {
+type GalleryImage = {
+  image: string;
+  caption?: string;
+};
+
+type Gallery = {
+  id: string;
+  title: string;
+  description: string;
+  images: GalleryImage[];
+};
+
+interface GalleryClientProps {
+  gallery?: Gallery;
+}
+
+export default function GalleryClient({ gallery }: GalleryClientProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   if (!gallery) {
@@ -36,7 +52,7 @@ export default function GalleryClient({ gallery }: { gallery: any }) {
       {/* Images */}
       <section className="max-w-7xl mx-auto px-6 pb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {gallery.images.map((img: any, i: number) => (
+          {gallery.images.map((img: GalleryImage, i: number) => (
             <figure
               key={i}
               className="rounded-2xl overflow-hidden border border-[#6b5550] bg-[#4b3b39] flex flex-col"
@@ -81,7 +97,7 @@ export default function GalleryClient({ gallery }: { gallery: any }) {
           open={true}
           close={() => setOpenIndex(null)}
           index={openIndex}
-          slides={gallery.images.map((img: any) => ({
+          slides={gallery.images.map((img: GalleryImage) => ({
             src: img.image,
             description: img.caption || "",
           }))}
