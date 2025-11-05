@@ -2,18 +2,14 @@ import { Metadata } from "next";
 import galleriesData from "@/data/galleries.json";
 import GalleryClient from "./GalleryClient";
 
-// Explicitly define the props type
-interface GalleryPageProps {
-  params: {
-    id: string;
-  };
-}
-
-// Generate metadata for each gallery
+// Explicitly define the props as async-compatible
 export async function generateMetadata({
   params,
-}: GalleryPageProps): Promise<Metadata> {
-  const gallery = galleriesData.galleries.find((g) => g.id === params.id);
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const gallery = galleriesData.galleries.find((g) => g.id === id);
 
   if (!gallery) {
     return {
@@ -38,8 +34,12 @@ export async function generateMetadata({
   };
 }
 
-// Default export for the gallery page
-export default function GalleryPage({ params }: GalleryPageProps) {
-  const gallery = galleriesData.galleries.find((g) => g.id === params.id);
+export default async function GalleryPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const gallery = galleriesData.galleries.find((g) => g.id === id);
   return <GalleryClient gallery={gallery} />;
 }
