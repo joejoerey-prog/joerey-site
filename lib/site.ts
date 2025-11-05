@@ -4,7 +4,6 @@ export type Site = {
   email: string;
   social: {
     instagram: string;
-    clickasnap: string;
   };
   hero: {
     image: string;
@@ -23,15 +22,14 @@ export const site: Site = {
   email: 'joereyphotography@hotmail.com',
   social: {
     instagram: 'https://instagram.com/joe.rey.photography',
-    clickasnap: 'https://www.clickasnap.com/profile/joereyphotos',
   },
   hero: {
-    image: '/photos/Gap.jpg', // keep this in /public/photos
+    image: '/photos/land-light/rapeseed-gold.jpg', // hero background image
     logo: '/photos/logo.png', // top-left logo
     headline: 'Joe Rey Photography',
     tagline: 'UK landscapes, cityscapes, macro, prints',
-    sub: 'A hand-picked set of favourites from my Clickasnap portfolio.',
-    ctaPrimary: { label: 'View portfolio', href: '#portfolio' },
-    ctaSecondary: { label: 'Book a shoot', href: '#contact' },
+    sub: 'A hand-picked set of favourites from my photography collection.',
+    ctaPrimary: { label: 'View gallery', href: '#portfolio' },
+    ctaSecondary: { label: 'Contact me', href: '#contact' },
   },
 };
