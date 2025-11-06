@@ -1,34 +1,30 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Pacifico } from "next/font/google";
-import Script from "next/script";
+import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const pacifico = Pacifico({
-  variable: "--font-pacifico",
-  subsets: ["latin"],
-  weight: "400",
-});
+import Clarity from "../clarity";
 
 export const metadata: Metadata = {
   title: "Joe Rey Photography",
-  description:
-    "Photography by Joe Rey — landscapes, stillness, weather, and memory.",
-  metadataBase: new URL("https://www.joereyphotography.com"),
-};
-
-export const viewport: Viewport = {
-  themeColor: "#3b2f2f",
+  description: "Photography portfolio by Joe Rey — landscapes, macro, and creative portrait work.",
+  metadataBase: new URL("https://joereyphotography.com"),
+  openGraph: {
+    title: "Joe Rey Photography",
+    description: "Explore the photography portfolio of Joe Rey — nature, macro, and landscape shots.",
+    url: "https://joereyphotography.com",
+    siteName: "Joe Rey Photography",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Joe Rey Photography portfolio cover",
+      },
+    ],
+    locale: "en_GB",
+    type: "website",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -37,29 +33,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${pacifico.variable}`}>
+    <html lang="en">
       <head>
-        {/* ✅ Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-M4MY7K2G4B"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-M4MY7K2G4B', {
-              page_path: window.location.pathname,
-            });
-            console.log("✅ Google Analytics loaded and tracking page:", window.location.pathname);
-          `}
-        </Script>
+        {/* Microsoft Clarity script */}
+        <Clarity />
       </head>
-      <body className="min-h-dvh bg-[#3b2f2f] text-[#f5efe7] flex flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
