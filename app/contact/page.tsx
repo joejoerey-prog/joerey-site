@@ -10,14 +10,14 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="max-w-3xl mx-auto px-6 py-20 text-[#f5efe7]">
+    <main className="max-w-3xl mx-auto px-6 py-20 text-foreground">
       <h1 className="text-3xl font-semibold mb-6">Contact</h1>
 
       <p className="mb-6 text-lg">
         If you’d like to get in touch, you can reach me directly at{" "}
         <Link
           href="mailto:joereyphotography@hotmail.com"
-          className="text-[#f5efe7b3] hover:text-[#f5efe7]"
+          className="text-foreground-muted hover:text-foreground underline decoration-border underline-offset-4"
         >
           joereyphotography@hotmail.com
         </Link>
@@ -31,7 +31,8 @@ export default function ContactPage() {
           <Link
             href="https://www.instagram.com/joe.rey.photography/"
             target="_blank"
-            className="flex items-center gap-2 text-[#f5efe7b3] hover:text-[#f5efe7]"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-foreground-muted hover:text-foreground"
           >
             <Instagram size={22} />
             Instagram
@@ -42,7 +43,8 @@ export default function ContactPage() {
           <Link
             href="https://bsky.app/profile/joereyphotos.bsky.social"
             target="_blank"
-            className="flex items-center gap-2 text-[#f5efe7b3] hover:text-[#f5efe7]"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-foreground-muted hover:text-foreground"
           >
             <Globe size={22} />
             Bluesky
@@ -53,7 +55,8 @@ export default function ContactPage() {
           <Link
             href="https://uk.pinterest.com/joesphotos1968/"
             target="_blank"
-            className="flex items-center gap-2 text-[#f5efe7b3] hover:text-[#f5efe7]"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-foreground-muted hover:text-foreground"
           >
             <FaPinterestP size={22} />
             Pinterest

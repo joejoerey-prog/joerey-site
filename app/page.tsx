@@ -12,16 +12,16 @@ import galleriesData from '@/data/galleries.json';
 
 export default function HomePage() {
   return (
-    <main className="min-h-dvh bg-[#3b2f2f] text-[#f5efe7] flex flex-col items-center justify-start">
+    <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start">
       {/* ===== HERO SECTION ===== */}
       <section className="text-center py-12">
         <h1
-          className="text-3xl font-bold text-[#f5efe7]"
+          className="text-3xl font-bold text-foreground"
           style={{ fontFamily: 'var(--font-pacifico)' }}
         >
           Welcome to Joe Rey Photography
         </h1>
-        <p className="mt-3 text-[#f5efe7b3] text-lg">
+        <p className="mt-3 text-foreground-muted text-lg">
           A curated selection of landscapes, weather, stillness, and memory.
         </p>
       </section>
@@ -47,9 +47,9 @@ export default function HomePage() {
                 <SwiperSlide key={gallery.id}>
                   <Link
                     href={`/gallery/${gallery.id}`}
-                    className="block rounded-2xl overflow-hidden ring-1 ring-[#6b5550] bg-[#4b3b39] hover:ring-[#a58a82] transition relative"
+                    className="block rounded-2xl overflow-hidden ring-1 ring-secondary bg-background-alt hover:ring-accent transition relative"
                   >
-                    <div className="relative aspect-[3/2] w-full flex items-center justify-center bg-[#3b2f2f]">
+                    <div className="relative aspect-[3/2] w-full flex items-center justify-center bg-background">
                       {preview && (
                         <Image
                           src={preview}
@@ -63,10 +63,10 @@ export default function HomePage() {
                       )}
                     </div>
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 opacity-0 hover:opacity-100 transition">
-                      <h2 className="text-2xl font-semibold text-[#f5efe7]">
+                      <h2 className="text-2xl font-semibold text-foreground">
                         {gallery.title}
                       </h2>
-                      <p className="mt-2 text-[#f5efe7b3] max-w-md text-sm">
+                      <p className="mt-2 text-foreground-muted max-w-md text-sm px-4">
                         {gallery.description}
                       </p>
                     </div>
@@ -86,9 +86,9 @@ export default function HomePage() {
             <Link
               key={gallery.id}
               href={`/gallery/${gallery.id}`}
-              className="block group rounded-2xl overflow-hidden border border-[#6b5550] bg-[#4b3b39] hover:ring-2 hover:ring-[#a58a82] transition"
+              className="block group rounded-2xl overflow-hidden border border-border bg-background-alt hover:ring-2 hover:ring-accent transition"
             >
-              <div className="relative aspect-[4/3] w-full flex items-center justify-center bg-[#3b2f2f]">
+              <div className="relative aspect-[4/3] w-full flex items-center justify-center bg-background">
                 {preview && (
                   <Image
                     src={preview}
@@ -101,10 +101,10 @@ export default function HomePage() {
                 )}
               </div>
               <div className="p-4 text-center">
-                <h3 className="text-lg font-semibold text-[#f5efe7]">
+                <h3 className="text-lg font-semibold text-foreground">
                   {gallery.title}
                 </h3>
-                <p className="text-[#f5efe7b3] text-sm mt-1">
+                <p className="text-foreground-muted text-sm mt-1">
                   {gallery.description}
                 </p>
               </div>
@@ -113,21 +113,16 @@ export default function HomePage() {
         })}
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="py-10 text-center text-[#f5efe7b3] text-sm border-t border-[#6b5550] w-full">
-        © {new Date().getFullYear()} Joe Rey Photography
-      </footer>
-
       {/* ===== SWIPER ARROW STYLES ===== */}
       <style jsx global>{`
         .swiper-button-prev,
         .swiper-button-next {
-          color: #f5efe7 !important;
+          color: var(--foreground) !important;
           transition: color 0.3s ease;
         }
         .swiper-button-prev:hover,
         .swiper-button-next:hover {
-          color: #d8cfc6 !important;
+          color: var(--foreground-muted) !important;
         }
       `}</style>
     </main>

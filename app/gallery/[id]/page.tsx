@@ -24,12 +24,23 @@ export async function generateMetadata({
     openGraph: {
       title: `${gallery.title} | Joe Rey Photography`,
       description: gallery.description,
-      images: ["/photos/logo.png"],
+      siteName: "Joe Rey Photography",
+      images: [
+        {
+          url: gallery.images[0]?.image || "/logo.svg",
+          width: 1200,
+          height: 800,
+          alt: gallery.title,
+        },
+      ],
+      locale: "en_GB",
+      type: "website",
     },
     twitter: {
+      card: "summary_large_image",
       title: `${gallery.title} | Joe Rey Photography`,
       description: gallery.description,
-      images: ["/photos/logo.png"],
+      images: [gallery.images[0]?.image || "/logo.svg"],
     },
   };
 }

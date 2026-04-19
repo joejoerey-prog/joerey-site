@@ -29,24 +29,24 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
 
   if (!gallery) {
     return (
-      <main className="min-h-dvh flex items-center justify-center bg-[#3b2f2f] text-[#f5efe7]">
+      <main className="min-h-dvh flex items-center justify-center bg-background text-foreground">
         <p>Gallery not found.</p>
       </main>
     );
   }
 
   return (
-    <main className="min-h-dvh bg-[#3b2f2f] text-[#f5efe7]">
+    <main className="min-h-dvh bg-background text-foreground">
       {/* Top section */}
       <section className="max-w-6xl mx-auto px-6 py-10">
         <Link
           href="/"
-          className="text-sm text-[#f5efe7b3] hover:text-[#f5efe7] transition"
+          className="text-sm text-foreground-muted hover:text-foreground transition"
         >
           ← Back to Galleries
         </Link>
         <h1 className="text-3xl font-bold mt-4 mb-2">{gallery.title}</h1>
-        <p className="text-[#f5efe7b3] max-w-2xl">{gallery.description}</p>
+        <p className="text-foreground-muted max-w-2xl">{gallery.description}</p>
       </section>
 
       {/* Images */}
@@ -55,10 +55,10 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
           {gallery.images.map((img: GalleryImage, i: number) => (
             <figure
               key={i}
-              className="rounded-2xl overflow-hidden border border-[#6b5550] bg-[#4b3b39] flex flex-col"
+              className="rounded-2xl overflow-hidden border border-border bg-background-alt flex flex-col"
             >
               <div
-                className="relative w-full aspect-[4/3] flex items-center justify-center bg-[#3b2f2f] cursor-pointer"
+                className="relative w-full aspect-[4/3] flex items-center justify-center bg-background cursor-pointer"
                 onClick={() => setOpenIndex(i)}
               >
                 <Image
@@ -68,22 +68,25 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
                   className="object-cover transition-transform duration-200 hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   priority={i < 3}     // preload first few images
-                  quality={75}          // reduce payload size
-                  loading="lazy"        // lazy-load off-screen images
+                  quality={80}          // slightly higher quality for photography
+                  loading={i < 3 ? "eager" : "lazy"}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
                 />
               </div>
 
               {img.caption && (
-                <figcaption className="p-3 text-sm text-center text-[#f5efe7b3] bg-[#3b2f2f]/70">
+                <figcaption className="p-3 text-sm text-center text-foreground-muted bg-background/70">
                   {img.caption}
                 </figcaption>
               )}
 
-              <div className="p-4 flex justify-center bg-[#3b2f2f]/70">
+              <div className="p-4 flex justify-center bg-background/70">
                 <Link
                   href="https://payhip.com/JRPhotoStore"
                   target="_blank"
-                  className="inline-block bg-[#6b5550] text-[#f5efe7] text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#856c67] transition"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-secondary text-foreground text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary transition"
                 >
                   Download
                 </Link>
@@ -107,9 +110,6 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
         />
       )}
 
-      <footer className="py-10 text-center text-[#f5efe7b3] text-sm border-t border-[#6b5550]">
-        © {new Date().getFullYear()} Joe Rey Photography
-      </footer>
     </main>
   );
 }

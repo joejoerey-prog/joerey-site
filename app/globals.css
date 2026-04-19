@@ -2,14 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Base Theme Colours ===== */
+:root {
+  /* ===== Base Theme Colours ===== */
+  --background: #3b2f2f;
+  --background-alt: #4b3b39;
+  --foreground: #f5efe7;
+  --foreground-muted: #f5efe7b3;
+  --primary: #856c67;
+  --secondary: #6b5550;
+  --accent: #a58a82;
+  --border: #6b5550;
+  --border-soft: #9b7c75;
+}
+
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #7a625d; /* lighter warm brown */
-  color: #f5efe7; /* cream text */
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: system-ui, Helvetica, Arial, sans-serif;
   scroll-behavior: smooth;
 }
@@ -23,7 +35,7 @@ a {
 
 a:hover {
   color: #ffffff;
-  opacity: 0.85;
+  opacity: 1;
 }
 
 /* ===== General Elements ===== */
@@ -39,24 +51,24 @@ p {
 
 /* ===== Swiper Pagination Dots ===== */
 .swiper-pagination-bullet {
-  background: #f5efe7b3 !important;
+  background: var(--foreground-muted) !important;
   opacity: 0.7;
   transition: all 0.3s ease;
 }
 
 .swiper-pagination-bullet-active {
-  background: #f5efe7 !important;
+  background: var(--foreground) !important;
   opacity: 1;
   transform: scale(1.2);
 }
 
 /* ===== Fade Transitions ===== */
 .fade-top {
-  background: linear-gradient(to bottom, #7a625d 0%, transparent 100%);
+  background: linear-gradient(to bottom, var(--background) 0%, transparent 100%);
 }
 
 .fade-bottom {
-  background: linear-gradient(to top, #7a625d 0%, transparent 100%);
+  background: linear-gradient(to top, var(--background) 0%, transparent 100%);
 }
 
 /* ===== Ken Burns Effect ===== */
@@ -80,15 +92,15 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: #7a625d;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #9b7c75;
+  background-color: var(--border-soft);
   border-radius: 5px;
 }
 
 /* ===== Utility Tweaks ===== */
 .border-soft {
-  border-color: #9b7c75;
+  border-color: var(--border-soft);
 }
