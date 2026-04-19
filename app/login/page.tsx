@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { account } from '@/lib/appwrite';
+import { account, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -94,7 +94,7 @@ export default function LoginPage() {
               variant="ghost"
               onClick={async () => {
                 try {
-                  console.log("Testing connection to project:", process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+                  console.log("Testing connection to project:", APPWRITE_CONFIG.projectId);
                   await account.get();
                   alert("Connection successful (but no active session).");
                 } catch (err: any) {
