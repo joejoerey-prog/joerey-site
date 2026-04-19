@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { account, databases, storage, ID, Query } from '@/lib/appwrite';
+import { account, databases, storage, ID, Query, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -41,8 +41,8 @@ export default function AdminDashboard() {
   const fetchGalleries = async () => {
     try {
       const response = await databases.listDocuments(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_GALLERIES_COLLECTION_ID!,
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.galleriesCollectionId,
         [Query.orderAsc('order')]
       );
       setGalleries(response.documents);
@@ -73,18 +73,18 @@ export default function AdminDashboard() {
     try {
       // 1. Upload to Storage
       const uploadedFile = await storage.createFile(
-        process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!,
+        APPWRITE_CONFIG.bucketId,
         ID.unique(),
         file
       );
 
       // 2. Construct public URL
-      const imageUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID}/files/${uploadedFile.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`;
+      const imageUrl = `https://cloud.appwrite.io/v1/storage/buckets/${APPWRITE_CONFIG.bucketId}/files/${uploadedFile.$id}/view?project=${APPWRITE_CONFIG.projectId}`;
 
       // 3. Create Database record
       await databases.createDocument(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_IMAGES_COLLECTION_ID!,
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.imagesCollectionId,
         ID.unique(),
         {
           gallery_id: selectedGallery,

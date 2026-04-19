@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { account, databases, storage, ID } from '@/lib/appwrite';
+import { account, databases, storage, ID, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Database, Loader2, Play, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
@@ -40,12 +40,12 @@ export default function MigratePage() {
     setProgress([]);
 
     try {
-      const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
-      const GALLERIES_COL_ID = process.env.NEXT_PUBLIC_APPWRITE_GALLERIES_COLLECTION_ID!;
-      const IMAGES_COL_ID = process.env.NEXT_PUBLIC_APPWRITE_IMAGES_COLLECTION_ID!;
-      const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID!;
-      const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
-      const ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
+      const DB_ID = APPWRITE_CONFIG.databaseId;
+      const GALLERIES_COL_ID = APPWRITE_CONFIG.galleriesCollectionId;
+      const IMAGES_COL_ID = APPWRITE_CONFIG.imagesCollectionId;
+      const BUCKET_ID = APPWRITE_CONFIG.bucketId;
+      const PROJECT_ID = APPWRITE_CONFIG.projectId;
+      const ENDPOINT = 'https://cloud.appwrite.io/v1';
 
       log("Starting migration...");
 

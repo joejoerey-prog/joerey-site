@@ -8,7 +8,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { databases, Query } from '@/lib/appwrite';
+import { databases, Query, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Loader2 } from 'lucide-react';
 
 export default function HomePage() {
@@ -19,16 +19,16 @@ export default function HomePage() {
     const fetchPortfolio = async () => {
       try {
         const galleriesRes = await databases.listDocuments(
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-          process.env.NEXT_PUBLIC_APPWRITE_GALLERIES_COLLECTION_ID!,
+          APPWRITE_CONFIG.databaseId,
+          APPWRITE_CONFIG.galleriesCollectionId,
           [Query.orderAsc('order')]
         );
 
         const galleriesWithPreviews = await Promise.all(
           galleriesRes.documents.map(async (gallery) => {
             const imagesRes = await databases.listDocuments(
-              process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-              process.env.NEXT_PUBLIC_APPWRITE_IMAGES_COLLECTION_ID!,
+              APPWRITE_CONFIG.databaseId,
+              APPWRITE_CONFIG.imagesCollectionId,
               [
                 Query.equal('gallery_id', gallery.id),
                 Query.limit(1),

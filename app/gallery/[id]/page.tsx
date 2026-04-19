@@ -1,12 +1,12 @@
 import { Metadata } from "next";
-import { databases, Query } from "@/lib/appwrite";
+import { databases, Query, APPWRITE_CONFIG } from "@/lib/appwrite";
 import GalleryClient from "./GalleryClient";
 
 async function getGalleryData(id: string) {
   try {
     const galleryRes = await databases.listDocuments(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_GALLERIES_COLLECTION_ID!,
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.galleriesCollectionId,
       [Query.equal('id', id), Query.limit(1)]
     );
 
@@ -15,8 +15,8 @@ async function getGalleryData(id: string) {
     const gallery = galleryRes.documents[0];
 
     const imagesRes = await databases.listDocuments(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_IMAGES_COLLECTION_ID!,
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.imagesCollectionId,
       [Query.equal('gallery_id', id), Query.orderDesc('created_at')]
     );
 
