@@ -3,18 +3,22 @@ import { useEffect } from "react";
 
 export default function Clarity() {
   useEffect(() => {
+    type ClarityFunction = (...args: unknown[]) => void;
+
     interface ClarityWindow extends Window {
       clarity?: {
-        q: any[][];
+        q: unknown[][];
       };
-      [key: string]: any;
+      [key: string]: unknown;
     }
 
     (function (c: ClarityWindow, l: Document, a: string, r: string, i: string) {
       c[a] =
-        c[a] ||
-        function (...args: any[]) {
-          (c[a].q = c[a].q || []).push(args);
+        (c[a] as ClarityFunction) ||
+        function (...args: unknown[]) {
+          const clarityObj = c.clarity || { q: [] };
+          clarityObj.q.push(args);
+          c.clarity = clarityObj;
         };
       const t = l.createElement(r) as HTMLScriptElement;
       t.async = true;
