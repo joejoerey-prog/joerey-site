@@ -2,7 +2,8 @@ import { Client, Account, Databases, Storage } from 'appwrite';
 
 // HYBRID CONFIG: Try environment variables first, fallback to hardcoded values
 const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1';
-const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || 'fra-69dd1f32003b7e825311';
+// Using the hexadecimal ID found in the El Capitan project
+const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '67b45c2f0011853d9e87';
 
 const client = new Client()
     .setEndpoint(endpoint)
