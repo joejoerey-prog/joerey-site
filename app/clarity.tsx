@@ -16,9 +16,10 @@ export default function Clarity() {
       c[a] =
         (c[a] as ClarityFunction) ||
         function (...args: unknown[]) {
-          const clarityObj = c.clarity || { q: [] };
-          clarityObj.q.push(args);
-          c.clarity = clarityObj;
+          if (!c.clarity) {
+            c.clarity = { q: [] };
+          }
+          c.clarity.q.push(args);
         };
       const t = l.createElement(r) as HTMLScriptElement;
       t.async = true;
