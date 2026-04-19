@@ -81,13 +81,30 @@ export default function LoginPage() {
               </p>
             )}
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col gap-2">
             <Button
               type="submit"
               disabled={loading}
               className="w-full bg-secondary hover:bg-primary text-foreground font-bold transition-all h-12"
             >
               {loading ? 'Logging in...' : 'Sign In'}
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={async () => {
+                try {
+                  console.log("Testing connection to project:", process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID);
+                  await account.get();
+                  alert("Connection successful (but no active session).");
+                } catch (err: any) {
+                  console.error("Diagnostic Error:", err);
+                  alert(`Diagnostic Result: ${err.message}\nCheck browser console (F12) for details.`);
+                }
+              }}
+              className="w-full text-[10px] text-foreground-muted uppercase tracking-widest opacity-50"
+            >
+              Run Diagnostic
             </Button>
           </CardFooter>
         </form>
