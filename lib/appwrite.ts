@@ -9,7 +9,8 @@ if (!endpoint || !projectId) {
 
 const client = new Client()
     .setEndpoint(endpoint || 'https://cloud.appwrite.io/v1')
-    .setProject(projectId || '');
+    .setProject(projectId || '')
+    .setSelfSigned(true); // For local development if needed
 
 export const account = new Account(client);
 export const databases = new Databases(client);
