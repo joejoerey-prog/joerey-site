@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Mail, Instagram, Globe } from "lucide-react";
+import { Instagram, Globe } from "lucide-react";
 import { FaPinterestP } from "react-icons/fa";
 
 export const metadata: Metadata = {
