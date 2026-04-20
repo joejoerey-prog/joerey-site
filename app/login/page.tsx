@@ -21,6 +21,19 @@ export default function LoginPage() {
 
   const router = useRouter();
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        await account.get();
+        router.push('/admin');
+      } catch (err) {
+        // Not logged in, stay on login page
+      }
+    };
+    checkUser();
+  }, [router]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
