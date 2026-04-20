@@ -17,6 +17,7 @@ export const storage = new Storage(client);
 
 // Constant IDs for the portfolio - these match the Appwrite Console verified values
 export const APPWRITE_CONFIG = {
+    endpoint,
     projectId,
     databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || '69e4ddd7003189c843fa',
     galleriesCollectionId: process.env.NEXT_PUBLIC_APPWRITE_GALLERIES_COLLECTION_ID || 'galleries',

@@ -41,6 +41,7 @@ export default function Footer() {
       {isLoggedIn && (
         <button
           onClick={handleLogout}
+          aria-label="Sign out of admin dashboard"
           className="flex items-center gap-2 text-[10px] uppercase font-black tracking-widest text-foreground-muted hover:text-red-400 transition-colors"
         >
           <LogOut size={12} />

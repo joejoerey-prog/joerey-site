@@ -65,10 +65,7 @@ export default function HomePage() {
     <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start pb-20">
       {/* ===== HERO SECTION ===== */}
       <section className="text-center py-12">
-        <h1
-          className="text-3xl font-bold text-foreground"
-          style={{ fontFamily: 'var(--font-pacifico)' }}
-        >
+        <h1 className="text-3xl font-bold text-foreground font-pacifico">
           Welcome to Joe Rey Photography
         </h1>
         <p className="mt-3 text-foreground-muted text-lg">

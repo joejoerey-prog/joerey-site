@@ -23,6 +23,8 @@
   --color-accent: var(--accent);
   --color-border: var(--border);
   --color-border-soft: var(--border-soft);
+
+  --font-pacifico: var(--font-pacifico);
 }
 
 @layer base {

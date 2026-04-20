@@ -4,8 +4,13 @@ import { Instagram, Globe } from "lucide-react";
 import { FaPinterestP } from "react-icons/fa";
 
 export const metadata: Metadata = {
-  title: "Contact – Joe Rey Photography",
-  description: "Get in touch with Joe Rey Photography via email or social media.",
+  title: "Contact | Joe Rey Photography",
+  description: "Get in touch with Joe Rey Photography for inquiries about prints, collaborations, or simply to say hello.",
+  openGraph: {
+    title: "Contact | Joe Rey Photography",
+    description: "Get in touch with Joe Rey Photography for inquiries about prints, collaborations, or simply to say hello.",
+    type: "website",
+  }
 };
 
 export default function ContactPage() {

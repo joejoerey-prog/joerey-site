@@ -27,10 +27,7 @@ export default function Header() {
             className="h-auto"
             priority
           />
-          <h1
-            className="text-2xl md:text-3xl text-foreground tracking-wide"
-            style={{ fontFamily: 'var(--font-pacifico)' }}
-          >
+          <h1 className="text-2xl md:text-3xl text-foreground tracking-wide font-pacifico">
             Joe Rey Photography
           </h1>
         </Link>

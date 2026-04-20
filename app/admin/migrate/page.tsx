@@ -47,39 +47,44 @@ export default function MigratePage() {
       const PROJECT_ID = APPWRITE_CONFIG.projectId;
       const ENDPOINT = 'https://fra.cloud.appwrite.io/v1';
 
-      log("Starting migration...");
+      log("🚀 Starting Smart Migration...");
 
       for (let i = 0; i < galleriesData.galleries.length; i++) {
         const gallery = galleriesData.galleries[i];
-        log(`Processing Gallery: ${gallery.title}...`);
+        log(`📂 Processing Gallery: ${gallery.title}...`);
 
         // 1. Create Gallery Document
         try {
+          // Flexible key handling: sending both 'id' and 'Id' to handle console mismatches
           await databases.createDocument(DB_ID, GALLERIES_COL_ID, ID.unique(), {
             id: gallery.id,
+            Id: gallery.id, 
             title: gallery.title,
             description: gallery.description,
             order: i + 1
           });
-          log(`✅ Created gallery document: ${gallery.id}`);
+          log(`✅ Created gallery: ${gallery.id}`);
         } catch (e: any) {
-          log(`⚠️ Gallery ${gallery.id} might already exist or error: ${e.message}`);
+          if (e.message.includes('already exists')) {
+            log(`ℹ️ Gallery ${gallery.id} already exists, skipping.`);
+          } else {
+            log(`⚠️ Gallery Error: ${e.message}`);
+          }
         }
 
         // 2. Process Images
         for (const img of gallery.images) {
-          log(`Uploading image: ${img.image}...`);
+          log(`📸 Uploading: ${img.image.split('/').pop()}...`);
           try {
-            // Fetch the image as a blob
             const response = await fetch(img.image);
+            if (!response.ok) throw new Error(`HTTP ${response.status} - Image not found on disk.`);
+            
             const blob = await response.blob();
             const fileName = img.image.split('/').pop() || 'image.jpg';
             const file = new File([blob], fileName, { type: blob.type });
 
             // Upload to storage
             const uploadedFile = await storage.createFile(BUCKET_ID, ID.unique(), file);
-            
-            // Construct URL
             const imageUrl = `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${uploadedFile.$id}/view?project=${PROJECT_ID}`;
 
             // Create Image Document
@@ -90,16 +95,19 @@ export default function MigratePage() {
               caption: img.caption || "",
               created_at: new Date().toISOString()
             });
-            log(`✅ Uploaded and linked: ${fileName}`);
+            log(`   ✅ Linked to database.`);
           } catch (e: any) {
-            log(`❌ Failed to process ${img.image}: ${e.message}`);
+            log(`   ❌ Error: ${e.message}`);
+            if (e.message.includes('permissions')) {
+              log(`   💡 ACTION REQUIRED: Go to Appwrite Storage -> Bucket Settings -> Permissions and add Role 'Users' with all permissions.`);
+            }
           }
         }
       }
 
-      log("🎉 Migration complete!");
+      log("🎉 Migration process finished!");
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred during migration.");
+      setError(err.message || "An unexpected error occurred.");
     } finally {
       setMigrating(false);
     }
@@ -126,16 +134,19 @@ export default function MigratePage() {
         <Card className="bg-background-alt border-border text-foreground shadow-xl">
           <CardHeader className="text-center py-10 border-b border-border">
             <Database className="mx-auto text-accent mb-4" size={48} />
-            <CardTitle className="text-3xl font-black">Data Migration</CardTitle>
+            <CardTitle className="text-3xl font-black text-foreground">Smart Migration</CardTitle>
             <CardDescription className="text-foreground-muted max-w-md mx-auto">
-              Push your existing galleries and local photos to the Appwrite dynamic system.
+              Syncing local images and JSON data to Appwrite Cloud.
             </CardDescription>
           </CardHeader>
 
           <CardContent className="p-8">
-            <div className="bg-background rounded-2xl p-6 h-[400px] overflow-y-auto font-mono text-xs space-y-1 border border-border">
+            <div className="bg-background rounded-2xl p-6 h-[400px] overflow-y-auto font-mono text-xs space-y-1 border border-border shadow-inner">
               {progress.length === 0 ? (
-                <p className="text-foreground-muted italic">Ready to begin migration...</p>
+                <div className="flex flex-col items-center justify-center h-full opacity-30 gap-4">
+                  <Play size={40} />
+                  <p className="italic">Ready to begin migration...</p>
+                </div>
               ) : (
                 progress.map((p, idx) => (
                   <p key={idx} className={p.includes('✅') ? 'text-green-400' : p.includes('❌') ? 'text-red-400' : 'text-foreground/70'}>
@@ -156,7 +167,7 @@ export default function MigratePage() {
             <Button
               onClick={handleMigrate}
               disabled={migrating}
-              className="w-full bg-accent hover:bg-accent/80 text-background font-black text-xl h-16 transition-all"
+              className="w-full bg-accent hover:bg-accent/80 text-background font-black text-xl h-16 transition-all shadow-lg active:scale-[0.99]"
             >
               {migrating ? (
                 <>
