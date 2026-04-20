@@ -64,11 +64,24 @@ export default function HomePage() {
   return (
     <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start pb-20">
       {/* ===== HERO SECTION ===== */}
-      <section className="text-center py-12">
-        <h1 className="text-3xl font-bold text-foreground font-pacifico">
+      <section className="text-center py-12 px-4 max-w-4xl mx-auto">
+        <div className="mb-8 relative inline-block">
+          <Image
+            src="/icon.png"
+            alt="Joe Rey Photography Logo"
+            width={240}
+            height={240}
+            className="mx-auto drop-shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:scale-105 transition-transform duration-500"
+            priority
+          />
+        </div>
+        <h1
+          className="text-4xl md:text-5xl font-bold text-foreground mb-4"
+          style={{ fontFamily: 'var(--font-pacifico)' }}
+        >
           Welcome to Joe Rey Photography
         </h1>
-        <p className="mt-3 text-foreground-muted text-lg">
+        <p className="text-foreground-muted text-lg md:text-xl font-light tracking-wide max-w-2xl mx-auto">
           A curated selection of landscapes, weather, stillness, and memory.
         </p>
       </section>
