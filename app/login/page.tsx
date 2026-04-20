@@ -6,13 +6,19 @@ import { account, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Lock } from 'lucide-react';
+import { Lock, HelpCircle, Activity } from 'lucide-react';
+import { Client, Account } from 'appwrite';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  
+  // Diagnostic State
+  const [testProjectId, setTestProjectId] = useState(APPWRITE_CONFIG.projectId);
+  const [diagOutput, setDiagOutput] = useState<string | null>(null);
+
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -30,8 +36,41 @@ export default function LoginPage() {
     }
   };
 
+  const runDiagnostic = async () => {
+    setDiagOutput("Running diagnostics...");
+    let logs = "";
+    const log = (msg: string) => { logs += msg + "\n"; setDiagOutput(logs); };
+
+    try {
+      log(`1. Testing Internet: Fetching Google...`);
+      await fetch('https://www.google.com', { mode: 'no-cors' });
+      log(`✅ Internet reachable.`);
+
+      log(`2. Testing Appwrite Connection with ID: ${testProjectId}`);
+      const testClient = new Client()
+        .setEndpoint('https://cloud.appwrite.io/v1')
+        .setProject(testProjectId);
+      const testAccount = new Account(testClient);
+      
+      try {
+        await testAccount.get();
+        log(`✅ Appwrite reached! (Already logged in)`);
+      } catch (err: any) {
+        if (err.message.includes('fetch')) {
+          log(`❌ FAILED TO FETCH: This is almost certainly a CORS/Platform issue or an Ad-blocker.`);
+        } else {
+          log(`✅ Appwrite reached, server returned: ${err.message}`);
+        }
+      }
+      
+      log(`\nADVICE: If you see 'Failed to fetch', ensure 'joereyphotography.com' is added to PLATFORMS in Appwrite Settings AND disable any ad-blockers.`);
+    } catch (err: any) {
+      log(`❌ Diagnostic failed: ${err.message}`);
+    }
+  };
+
   return (
-    <main className="min-h-[80dvh] flex items-center justify-center p-6 bg-background">
+    <main className="min-h-[80dvh] flex flex-col items-center justify-center p-6 bg-background space-y-6">
       <Card className="w-full max-w-md bg-background-alt border-border text-foreground shadow-2xl">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto bg-secondary/30 p-3 rounded-full w-fit">
@@ -39,7 +78,7 @@ export default function LoginPage() {
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">Admin Login</CardTitle>
           <CardDescription className="text-foreground-muted">
-            Enter your credentials to manage your portfolio.
+            Sign in to manage your portfolio.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
@@ -81,7 +120,7 @@ export default function LoginPage() {
               </p>
             )}
           </CardContent>
-          <CardFooter className="flex flex-col gap-2">
+          <CardFooter>
             <Button
               type="submit"
               disabled={loading}
@@ -89,25 +128,36 @@ export default function LoginPage() {
             >
               {loading ? 'Logging in...' : 'Sign In'}
             </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={async () => {
-                try {
-                  console.log("Testing connection to project:", APPWRITE_CONFIG.projectId);
-                  await account.get();
-                  alert("Connection successful (but no active session).");
-                } catch (err: any) {
-                  console.error("Diagnostic Error:", err);
-                  alert(`Diagnostic Result: ${err.message}\nCheck browser console (F12) for details.`);
-                }
-              }}
-              className="w-full text-[10px] text-foreground-muted uppercase tracking-widest opacity-50"
-            >
-              Run Diagnostic
-            </Button>
           </CardFooter>
         </form>
+      </Card>
+
+      {/* Advanced Diagnostics Card */}
+      <Card className="w-full max-w-md bg-black/20 border-white/10 text-foreground">
+        <CardHeader className="py-4">
+          <CardTitle className="text-xs font-black uppercase tracking-widest flex items-center gap-2 opacity-50">
+            <Activity size={14} /> Connection Diagnostics
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pb-6">
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase font-bold opacity-40 ml-1">Test Project ID</label>
+            <div className="flex gap-2">
+              <Input 
+                value={testProjectId} 
+                onChange={(e) => setTestProjectId(e.target.value)}
+                className="h-8 text-xs bg-black/20 border-white/5"
+              />
+              <Button size="sm" onClick={runDiagnostic} className="h-8 bg-white/10 hover:bg-white/20">Test</Button>
+            </div>
+          </div>
+          
+          {diagOutput && (
+            <div className="bg-black/40 rounded-lg p-3 font-mono text-[10px] whitespace-pre-wrap border border-white/5 leading-relaxed">
+              {diagOutput}
+            </div>
+          )}
+        </CardContent>
       </Card>
     </main>
   );
