@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { account, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
