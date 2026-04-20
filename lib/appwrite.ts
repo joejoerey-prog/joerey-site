@@ -1,6 +1,6 @@
 import { Client, Account, Databases, Storage } from 'appwrite';
 
-// Use environment variables — ensure NEXT_PUBLIC_ prefix so they're available client-side
+// HYBRID CONFIG: Try environment variables first, fallback to hardcoded values
 const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1';
 // IMPORTANT: The Project ID must NOT include the "fra-" region prefix.
 const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '69dd1f32003b7e825311';
