@@ -79,7 +79,7 @@ export default function AdminDashboard() {
       );
 
       // 2. Construct public URL
-      const imageUrl = `https://cloud.appwrite.io/v1/storage/buckets/${APPWRITE_CONFIG.bucketId}/files/${uploadedFile.$id}/view?project=${APPWRITE_CONFIG.projectId}`;
+      const imageUrl = `https://fra.cloud.appwrite.io/v1/storage/buckets/${APPWRITE_CONFIG.bucketId}/files/${uploadedFile.$id}/view?project=${APPWRITE_CONFIG.projectId}`;
 
       // 3. Create Database record
       await databases.createDocument(

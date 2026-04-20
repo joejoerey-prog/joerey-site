@@ -6,7 +6,7 @@ import { account, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Lock, HelpCircle, Activity } from 'lucide-react';
+import { Lock, Activity } from 'lucide-react';
 import { Client, Account } from 'appwrite';
 
 export default function LoginPage() {
@@ -48,7 +48,7 @@ export default function LoginPage() {
 
       log(`2. Testing Appwrite Connection with ID: ${testProjectId}`);
       const testClient = new Client()
-        .setEndpoint('https://cloud.appwrite.io/v1')
+        .setEndpoint('https://fra.cloud.appwrite.io/v1')
         .setProject(testProjectId);
       const testAccount = new Account(testClient);
       

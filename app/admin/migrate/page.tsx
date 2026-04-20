@@ -45,7 +45,7 @@ export default function MigratePage() {
       const IMAGES_COL_ID = APPWRITE_CONFIG.imagesCollectionId;
       const BUCKET_ID = APPWRITE_CONFIG.bucketId;
       const PROJECT_ID = APPWRITE_CONFIG.projectId;
-      const ENDPOINT = 'https://cloud.appwrite.io/v1';
+      const ENDPOINT = 'https://fra.cloud.appwrite.io/v1';
 
       log("Starting migration...");
 
