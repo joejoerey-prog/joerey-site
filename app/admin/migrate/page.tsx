@@ -6,7 +6,7 @@ import { account, databases, storage, ID, APPWRITE_CONFIG } from '@/lib/appwrite
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Database, Loader2, Play, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
-import galleriesData from '@/data/galleries.json';
+import galleriesData from '@/data/legacy/galleries.json';
 
 export default function MigratePage() {
   const [loading, setLoading] = useState(true);
