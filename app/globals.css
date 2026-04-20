@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   /* ===== Base Theme Colours ===== */
@@ -15,15 +13,22 @@
   --border-soft: #9b7c75;
 }
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, Helvetica, Arial, sans-serif;
-  scroll-behavior: smooth;
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: system-ui, Helvetica, Arial, sans-serif;
+    scroll-behavior: smooth;
+  }
 }
 
 /* ===== Links ===== */
