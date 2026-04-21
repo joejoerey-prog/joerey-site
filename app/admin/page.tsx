@@ -97,6 +97,7 @@ export default function AdminDashboard() {
       // 3. Create Database record
       // Ensure we use the lowercase slug 'id' for the relationship
       const slugId = selectedGallery.toLowerCase();
+      console.log(`[Admin] Uploading new image. Targeting gallery_id: '${slugId}'`);
 
       await databases.createDocument(
         APPWRITE_CONFIG.databaseId,

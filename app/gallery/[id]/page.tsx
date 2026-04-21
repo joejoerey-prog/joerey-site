@@ -26,6 +26,9 @@ async function getGalleryData(id: string) {
     const gallery = galleryRes.documents[0];
     // Standardize to lowercase 'id' for the app's internal logic
     const actualId = String(gallery.id || gallery.Id || gallery.$id).toLowerCase();
+    
+    // Server-side Log
+    console.log(`[Gallery Page] Requested URL ID: '${id}' -> Resolved DB gallery_id: '${actualId}'`);
 
     const imagesRes = await databases.listDocuments(
       APPWRITE_CONFIG.databaseId,
