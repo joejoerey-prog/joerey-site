@@ -30,18 +30,26 @@ async function getGalleryData(id: string) {
     const imagesRes = await databases.listDocuments(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.imagesCollectionId,
-      [Query.equal('gallery_id', actualId), Query.orderDesc('created_at')]
+      [Query.equal('gallery_id', actualId), Query.orderDesc('created_at'), Query.limit(100)]
     );
+
+    // Deduplicate images by image_url (in case migration was run multiple times)
+    const uniqueImagesMap = new Map();
+    imagesRes.documents.forEach(doc => {
+      if (!uniqueImagesMap.has(doc.image_url)) {
+        uniqueImagesMap.set(doc.image_url, {
+          id: doc.$id,
+          image: doc.image_url,
+          caption: doc.caption
+        });
+      }
+    });
 
     return {
       id: actualId,
       title: gallery.title,
       description: gallery.description,
-      images: imagesRes.documents.map(doc => ({
-        id: doc.$id,
-        image: doc.image_url,
-        caption: doc.caption
-      }))
+      images: Array.from(uniqueImagesMap.values())
     };
   } catch (err) {
     console.error('Error fetching gallery data:', err);
