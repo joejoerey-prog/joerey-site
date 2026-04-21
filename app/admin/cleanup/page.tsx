@@ -79,6 +79,8 @@ export default function CleanupPage() {
       if (toDelete.length > 0) {
           log(`🗑️ Deleting ${toDelete.length} duplicate images...`);
           
+          const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
           for (let i = 0; i < toDelete.length; i++) {
               const doc = toDelete[i];
               
@@ -96,6 +98,9 @@ export default function CleanupPage() {
               } catch (e: any) {
                 log(`   ❌ Error deleting DB document: ${e.message}`);
               }
+
+              // Throttle to avoid hitting Appwrite Rate Limits (HTTP 429)
+              await delay(800);
           }
           log("🎉 Cleanup successful!");
       } else {
