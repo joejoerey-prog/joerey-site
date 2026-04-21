@@ -2,6 +2,9 @@ import { Metadata } from "next";
 import { databases, Query, APPWRITE_CONFIG } from "@/lib/appwrite";
 import GalleryClient from "./GalleryClient";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getGalleryData(id: string) {
   try {
     // Robust ID matching: try both 'id' and 'Id'
