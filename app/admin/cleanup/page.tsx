@@ -59,8 +59,24 @@ export default function CleanupPage() {
 
       log(`✅ Found total ${allDocs.length} images.`);
 
-      if (allDocs.length > 259) {
-          const toDelete = allDocs.slice(259);
+      const seen = new Set<string>();
+      const toDelete: any[] = [];
+      const toKeep: any[] = [];
+
+      for (const doc of allDocs) {
+          // Use gallery_id + caption as a unique signature to find the true original inserts
+          const key = `${doc.gallery_id}::${doc.caption}`;
+          if (seen.has(key)) {
+              toDelete.push(doc);
+          } else {
+              seen.add(key);
+              toKeep.push(doc);
+          }
+      }
+
+      log(`💡 Analysis: Found ${toKeep.length} unique originals. Identified ${toDelete.length} duplicates for deletion.`);
+
+      if (toDelete.length > 0) {
           log(`🗑️ Deleting ${toDelete.length} duplicate images...`);
           
           for (let i = 0; i < toDelete.length; i++) {
@@ -83,7 +99,7 @@ export default function CleanupPage() {
           }
           log("🎉 Cleanup successful!");
       } else {
-          log("👍 No duplicates found! You have 259 or fewer images.");
+          log("👍 No duplicates found! You have a perfectly clean database.");
       }
     } catch (err: any) {
       log(`❌ Critical Error: ${err.message || 'Unexpected error'}`);
