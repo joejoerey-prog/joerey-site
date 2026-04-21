@@ -26,17 +26,21 @@ export default function HomePage() {
 
         const galleriesWithPreviews = await Promise.all(
           galleriesRes.documents.map(async (gallery) => {
+            // Handle both lowercase 'id' and uppercase 'Id' from Appwrite
+            const actualId = gallery.id || gallery.Id;
+            
             const imagesRes = await databases.listDocuments(
               APPWRITE_CONFIG.databaseId,
               APPWRITE_CONFIG.imagesCollectionId,
               [
-                Query.equal('gallery_id', gallery.id),
+                Query.equal('gallery_id', actualId),
                 Query.limit(1),
                 Query.orderDesc('created_at')
               ]
             );
             return {
               ...gallery,
+              id: actualId, // Ensure it's available as 'id' for the Link component
               preview: imagesRes.documents[0]?.image_url || null
             };
           })
