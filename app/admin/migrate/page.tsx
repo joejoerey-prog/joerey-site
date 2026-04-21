@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { account, databases, storage, ID, APPWRITE_CONFIG } from '@/lib/appwrite';
+import { account, databases, storage, ID, APPWRITE_CONFIG, Query } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Database, Loader2, Play, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
