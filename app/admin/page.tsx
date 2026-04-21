@@ -43,11 +43,24 @@ export default function AdminDashboard() {
       const response = await databases.listDocuments(
         APPWRITE_CONFIG.databaseId,
         APPWRITE_CONFIG.galleriesCollectionId,
-        [Query.orderAsc('order')]
+        [Query.orderAsc('order'), Query.limit(100)]
       );
-      setGalleries(response.documents);
-      if (response.documents.length > 0) {
-        setSelectedGallery(response.documents[0].id);
+
+      // Deduplicate by the slug 'id'
+      const uniqueGalleriesMap = new Map();
+      response.documents.forEach(doc => {
+        const slugId = doc.id || doc.Id;
+        if (slugId && !uniqueGalleriesMap.has(slugId)) {
+          uniqueGalleriesMap.set(slugId, doc);
+        }
+      });
+
+      const uniqueGalleries = Array.from(uniqueGalleriesMap.values());
+      setGalleries(uniqueGalleries);
+      
+      if (uniqueGalleries.length > 0) {
+        const firstId = uniqueGalleries[0].id || uniqueGalleries[0].Id;
+        setSelectedGallery(firstId);
       }
     } catch (err) {
       console.error('Failed to fetch galleries:', err);
