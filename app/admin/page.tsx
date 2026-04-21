@@ -103,7 +103,8 @@ export default function AdminDashboard() {
       if (fileInput) fileInput.value = '';
       
     } catch (err: any) {
-      setMessage({ type: 'error', text: err.message || 'Upload failed. Please try again.' });
+      console.error("Upload Error Details:", err);
+      setMessage({ type: 'error', text: `Upload failed: ${err.message}` });
     } finally {
       setUploading(false);
     }
