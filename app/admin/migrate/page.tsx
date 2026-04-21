@@ -55,57 +55,49 @@ export default function MigratePage() {
 
         // 1. Create Gallery Document
         try {
-            // First attempt: matching exactly what the code expects
-            await databases.createDocument(DB_ID, GALLERIES_COL_ID, ID.unique(), {
-                id: gallery.id,
-                title: gallery.title,
-                description: gallery.description,
-                order: i + 1
-            });
-            log(`   ✅ Gallery created.`);
-        } catch (e: any) {
-            if (e.message.includes('already exists')) {
-                log(`   ℹ️ Gallery already exists.`);
-            } else {
-                log(`   ⚠️ Retrying with capital 'Id'...`);
+            await databases.getDocument(DB_ID, GALLERIES_COL_ID, gallery.id);
+            log(`   ℹ️ Gallery already exists.`);
+        } catch (e) {
+            try {
+                await databases.getDocument(DB_ID, GALLERIES_COL_ID, gallery.id.charAt(0).toUpperCase() + gallery.id.slice(1));
+                log(`   ℹ️ Gallery already exists (capital Id).`);
+            } catch (e2) {
                 try {
+                    log(`   ➕ Creating gallery...`);
                     await databases.createDocument(DB_ID, GALLERIES_COL_ID, ID.unique(), {
                         Id: gallery.id,
                         title: gallery.title,
                         description: gallery.description,
                         order: i + 1
                     });
-                    log(`   ✅ Gallery created (using Id).`);
-                } catch (e2: any) {
-                    log(`   ❌ Gallery creation failed: ${e2.message}`);
-                    if (e2.message.includes('100 chars')) {
-                        log(`   💡 ACTION REQUIRED: Your 'description' attribute in Appwrite is too short (limit 100). Go to Database -> galleries -> Attributes, delete 'description', and recreate it with size 1000.`);
-                    }
-                    log(`   💡 Ensure 'id' or 'Id' exists in Appwrite -> Database -> galleries -> Attributes.`);
+                    log(`   ✅ Gallery created.`);
+                } catch (e3: any) {
+                    log(`   ❌ Gallery creation failed: ${e3.message}`);
                 }
             }
         }
 
         // 2. Process Images
+        let existingImages: any[] = [];
+        try {
+            const existingRes = await databases.listDocuments(DB_ID, IMAGES_COL_ID, [
+                Query.equal('gallery_id', gallery.id),
+                Query.limit(100)
+            ]);
+            existingImages = existingRes.documents;
+        } catch (e) {
+            log(`   ⚠️ Could not fetch existing images for ${gallery.title}.`);
+        }
+
         for (const img of gallery.images) {
           const fileName = img.image.split('/').pop() || 'image.jpg';
           
-          // Check if already in database to avoid duplicates
-          try {
-              const existing = await databases.listDocuments(DB_ID, IMAGES_COL_ID, [
-                  Query.equal('image_url', { 
-                      startsWith: `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/`
-                  } as any),
-                  Query.limit(100) // Rough check
-              ]);
-              
-              // We'll just look for the filename in the metadata as a shortcut
-              const isUploaded = existing.documents.some(doc => doc.image_url.includes(fileName));
-              if (isUploaded) {
-                  log(`   ⏭️ Skipping ${fileName} (already uploaded).`);
-                  continue;
-              }
-          } catch (e) {}
+          // Idempotency: match by caption (since file_ids are generated)
+          const isUploaded = existingImages.some(doc => doc.caption === (img.caption || ""));
+          if (isUploaded) {
+              log(`   ⏭️ Skipping ${fileName} (already uploaded).`);
+              continue;
+          }
 
           log(`   📸 Uploading: ${fileName}...`);
           try {
