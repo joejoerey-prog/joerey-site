@@ -95,12 +95,15 @@ export default function AdminDashboard() {
       const imageUrl = `https://fra.cloud.appwrite.io/v1/storage/buckets/${APPWRITE_CONFIG.bucketId}/files/${uploadedFile.$id}/view?project=${APPWRITE_CONFIG.projectId}`;
 
       // 3. Create Database record
+      // Ensure we use the lowercase slug 'id' for the relationship
+      const slugId = selectedGallery.toLowerCase();
+
       await databases.createDocument(
         APPWRITE_CONFIG.databaseId,
         APPWRITE_CONFIG.imagesCollectionId,
         ID.unique(),
         {
-          gallery_id: selectedGallery,
+          gallery_id: slugId,
           file_id: uploadedFile.$id,
           image_url: imageUrl,
           caption: caption,
