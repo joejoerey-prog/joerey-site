@@ -4,20 +4,31 @@ import GalleryClient from "./GalleryClient";
 
 async function getGalleryData(id: string) {
   try {
+    // Check for both 'id' and 'Id' in the database
     const galleryRes = await databases.listDocuments(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.galleriesCollectionId,
-      [Query.equal('id', id), Query.limit(1)]
+      [
+        Query.or([
+            Query.equal('id', id),
+            Query.equal('Id', id)
+        ]),
+        Query.limit(1)
+      ]
     );
 
-    if (galleryRes.documents.length === 0) return null;
+    if (galleryRes.documents.length === 0) {
+      console.warn(`[Gallery] No document found for ID: ${id}`);
+      return null;
+    }
 
     const gallery = galleryRes.documents[0];
+    const actualId = gallery.id || gallery.Id;
 
     const imagesRes = await databases.listDocuments(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.imagesCollectionId,
-      [Query.equal('gallery_id', id), Query.orderDesc('created_at')]
+      [Query.equal('gallery_id', actualId), Query.orderDesc('created_at')]
     );
 
     return {
