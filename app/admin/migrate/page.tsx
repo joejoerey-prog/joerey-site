@@ -78,7 +78,10 @@ export default function MigratePage() {
                     log(`   ✅ Gallery created (using Id).`);
                 } catch (e2: any) {
                     log(`   ❌ Gallery creation failed: ${e2.message}`);
-                    log(`   💡 Ensure 'id' exists in Appwrite -> Database -> galleries -> Attributes.`);
+                    if (e2.message.includes('100 chars')) {
+                        log(`   💡 ACTION REQUIRED: Your 'description' attribute in Appwrite is too short (limit 100). Go to Database -> galleries -> Attributes, delete 'description', and recreate it with size 1000.`);
+                    }
+                    log(`   💡 Ensure 'id' or 'Id' exists in Appwrite -> Database -> galleries -> Attributes.`);
                 }
             }
         }
