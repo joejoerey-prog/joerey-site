@@ -24,23 +24,39 @@ export default function HomePage() {
           [Query.orderAsc('order')]
         );
 
+        // 1. Process documents to handle ID variations and standardize
+        const processedDocs = galleriesRes.documents.map(doc => {
+          const rawId = doc.id || doc.Id || doc.$id;
+          return {
+            ...doc,
+            id: String(rawId).toLowerCase()
+          };
+        });
+
+        // 2. Deduplicate by standardized ID (keeping the newest/first occurrence)
+        const uniqueGalleriesMap = new Map();
+        processedDocs.forEach(gallery => {
+          if (!uniqueGalleriesMap.has(gallery.id)) {
+            uniqueGalleriesMap.set(gallery.id, gallery);
+          }
+        });
+        
+        const deduplicatedGalleries = Array.from(uniqueGalleriesMap.values());
+
+        // 3. Fetch previews for deduplicated galleries
         const galleriesWithPreviews = await Promise.all(
-          galleriesRes.documents.map(async (gallery) => {
-            // Handle both lowercase 'id' and uppercase 'Id' from Appwrite
-            const actualId = gallery.id || gallery.Id;
-            
+          deduplicatedGalleries.map(async (gallery) => {
             const imagesRes = await databases.listDocuments(
               APPWRITE_CONFIG.databaseId,
               APPWRITE_CONFIG.imagesCollectionId,
               [
-                Query.equal('gallery_id', actualId),
+                Query.equal('gallery_id', gallery.id),
                 Query.limit(1),
                 Query.orderDesc('created_at')
               ]
             );
             return {
               ...gallery,
-              id: actualId, // Ensure it's available as 'id' for the Link component
               preview: imagesRes.documents[0]?.image_url || null
             };
           })

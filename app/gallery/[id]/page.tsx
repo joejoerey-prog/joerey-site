@@ -4,14 +4,16 @@ import GalleryClient from "./GalleryClient";
 
 async function getGalleryData(id: string) {
   try {
-    // Check for both 'id' and 'Id' in the database
+    // Robust ID matching: try both 'id' and 'Id'
     const galleryRes = await databases.listDocuments(
       APPWRITE_CONFIG.databaseId,
       APPWRITE_CONFIG.galleriesCollectionId,
       [
         Query.or([
             Query.equal('id', id),
-            Query.equal('Id', id)
+            Query.equal('Id', id),
+            Query.equal('id', id.toLowerCase()), // Double check with lower case
+            Query.equal('Id', id.toLowerCase())
         ]),
         Query.limit(1)
       ]
@@ -23,7 +25,8 @@ async function getGalleryData(id: string) {
     }
 
     const gallery = galleryRes.documents[0];
-    const actualId = gallery.id || gallery.Id;
+    // Standardize to lowercase 'id' for the app's internal logic
+    const actualId = String(gallery.id || gallery.Id || gallery.$id).toLowerCase();
 
     const imagesRes = await databases.listDocuments(
       APPWRITE_CONFIG.databaseId,
@@ -32,7 +35,7 @@ async function getGalleryData(id: string) {
     );
 
     return {
-      id: gallery.id,
+      id: actualId,
       title: gallery.title,
       description: gallery.description,
       images: imagesRes.documents.map(doc => ({
