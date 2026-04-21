@@ -10,10 +10,9 @@ async function getGalleryData(id: string) {
       APPWRITE_CONFIG.galleriesCollectionId,
       [
         Query.or([
-            Query.equal('id', id),
             Query.equal('Id', id),
-            Query.equal('id', id.toLowerCase()), // Double check with lower case
-            Query.equal('Id', id.toLowerCase())
+            Query.equal('Id', id.toLowerCase()),
+            Query.equal('$id', id)
         ]),
         Query.limit(1)
       ]
