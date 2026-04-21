@@ -143,7 +143,6 @@ export default function HomePage() {
                               alt={gallery.title}
                               fill
                               className="object-contain"
-                              unoptimized
                               priority={index === 0}
                               sizes="(max-width: 768px) 100vw, 50vw"
                             />
@@ -184,7 +183,6 @@ export default function HomePage() {
                         alt={gallery.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        unoptimized
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
