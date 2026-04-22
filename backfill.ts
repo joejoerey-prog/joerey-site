@@ -1,4 +1,4 @@
-import { Client, Databases, Query } from "node-appwrite"
+import { Client, Databases, Storage, Query } from "node-appwrite"
 import OpenAI from "openai"
 import dotenv from "dotenv"
 
@@ -15,46 +15,51 @@ const githubToken = process.env.GITHUB_TOKEN || ""
 const client = new Client().setEndpoint("https://fra.cloud.appwrite.io/v1").setProject(projectId).setKey(appwriteKey)
 
 const databases = new Databases(client)
+const storage = new Storage(client)
 
 const openai = new OpenAI({ baseURL: "https://models.inference.ai.azure.com", apiKey: githubToken })
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 async function runBackfill() {
-console.log("Starting backfill process")
+  console.log("Starting backfill process")
 
-const response = await databases.listDocuments(dbId, collectionId, [Query.limit(100)])
+  const response = await databases.listDocuments(dbId, collectionId, [Query.limit(100)])
 
-const documents = response.documents
-console.log("Found " + documents.length + " images")
+  const documents = response.documents
+  console.log("Found " + documents.length + " images")
 
-for (const doc of documents) {
-if (doc.description) {
-console.log("Skipping " + doc.$id + " as description exists")
-continue
-}
+  for (const doc of documents) {
+    if (doc.description) {
+      console.log("Skipping " + doc.$id + " as description exists")
+      continue
+    }
 
-console.log("Processing " + doc.$id)
-const imageUrl = "https://fra.cloud.appwrite.io/v1/storage/buckets/" + bucketId + "/files/" + doc.$id + "/view?project=" + projectId
+    console.log("Processing " + doc.$id)
 
-try {
-  const aiResponse = await openai.chat.completions.create({
-    messages: [{ role: "system", content: "You are a visual assistant. Describe the image in under 200 characters." }, { role: "user", content: [{ type: "image_url", image_url: { url: imageUrl } }] }],
-    model: "gpt-4o-mini"
-  })
+    try {
+      const fileBuffer = await storage.getFileDownload(bucketId, doc.$id)
+      const base64String = Buffer.from(fileBuffer).toString("base64")
+      const dataUrl = "data:image/jpeg;base64," + base64String
 
-  const description = aiResponse.choices[0].message.content
+      const aiResponse = await openai.chat.completions.create({
+        messages: [{ role: "system", content: "You are a visual assistant. Describe the image in under 200 characters." }, { role: "user", content: [{ type: "image_url", image_url: { url: dataUrl } }] }],
+        model: "gpt-4o-mini"
+      })
 
-  await databases.updateDocument(dbId, collectionId, doc.$id, { description: description })
+      const description = aiResponse.choices[0].message.content
 
-  console.log("Updated " + doc.$id + " successfully")
-  await sleep(2000)
-} catch (error) {
-  console.error("Error processing " + doc.$id, error)
-}
-}
+      await databases.updateDocument(dbId, collectionId, doc.$id, { description: description })
 
-console.log("Backfill complete")
+      console.log("Updated " + doc.$id + " successfully")
+      await sleep(5000)
+    } catch (error) {
+      console.error("Error processing " + doc.$id, error)
+      await sleep(5000)
+    }
+  }
+
+  console.log("Backfill complete")
 }
 
 runBackfill()
