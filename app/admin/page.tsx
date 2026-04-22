@@ -182,9 +182,12 @@ export default function AdminDashboard() {
                     className="w-full bg-background border border-border rounded-lg p-3 text-foreground focus:ring-2 focus:ring-accent outline-none appearance-none"
                     required
                   >
-                    {galleries.map((g) => (
-                      <option key={g.$id} value={g.id}>{g.title}</option>
-                    ))}
+                    {galleries.map((g) => {
+                      const val = g.id || g.Id;
+                      return (
+                        <option key={g.$id} value={val}>{g.title}</option>
+                      );
+                    })}
                   </select>
                 )}
               </div>
