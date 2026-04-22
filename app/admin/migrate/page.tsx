@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import { account, databases, storage, ID, APPWRITE_CONFIG, Query } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Database, Loader2, Play, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Database, Loader2, Play, CheckCircle2, AlertCircle, ArrowLeft, MessageSquareText } from 'lucide-react';
 import galleriesData from '@/data/legacy/galleries.json';
 
 export default function MigratePage() {
   const [loading, setLoading] = useState(true);
   const [migrating, setMigrating] = useState(false);
+  const [syncingCaptions, setSyncingCaptions] = useState(false);
   const [progress, setProgress] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -55,51 +56,37 @@ export default function MigratePage() {
 
         // 1. Create Gallery Document
         try {
-            await databases.getDocument(DB_ID, GALLERIES_COL_ID, gallery.id);
-            log(`   ℹ️ Gallery already exists.`);
-        } catch (e) {
-            try {
-                await databases.getDocument(DB_ID, GALLERIES_COL_ID, gallery.id.charAt(0).toUpperCase() + gallery.id.slice(1));
-                log(`   ℹ️ Gallery already exists (capital Id).`);
-            } catch (e2) {
+            await databases.createDocument(DB_ID, GALLERIES_COL_ID, ID.unique(), {
+                id: gallery.id,
+                title: gallery.title,
+                description: gallery.description,
+                order: i + 1
+            });
+            log(`   ✅ Gallery created.`);
+        } catch (e: any) {
+            if (e.message.includes('already exists')) {
+                log(`   ℹ️ Gallery already exists.`);
+            } else {
+                log(`   ⚠️ Retrying with capital 'Id'...`);
                 try {
-                    log(`   ➕ Creating gallery...`);
                     await databases.createDocument(DB_ID, GALLERIES_COL_ID, ID.unique(), {
                         Id: gallery.id,
                         title: gallery.title,
                         description: gallery.description,
                         order: i + 1
                     });
-                    log(`   ✅ Gallery created.`);
-                } catch (e3: any) {
-                    log(`   ❌ Gallery creation failed: ${e3.message}`);
+                    log(`   ✅ Gallery created (using Id).`);
+                } catch (e2: any) {
+                    log(`   ❌ Gallery creation failed: ${e2.message}`);
                 }
             }
         }
 
         // 2. Process Images
-        let existingImages: any[] = [];
-        try {
-            const existingRes = await databases.listDocuments(DB_ID, IMAGES_COL_ID, [
-                Query.equal('gallery_id', gallery.id),
-                Query.limit(100)
-            ]);
-            existingImages = existingRes.documents;
-        } catch (e) {
-            log(`   ⚠️ Could not fetch existing images for ${gallery.title}.`);
-        }
-
         for (const img of gallery.images) {
           const fileName = img.image.split('/').pop() || 'image.jpg';
+          log(`   📸 Processing: ${fileName}...`);
           
-          // Idempotency: match by caption (since file_ids are generated)
-          const isUploaded = existingImages.some(doc => doc.caption === (img.caption || ""));
-          if (isUploaded) {
-              log(`   ⏭️ Skipping ${fileName} (already uploaded).`);
-              continue;
-          }
-
-          log(`   📸 Uploading: ${fileName}...`);
           try {
             const response = await fetch(img.image);
             if (!response.ok) throw new Error("File not on disk");
@@ -117,9 +104,9 @@ export default function MigratePage() {
               caption: img.caption || "",
               created_at: new Date().toISOString()
             });
-            log(`   ✅ Success.`);
+            log(`      ✅ Uploaded & Linked.`);
           } catch (e: any) {
-            log(`   ❌ Error: ${e.message}`);
+            log(`      ❌ Error: ${e.message}`);
           }
         }
       }
@@ -132,6 +119,57 @@ export default function MigratePage() {
     }
   };
 
+  const handleSyncCaptions = async () => {
+    if (!window.confirm("This will find all existing images in Appwrite and update their missing captions from the JSON file. Continue?")) return;
+
+    setSyncingCaptions(true);
+    setError(null);
+    setProgress([]);
+
+    try {
+      const DB_ID = APPWRITE_CONFIG.databaseId;
+      const IMAGES_COL_ID = APPWRITE_CONFIG.imagesCollectionId;
+
+      log("🔍 Starting Caption Sync...");
+
+      // 1. Get all images from database
+      const response = await databases.listDocuments(DB_ID, IMAGES_COL_ID, [Query.limit(100)]);
+      log(`Found ${response.documents.length} images in database.`);
+
+      // 2. Create a map of filename -> caption from our local data
+      const captionMap = new Map();
+      galleriesData.galleries.forEach(g => {
+        g.images.forEach(img => {
+          const fileName = img.image.split('/').pop();
+          if (fileName) captionMap.set(fileName, img.caption);
+        });
+      });
+
+      // 3. Update each document
+      let updatedCount = 0;
+      for (const doc of response.documents) {
+        // Find filename in the URL
+        const fileName = Array.from(captionMap.keys()).find(name => doc.image_url.includes(name));
+        
+        if (fileName && (!doc.caption || doc.caption === "")) {
+          const newCaption = captionMap.get(fileName);
+          log(`✍️ Updating caption for: ${fileName}`);
+          
+          await databases.updateDocument(DB_ID, IMAGES_COL_ID, doc.$id, {
+            caption: newCaption
+          });
+          updatedCount++;
+        }
+      }
+
+      log(`🎉 Caption Sync complete! Updated ${updatedCount} images.`);
+    } catch (err: any) {
+      setError(err.message || "Caption sync failed.");
+    } finally {
+      setSyncingCaptions(false);
+    }
+  };
+
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="animate-spin text-accent" size={48} /></div>;
 
   return (
@@ -140,20 +178,30 @@ export default function MigratePage() {
         <Button variant="ghost" onClick={() => router.push('/admin')} className="text-foreground-muted">
           <ArrowLeft size={20} className="mr-2" /> Back to Admin
         </Button>
+        
         <Card className="bg-background-alt border-border text-foreground shadow-xl">
           <CardHeader className="text-center py-10 border-b border-border">
             <Database className="mx-auto text-accent mb-4" size={48} />
-            <CardTitle className="text-3xl font-black">Final Sync</CardTitle>
+            <CardTitle className="text-3xl font-black">Dynamic Sync Tool</CardTitle>
           </CardHeader>
           <CardContent className="p-8">
-            <div className="bg-background rounded-2xl p-6 h-[400px] overflow-y-auto font-mono text-xs space-y-1 border border-border">
-              {progress.length === 0 ? <p className="text-foreground-muted italic">Ready to fix the galleries...</p> : progress.map((p, idx) => <p key={idx} className={p.includes('✅') ? 'text-green-400' : p.includes('❌') ? 'text-red-400' : 'text-foreground/70'}>{p}</p>)}
+            <div className="bg-background rounded-2xl p-6 h-[300px] overflow-y-auto font-mono text-xs space-y-1 border border-border">
+              {progress.length === 0 ? <p className="text-foreground-muted italic text-center py-20">Ready for action...</p> : progress.map((p, idx) => <p key={idx} className={p.includes('✅') ? 'text-green-400' : p.includes('❌') ? 'text-red-400' : 'text-foreground/70'}>{p}</p>)}
               {error && <p className="text-red-400 font-bold mt-4">{error}</p>}
             </div>
           </CardContent>
-          <CardFooter className="pb-10 px-8">
-            <Button onClick={handleMigrate} disabled={migrating} className="w-full bg-accent hover:bg-accent/80 text-background font-black text-xl h-16 transition-all">
-              {migrating ? <Loader2 className="mr-2 animate-spin" /> : "Run Final Sync"}
+          <CardFooter className="pb-10 px-8 flex flex-col gap-4">
+            <Button onClick={handleSyncCaptions} disabled={syncingCaptions || migrating} className="w-full bg-secondary hover:bg-primary text-foreground font-bold h-14">
+              {syncingCaptions ? <Loader2 className="mr-2 animate-spin" /> : <><MessageSquareText className="mr-2" size={20}/> Sync Missing Captions Only</>}
+            </Button>
+            
+            <div className="relative w-full py-4 text-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
+                <span className="relative bg-background-alt px-4 text-[10px] text-foreground-muted uppercase font-bold tracking-widest">Or Full Sync</span>
+            </div>
+
+            <Button onClick={handleMigrate} disabled={migrating || syncingCaptions} variant="ghost" className="w-full border border-white/5 text-foreground-muted hover:text-foreground h-12 text-xs">
+              {migrating ? <Loader2 className="animate-spin" /> : "Run Full Data & Image Migration"}
             </Button>
           </CardFooter>
         </Card>
