@@ -133,7 +133,7 @@ export default function MigratePage() {
       log("🔍 Starting Caption Sync...");
 
       // 1. Get all images from database
-      const response = await databases.listDocuments(DB_ID, IMAGES_COL_ID, [Query.limit(100)]);
+      const response = await databases.listDocuments(DB_ID, IMAGES_COL_ID, [Query.limit(200)]);
       log(`Found ${response.documents.length} images in database.`);
 
       // 2. Create a map of filename -> caption from our local data
@@ -147,19 +147,35 @@ export default function MigratePage() {
 
       // 3. Update each document
       let updatedCount = 0;
+      const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
+
       for (const doc of response.documents) {
-        // Find filename in the URL
-        const fileName = Array.from(captionMap.keys()).find(name => doc.image_url.includes(name));
-        
-        if (fileName && (!doc.caption || doc.caption === "")) {
-          const newCaption = captionMap.get(fileName);
-          log(`✍️ Updating caption for: ${fileName}`);
-          
-          await databases.updateDocument(DB_ID, IMAGES_COL_ID, doc.$id, {
-            caption: newCaption
-          });
-          updatedCount++;
+        if (!doc.file_id) {
+          log(`   ⚠️ Skipping DB doc ${doc.$id} (No file_id found).`);
+          continue;
         }
+
+        try {
+          // Retrieve actual storage metadata to extract the original uploaded filename
+          const fileMeta = await storage.getFile(APPWRITE_CONFIG.bucketId, doc.file_id);
+          const originalName = fileMeta.name;
+
+          // Lookup matching caption from local map based on exact original filename
+          if (originalName && captionMap.has(originalName) && (!doc.caption || doc.caption.trim() === "")) {
+            const correctCaption = captionMap.get(originalName);
+            log(`✍️ Updating DB caption for: ${originalName}`);
+            
+            await databases.updateDocument(DB_ID, IMAGES_COL_ID, doc.$id, {
+              caption: correctCaption
+            });
+            updatedCount++;
+          }
+        } catch (e: any) {
+          log(`   ❌ Could not lookup storage file ${doc.file_id}: ${e.message}`);
+        }
+
+        // Delay to prevent hitting Appwrite rate limits
+        await delay(100);
       }
 
       log(`🎉 Caption Sync complete! Updated ${updatedCount} images.`);
