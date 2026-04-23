@@ -222,7 +222,10 @@ export default function MigratePage() {
             body: JSON.stringify({ imageUrl: doc.image_url })
           });
 
-          if (!aiRes.ok) throw new Error(`AI API failed: ${aiRes.statusText}`);
+          if (!aiRes.ok) {
+            const errorData = await aiRes.json().catch(() => ({}));
+            throw new Error(errorData.error || `AI API failed: ${aiRes.statusText || aiRes.status}`);
+          }
 
           const { caption, error: aiError } = await aiRes.json();
           if (aiError) throw new Error(aiError);
