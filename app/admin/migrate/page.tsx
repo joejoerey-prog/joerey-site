@@ -216,9 +216,9 @@ export default function MigratePage() {
         log(`   🤖 Analyzing Image: ${doc.$id}...`);
 
         try {
-          // Add a client-side timeout to prevent hanging
+          // Increased client-side timeout to 65s for high-res images
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 35000); // 35-second client timeout
+          const timeoutId = setTimeout(() => controller.abort(), 65000); 
 
           const aiRes = await fetch('/api/generate-caption', {
             method: 'POST',
@@ -247,14 +247,14 @@ export default function MigratePage() {
           successCount++;
         } catch (e: any) {
           if (e.name === 'AbortError') {
-            log(`      ❌ Error: Request timed out (35s).`);
+            log(`      ❌ Error: Request timed out (65s).`);
           } else {
             log(`      ❌ Error: ${e.message}`);
           }
         }
 
-        // Wait between calls to stay within rate limits
-        await delay(5000);
+        // Increased delay to 8s to safely avoid rate limits
+        await delay(8000);
       }
 
       log(`🎉 AI Generation complete! Processed ${successCount} images.`);
