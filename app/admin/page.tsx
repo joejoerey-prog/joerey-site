@@ -128,18 +128,33 @@ export default function AdminDashboard() {
     setUploading(true);
 
     try {
-      // 1. Upload to Storage
+      // 1. Calculate File Hash (Fingerprint)
+      const fileHash = await calculateFileHash(file);
+      console.log(`[Admin] Generated file hash: ${fileHash}`);
+
+      // 2. Check for Duplicates in Database
+      const existing = await databases.listDocuments(
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.imagesCollectionId,
+        [Query.equal('file_hash', fileHash)]
+      );
+
+      if (existing.total > 0) {
+        const dup = existing.documents[0];
+        throw new Error(`This image has already been uploaded to the "${dup.gallery_id}" gallery.`);
+      }
+
+      // 3. Upload to Storage
       const uploadedFile = await storage.createFile(
         APPWRITE_CONFIG.bucketId,
         ID.unique(),
         file
       );
 
-      // 2. Construct public URL
+      // 4. Construct public URL
       const imageUrl = `https://fra.cloud.appwrite.io/v1/storage/buckets/${APPWRITE_CONFIG.bucketId}/files/${uploadedFile.$id}/view?project=${APPWRITE_CONFIG.projectId}`;
 
-      // 3. Create Database record
-      // Ensure we use the lowercase slug 'id' for the relationship
+      // 5. Create Database record
       const slugId = selectedGallery.toLowerCase();
       console.log(`[Admin] Uploading new image. Targeting gallery_id: '${slugId}'`);
 
@@ -152,20 +167,20 @@ export default function AdminDashboard() {
           file_id: uploadedFile.$id,
           image_url: imageUrl,
           caption: caption,
+          file_hash: fileHash, // Save the hash for future checks
           created_at: new Date().toISOString()
         }
       );
 
-      setMessage({ type: 'success', text: 'Photo uploaded successfully to the portfolio!' });
+      setMessage({ type: 'success', text: 'Photo uploaded successfully!' });
       setCaption('');
       setFile(null);
-      // Reset file input
       const fileInput = document.getElementById('photo-upload') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
       
     } catch (err: any) {
-      console.error("Upload Error Details:", err);
-      setMessage({ type: 'error', text: `Upload failed: ${err.message}` });
+      console.error("Upload Error:", err);
+      setMessage({ type: 'error', text: err.message || 'Upload failed' });
     } finally {
       setUploading(false);
     }
