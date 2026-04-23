@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation';
 import { account, databases, storage, ID, APPWRITE_CONFIG, Query } from '@/lib/appwrite';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Database, Loader2, Play, CheckCircle2, AlertCircle, ArrowLeft, MessageSquareText } from 'lucide-react';
+import { Database, Loader2, Play, CheckCircle2, AlertCircle, ArrowLeft, MessageSquareText, Sparkles } from 'lucide-react';
 import galleriesData from '@/data/legacy/galleries.json';
 
 export default function MigratePage() {
   const [loading, setLoading] = useState(true);
   const [migrating, setMigrating] = useState(false);
   const [syncingCaptions, setSyncingCaptions] = useState(false);
+  const [generatingAI, setGeneratingAI] = useState(false);
   const [progress, setProgress] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -186,6 +187,68 @@ export default function MigratePage() {
     }
   };
 
+  const handleAIGenerateCaptions = async () => {
+    if (!window.confirm("This will analyze all images using AI and generate artistic descriptions. This may take several minutes. Continue?")) return;
+
+    setGeneratingAI(true);
+    setError(null);
+    setProgress([]);
+
+    try {
+      const DB_ID = APPWRITE_CONFIG.databaseId;
+      const IMAGES_COL_ID = APPWRITE_CONFIG.imagesCollectionId;
+
+      log("✨ Starting AI Caption Generation...");
+
+      const response = await databases.listDocuments(DB_ID, IMAGES_COL_ID, [Query.limit(200)]);
+      log(`Found ${response.documents.length} images to process.`);
+
+      let successCount = 0;
+      const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+      for (const doc of response.documents) {
+        // Skip if it already has a long caption (meaning it's likely already processed)
+        if (doc.caption && doc.caption.length > 200) {
+          log(`   ⏩ Skipping ${doc.$id} (already has AI description).`);
+          continue;
+        }
+
+        log(`   🤖 Analyzing Image: ${doc.$id}...`);
+
+        try {
+          const aiRes = await fetch('/api/generate-caption', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ imageUrl: doc.image_url })
+          });
+
+          if (!aiRes.ok) throw new Error(`AI API failed: ${aiRes.statusText}`);
+
+          const { caption, error: aiError } = await aiRes.json();
+          if (aiError) throw new Error(aiError);
+
+          await databases.updateDocument(DB_ID, IMAGES_COL_ID, doc.$id, {
+            caption: caption
+          });
+
+          log(`      ✅ Caption generated.`);
+          successCount++;
+        } catch (e: any) {
+          log(`      ❌ Error: ${e.message}`);
+        }
+
+        // Wait between calls to stay within rate limits
+        await delay(5000);
+      }
+
+      log(`🎉 AI Generation complete! Processed ${successCount} images.`);
+    } catch (err: any) {
+      setError(err.message || "AI generation failed.");
+    } finally {
+      setGeneratingAI(false);
+    }
+  };
+
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="animate-spin text-accent" size={48} /></div>;
 
   return (
@@ -207,7 +270,15 @@ export default function MigratePage() {
             </div>
           </CardContent>
           <CardFooter className="pb-10 px-8 flex flex-col gap-4">
-            <Button onClick={handleSyncCaptions} disabled={syncingCaptions || migrating} className="w-full bg-secondary hover:bg-primary text-foreground font-bold h-14">
+            <Button 
+              onClick={handleAIGenerateCaptions} 
+              disabled={generatingAI || migrating || syncingCaptions} 
+              className="w-full bg-accent hover:bg-accent/80 text-background font-black h-14"
+            >
+              {generatingAI ? <Loader2 className="mr-2 animate-spin" /> : <><Sparkles className="mr-2" size={20}/> Generate AI Descriptions (Artistic)</>}
+            </Button>
+
+            <Button onClick={handleSyncCaptions} disabled={syncingCaptions || migrating || generatingAI} className="w-full bg-secondary hover:bg-primary text-foreground font-bold h-12">
               {syncingCaptions ? <Loader2 className="mr-2 animate-spin" /> : <><MessageSquareText className="mr-2" size={20}/> Sync Missing Captions Only</>}
             </Button>
             
@@ -216,7 +287,7 @@ export default function MigratePage() {
                 <span className="relative bg-background-alt px-4 text-[10px] text-foreground-muted uppercase font-bold tracking-widest">Or Full Sync</span>
             </div>
 
-            <Button onClick={handleMigrate} disabled={migrating || syncingCaptions} variant="ghost" className="w-full border border-white/5 text-foreground-muted hover:text-foreground h-12 text-xs">
+            <Button onClick={handleMigrate} disabled={migrating || syncingCaptions || generatingAI} variant="ghost" className="w-full border border-white/5 text-foreground-muted hover:text-foreground h-12 text-xs">
               {migrating ? <Loader2 className="animate-spin" /> : "Run Full Data & Image Migration"}
             </Button>
           </CardFooter>
