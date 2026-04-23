@@ -19,7 +19,11 @@ const response = await databases.listDocuments(dbId, collectionId, [Query.limit(
 const documents = response.documents
 console.log("Found " + documents.length + " images")
 for (const doc of documents) {
-console.log("Processing document " + doc.$id)
+  if (doc.caption && doc.caption.length > 200) {
+    console.log("Skipping already processed document " + doc.$id)
+    continue
+  }
+  console.log("Processing document " + doc.$id)
 try {
   const fileBuffer = await storage.getFileDownload(bucketId, doc.file_id)
   const base64String = Buffer.from(fileBuffer).toString("base64")
