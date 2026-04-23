@@ -1,24 +1,33 @@
 import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
+import path from "path";
+import fs from "fs";
+import dotenv from "dotenv";
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
-  console.log("[AI API] Starting request...");
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 60000); 
-
+  console.log("[AI API] Request received");
+  
   try {
     const { imageUrl } = await req.json();
-    console.log(`[AI API] Processing Image URL: ${imageUrl}`);
-
-    if (!imageUrl) {
-      return NextResponse.json({ error: "Image URL is required" }, { status: 400 });
+    
+    // Fallback: Manually load .env.local if GITHUB_TOKEN is missing
+    if (!process.env.GITHUB_TOKEN) {
+      const envPath = path.join(process.cwd(), '.env.local');
+      if (fs.existsSync(envPath)) {
+        const envConfig = dotenv.parse(fs.readFileSync(envPath));
+        for (const k in envConfig) {
+          process.env[k] = envConfig[k];
+        }
+      }
     }
 
     const apiKey = process.env.GITHUB_TOKEN;
+    
     if (!apiKey) {
-      return NextResponse.json({ error: "API configuration missing (GITHUB_TOKEN)" }, { status: 500 });
+      console.error("[AI API] GITHUB_TOKEN is still missing after fallback check");
+      return NextResponse.json({ error: "API configuration missing (GITHUB_TOKEN). Please restart your server or check .env.local" }, { status: 500 });
     }
 
     const openai = new OpenAI({
@@ -26,7 +35,6 @@ export async function POST(req: Request) {
       apiKey: apiKey,
     });
 
-    console.log("[AI API] Sending to OpenAI...");
     const response = await openai.chat.completions.create({
       messages: [
         {
@@ -35,31 +43,15 @@ export async function POST(req: Request) {
         },
         {
           role: "user",
-          content: [
-            {
-              type: "image_url",
-              image_url: { url: imageUrl },
-            },
-          ],
+          content: [{ type: "image_url", image_url: { url: imageUrl } }],
         },
       ],
       model: "gpt-4o-mini",
-    }, {
-        signal: controller.signal
     });
 
-    const caption = response.choices[0].message.content;
-    console.log("[AI API] Success!");
-    return NextResponse.json({ caption });
+    return NextResponse.json({ caption: response.choices[0].message.content });
   } catch (error: any) {
-    if (error.name === 'AbortError') {
-        return NextResponse.json({ error: "Request timed out (60s)." }, { status: 504 });
-    }
-    // Check if it's an OpenAI error related to image accessibility
-    const status = error.status || 500;
-    console.error(`[AI API] Error (${status}):`, error.message);
-    return NextResponse.json({ error: error.message }, { status });
-  } finally {
-    clearTimeout(timeoutId);
+    console.error("[AI API] Error:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
