@@ -7,7 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Upload, LogOut, Image as ImageIcon, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, LogOut, Image as ImageIcon, CheckCircle2, AlertCircle, Loader2, Edit, Save, Database } from 'lucide-react';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogDescription 
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
@@ -15,6 +24,12 @@ export default function AdminDashboard() {
   const [uploading, setUploading] = useState(false);
   const [galleries, setGalleries] = useState<any[]>([]);
   
+  // Gallery Edit State
+  const [editingGallery, setEditingGallery] = useState<any>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [isUpdatingGallery, setIsUpdatingGallery] = useState(false);
+
   // Form State
   const [selectedGallery, setSelectedGallery] = useState('');
   const [caption, setCaption] = useState('');
@@ -73,6 +88,35 @@ export default function AdminDashboard() {
       router.push('/login');
     } catch (err) {
       console.error('Logout failed:', err);
+    }
+  };
+
+  const handleUpdateGallery = async () => {
+    if (!editingGallery) return;
+    setIsUpdatingGallery(true);
+    try {
+      await databases.updateDocument(
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.galleriesCollectionId,
+        editingGallery.$id,
+        {
+          title: editTitle,
+          description: editDescription
+        }
+      );
+      
+      // Update local state
+      setGalleries(prev => prev.map(g => 
+        g.$id === editingGallery.$id ? { ...g, title: editTitle, description: editDescription } : g
+      ));
+      
+      setEditingGallery(null);
+      setMessage({ type: 'success', text: 'Gallery updated successfully!' });
+    } catch (err: any) {
+      console.error('Failed to update gallery:', err);
+      setMessage({ type: 'error', text: `Failed to update gallery: ${err.message}` });
+    } finally {
+      setIsUpdatingGallery(false);
     }
   };
 
@@ -153,6 +197,44 @@ export default function AdminDashboard() {
             Logout
           </Button>
         </div>
+
+        {/* Manage Galleries */}
+        <Card className="bg-background-alt border-border text-foreground shadow-xl overflow-hidden">
+          <CardHeader className="bg-accent/10 border-b border-border py-6">
+            <div className="flex items-center gap-3">
+              <Database className="text-accent" size={24} />
+              <div>
+                <CardTitle className="text-xl">Manage Galleries</CardTitle>
+                <CardDescription className="text-foreground-muted text-xs">Update your gallery names and descriptions.</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="divide-y divide-border">
+              {galleries.map((g) => (
+                <div key={g.$id} className="flex items-center justify-between p-4 hover:bg-background/50 transition-colors">
+                  <div className="space-y-1">
+                    <p className="font-bold text-foreground">{g.title}</p>
+                    <p className="text-xs text-foreground-muted line-clamp-1">{g.description}</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setEditingGallery(g);
+                      setEditTitle(g.title);
+                      setEditDescription(g.description || '');
+                    }}
+                    className="border-border hover:bg-accent/10 hover:text-accent"
+                  >
+                    <Edit className="mr-2" size={14} />
+                    Edit
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Upload Form */}
         <Card className="bg-background-alt border-border text-foreground shadow-xl overflow-hidden">
@@ -270,6 +352,57 @@ export default function AdminDashboard() {
           </form>
         </Card>
       </div>
+
+      {/* Edit Gallery Dialog */}
+      <Dialog open={!!editingGallery} onOpenChange={(open) => !open && setEditingGallery(null)}>
+        <DialogContent className="sm:max-w-lg bg-background-alt border-border text-foreground">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-black">Edit Gallery</DialogTitle>
+            <DialogDescription className="text-foreground-muted">
+              Update the details for "{editingGallery?.title}".
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            <div className="space-y-2">
+              <Label className="text-accent font-bold uppercase tracking-wider text-xs">Gallery Title</Label>
+              <Input
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                className="bg-background border-border"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-accent font-bold uppercase tracking-wider text-xs">Description</Label>
+              <Textarea
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+                className="bg-background border-border min-h-[120px]"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="ghost"
+              onClick={() => setEditingGallery(null)}
+              className="text-foreground-muted hover:text-foreground"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUpdateGallery}
+              disabled={isUpdatingGallery}
+              className="bg-secondary hover:bg-primary text-foreground font-bold"
+            >
+              {isUpdatingGallery ? (
+                <Loader2 className="mr-2 animate-spin" size={18} />
+              ) : (
+                <Save className="mr-2" size={18} />
+              )}
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
