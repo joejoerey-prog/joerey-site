@@ -211,24 +211,39 @@ export default function MigratePage() {
         if (doc.caption && doc.caption.length > 200) {
           log(`   ⏩ Skipping ${doc.$id} (already has AI description).`);
           continue;
-        }
-
         log(`   🤖 Analyzing Image: ${doc.$id}...`);
 
         try {
+          // Add a client-side timeout to prevent hanging
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 35000); // 35-second client timeout
+
           const aiRes = await fetch('/api/generate-caption', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ imageUrl: doc.image_url })
+            body: JSON.stringify({ imageUrl: doc.image_url }),
+            signal: controller.signal
           });
+
+          clearTimeout(timeoutId);
 
           if (!aiRes.ok) {
             const errorData = await aiRes.json().catch(() => ({}));
-            throw new Error(errorData.error || `AI API failed: ${aiRes.statusText || aiRes.status}`);
+            const errMsg = errorData.error || `AI API failed: ${aiRes.statusText || aiRes.status}`;
+            log(`      ❌ Error: ${errMsg}`);
+            // If it's a 403/404/504, it might be a persistent issue, so we skip it
+            continue; 
           }
 
           const { caption, error: aiError } = await aiRes.json();
-          if (aiError) throw new Error(aiError);
+        ...
+        } catch (e: any) {
+          if (e.name === 'AbortError') {
+            log(`      ❌ Error: Request timed out (35s).`);
+          } else {
+            log(`      ❌ Error: ${e.message}`);
+          }
+        }
 
           await databases.updateDocument(DB_ID, IMAGES_COL_ID, doc.$id, {
             caption: caption
