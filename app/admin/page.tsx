@@ -17,6 +17,7 @@ import {
   DialogDescription 
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { calculateFileHash } from '@/lib/utils';
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
