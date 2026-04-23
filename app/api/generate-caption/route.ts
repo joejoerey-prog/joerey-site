@@ -4,15 +4,19 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
+  console.log("[AI API] Starting request...");
   try {
     const { imageUrl } = await req.json();
+    console.log(`[AI API] Image URL: ${imageUrl}`);
 
     if (!imageUrl) {
+      console.error("[AI API] Error: Image URL is missing");
       return NextResponse.json({ error: "Image URL is required" }, { status: 400 });
     }
 
     const apiKey = process.env.GITHUB_TOKEN;
     if (!apiKey) {
+      console.error("[AI API] Error: GITHUB_TOKEN is not set in environment");
       return NextResponse.json({ error: "API configuration missing (GITHUB_TOKEN)" }, { status: 500 });
     }
 
@@ -21,6 +25,7 @@ export async function POST(req: Request) {
       apiKey: apiKey,
     });
 
+    console.log("[AI API] Sending request to OpenAI...");
     const response = await openai.chat.completions.create({
       messages: [
         {
@@ -57,9 +62,10 @@ Please provide a captivating artistic description of the image while focusing on
     });
 
     const caption = response.choices[0].message.content;
+    console.log("[AI API] Success! Caption generated.");
     return NextResponse.json({ caption });
   } catch (error: any) {
-    console.error("AI Generation Error:", error);
+    console.error("[AI API] Error occurred:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
