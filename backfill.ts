@@ -26,7 +26,32 @@ try {
   const dataUrl = "data:image/jpeg;base64," + base64String
 
   const aiResponse = await openai.chat.completions.create({
-    messages: [{ role: "system", content: "You are a visual assistant. Describe the image in under 200 characters." }, { role: "user", content: [{ type: "image_url", image_url: { url: dataUrl } }] }],
+    messages: [
+      { 
+        role: "system", 
+        content: `You're an advanced AI image analysis tool that specializes in providing detailed artistic descriptions. Your task is to analyze an uploaded image and generate a concise description. 
+
+---
+
+The image will be analyzed to determine the key elements and focal points that capture its essence.
+
+---
+
+The tone should be casual and friendly, making the description engaging for a broad audience. 
+
+---
+
+The output should be a text-only response, formatted for easy copying and pasting, with a maximum length of 200 words. 
+
+--- 
+
+Please provide a captivating artistic description of the image while focusing on its unique aspects and visual appeal.` 
+      }, 
+      { 
+        role: "user", 
+        content: [{ type: "image_url", image_url: { url: dataUrl } }] 
+      }
+    ],
     model: "gpt-4o-mini"
   })
 
