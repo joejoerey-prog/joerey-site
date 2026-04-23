@@ -211,6 +211,8 @@ export default function MigratePage() {
         if (doc.caption && doc.caption.length > 200) {
           log(`   ⏩ Skipping ${doc.$id} (already has AI description).`);
           continue;
+        }
+
         log(`   🤖 Analyzing Image: ${doc.$id}...`);
 
         try {
@@ -231,19 +233,11 @@ export default function MigratePage() {
             const errorData = await aiRes.json().catch(() => ({}));
             const errMsg = errorData.error || `AI API failed: ${aiRes.statusText || aiRes.status}`;
             log(`      ❌ Error: ${errMsg}`);
-            // If it's a 403/404/504, it might be a persistent issue, so we skip it
             continue; 
           }
 
           const { caption, error: aiError } = await aiRes.json();
-        ...
-        } catch (e: any) {
-          if (e.name === 'AbortError') {
-            log(`      ❌ Error: Request timed out (35s).`);
-          } else {
-            log(`      ❌ Error: ${e.message}`);
-          }
-        }
+          if (aiError) throw new Error(aiError);
 
           await databases.updateDocument(DB_ID, IMAGES_COL_ID, doc.$id, {
             caption: caption
@@ -252,7 +246,11 @@ export default function MigratePage() {
           log(`      ✅ Caption generated.`);
           successCount++;
         } catch (e: any) {
-          log(`      ❌ Error: ${e.message}`);
+          if (e.name === 'AbortError') {
+            log(`      ❌ Error: Request timed out (35s).`);
+          } else {
+            log(`      ❌ Error: ${e.message}`);
+          }
         }
 
         // Wait between calls to stay within rate limits
