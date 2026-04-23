@@ -1,14 +1,27 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { Edit2, Loader2, Save } from "lucide-react";
+import { account, databases, APPWRITE_CONFIG } from "@/lib/appwrite";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogDescription 
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 type GalleryImage = {
+  id: string;
   image: string;
   caption?: string;
 };
@@ -24,8 +37,50 @@ interface GalleryClientProps {
   gallery?: Gallery;
 }
 
-export default function GalleryClient({ gallery }: GalleryClientProps) {
+export default function GalleryClient({ gallery: initialGallery }: GalleryClientProps) {
+  const [gallery, setGallery] = useState<Gallery | undefined>(initialGallery);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
+  const [newCaption, setNewCaption] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        await account.get();
+        setIsAdmin(true);
+      } catch (err) {
+        setIsAdmin(false);
+      }
+    };
+    checkAdmin();
+  }, []);
+
+  const handleSaveCaption = async () => {
+    if (!editingImage || !gallery) return;
+    setIsSaving(true);
+    try {
+      await databases.updateDocument(
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.imagesCollectionId,
+        editingImage.id,
+        { caption: newCaption }
+      );
+      
+      // Update local state for immediate feedback
+      const updatedImages = gallery.images.map(img => 
+        img.id === editingImage.id ? { ...img, caption: newCaption } : img
+      );
+      setGallery({ ...gallery, images: updatedImages });
+      setEditingImage(null);
+    } catch (err) {
+      console.error("Failed to update caption:", err);
+      alert("Failed to update caption. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   if (!gallery) {
     return (
@@ -54,8 +109,8 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {gallery.images.map((img: GalleryImage, i: number) => (
             <figure
-              key={i}
-              className="rounded-2xl overflow-hidden border border-border bg-background-alt flex flex-col"
+              key={img.id || i}
+              className="rounded-2xl overflow-hidden border border-border bg-background-alt flex flex-col relative group"
             >
               <div
                 className="relative w-full aspect-[4/3] flex items-center justify-center bg-background cursor-pointer"
@@ -73,6 +128,20 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
                   placeholder="blur"
                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
                 />
+
+                {isAdmin && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingImage(img);
+                      setNewCaption(img.caption || "");
+                    }}
+                    className="absolute top-2 right-2 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors z-10 opacity-0 group-hover:opacity-100"
+                    title="Edit Description"
+                  >
+                    <Edit2 size={16} />
+                  </button>
+                )}
               </div>
 
               {img.caption && (
@@ -81,7 +150,7 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
                 </figcaption>
               )}
 
-              <div className="p-4 flex justify-center bg-background/70">
+              <div className="p-4 flex justify-center bg-background/70 mt-auto">
                 <Link
                   href="https://payhip.com/JRPhotoStore"
                   target="_blank"
@@ -109,6 +178,52 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
           plugins={[Thumbnails]}
         />
       )}
+
+      {/* Edit Caption Dialog */}
+      <Dialog open={!!editingImage} onOpenChange={(open) => !open && setEditingImage(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Image Description</DialogTitle>
+            <DialogDescription>
+              Update the caption for this photograph.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Textarea
+              value={newCaption}
+              onChange={(e) => setNewCaption(e.target.value)}
+              placeholder="Enter description..."
+              className="min-h-[100px]"
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setEditingImage(null)}
+              disabled={isSaving}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSaveCaption}
+              disabled={isSaving}
+              className="bg-secondary hover:bg-primary text-foreground"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Changes
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
     </main>
   );
