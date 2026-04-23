@@ -1,10 +1,7 @@
 import { OpenAI } from "openai";
 import { NextResponse } from "next/server";
 
-const openai = new OpenAI({
-  baseURL: "https://models.inference.ai.azure.com",
-  apiKey: process.env.GITHUB_TOKEN,
-});
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
@@ -13,6 +10,16 @@ export async function POST(req: Request) {
     if (!imageUrl) {
       return NextResponse.json({ error: "Image URL is required" }, { status: 400 });
     }
+
+    const apiKey = process.env.GITHUB_TOKEN;
+    if (!apiKey) {
+      return NextResponse.json({ error: "API configuration missing (GITHUB_TOKEN)" }, { status: 500 });
+    }
+
+    const openai = new OpenAI({
+      baseURL: "https://models.inference.ai.azure.com",
+      apiKey: apiKey,
+    });
 
     const response = await openai.chat.completions.create({
       messages: [
