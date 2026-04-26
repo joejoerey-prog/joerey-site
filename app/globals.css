@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-  /* ===== Base Theme Colours ===== */
-  --background: #3b2f2f;
-  --background-alt: #4b3b39;
-  --foreground: #f5efe7;
-  --foreground-muted: #f5efe7b3;
-  --primary: #856c67;
-  --secondary: #6b5550;
-  --accent: #a58a82;
-  --border: #6b5550;
-  --border-soft: #9b7c75;
+  /* ===== Base Theme Colours - Light & Airy ===== */
+  --background: #F5F1ED;
+  --background-alt: #FAF8F6;
+  --foreground: #1A1A1A;
+  --foreground-muted: #6B6B6B;
+  --primary: #6F4E37;
+  --secondary: #8B6F47;
+  --accent: #6F4E37;
+  --border: #D9D3CC;
+  --border-soft: #E8E1D7;
 }
 
 @theme {
@@ -35,8 +37,15 @@
     padding: 0;
     background-color: var(--background);
     color: var(--foreground);
-    font-family: system-ui, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     scroll-behavior: smooth;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: -0.5px;
   }
 }
 
@@ -48,8 +57,8 @@ a {
 }
 
 a:hover {
-  color: #ffffff;
-  opacity: 1;
+  color: var(--accent);
+  opacity: 0.8;
 }
 
 /* ===== General Elements ===== */

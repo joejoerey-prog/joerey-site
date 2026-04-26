@@ -9,11 +9,18 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['Playfair Display', 'serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
       colors: {
         baseBrown: "#3b2f2f",
         cream: "#f5efe7",
+        coffeeBrown: "#6F4E37",
+        lightCream: "#F5F1ED",
       },
     },
   },
   plugins: [],
 };
+

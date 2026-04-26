@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { account } from "@/lib/appwrite";
-import { LogOut } from "lucide-react";
+import { LogOut, Instagram, Facebook, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Footer() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,9 +34,41 @@ export default function Footer() {
   };
 
   return (
-    <footer className="py-10 text-center flex flex-col items-center gap-4 border-t border-border bg-background">
-      <div className="text-foreground-muted text-sm opacity-70">
-        © {new Date().getFullYear()} Joe Rey Photography
+    <footer className="py-12 text-center flex flex-col items-center gap-6 border-t border-border bg-background">
+      {/* Social Links */}
+      <div className="flex items-center gap-6">
+        <Link
+          href="https://instagram.com/joe.rey.photography"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-foreground-muted hover:text-accent transition-colors"
+          aria-label="Instagram"
+        >
+          <Instagram size={20} />
+        </Link>
+        <Link
+          href="https://facebook.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-foreground-muted hover:text-accent transition-colors"
+          aria-label="Facebook"
+        >
+          <Facebook size={20} />
+        </Link>
+        <Link
+          href="mailto:joereyphotography@hotmail.com"
+          className="text-foreground-muted hover:text-accent transition-colors"
+          aria-label="Email"
+        >
+          <Mail size={20} />
+        </Link>
+      </div>
+
+      <div className="text-foreground-muted text-sm">
+        © {new Date().getFullYear()} Joe Rey Photography. All rights reserved.
+      </div>
+      <div className="text-foreground-muted text-xs">
+        Built with passion for nature and light.
       </div>
 
       {isLoggedIn && (

@@ -9,7 +9,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { databases, Query, APPWRITE_CONFIG } from '@/lib/appwrite';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowRight } from 'lucide-react';
 
 export default function HomePage() {
   const [galleries, setGalleries] = useState<any[]>([]);
@@ -82,28 +82,40 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start pb-20">
+    <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start">
       {/* ===== HERO SECTION ===== */}
-      <section className="text-center py-12 px-4 max-w-4xl mx-auto">
-        <div className="mb-8 relative inline-block">
+      <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+        {/* Hero Background Image */}
+        {galleries.length > 0 && galleries[0]?.preview && (
           <Image
-            src="/icon.png"
-            alt="Joe Rey Photography Logo"
-            width={240}
-            height={240}
-            className="mx-auto drop-shadow-[0_0_25px_rgba(255,255,255,0.1)] hover:scale-105 transition-transform duration-500"
+            src={galleries[0].preview}
+            alt="Hero Background"
+            fill
+            className="object-cover"
             priority
           />
+        )}
+        
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-bold text-white mb-6 drop-shadow-lg">
+            Capturing Nature.
+            <br />
+            Preserving Moments.
+          </h1>
+          <p className="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
+            A curated selection of landscapes, weather, stillness, and memory.
+          </p>
+          <Link
+            href="#gallery"
+            className="inline-block px-8 py-3 bg-accent text-white font-medium rounded-lg hover:bg-accent/90 transition-all duration-300 transform hover:scale-105 drop-shadow-lg"
+          >
+            Explore Gallery
+          </Link>
         </div>
-        <h1
-          className="text-4xl md:text-5xl font-bold text-foreground mb-4"
-          style={{ fontFamily: 'var(--font-pacifico)' }}
-        >
-          Welcome to Joe Rey Photography
-        </h1>
-        <p className="text-foreground-muted text-lg md:text-xl font-light tracking-wide max-w-2xl mx-auto">
-          A curated selection of landscapes, weather, stillness, and memory.
-        </p>
       </section>
 
       {galleries.length === 0 ? (
@@ -113,93 +125,92 @@ export default function HomePage() {
         </section>
       ) : (
         <>
-          {/* ===== CAROUSEL ===== */}
-          <section className="w-full flex justify-center mb-16 relative">
-            <div className="w-full max-w-4xl px-4">
-              <Swiper
-                modules={[Autoplay, Pagination, Navigation]}
-                autoplay={{ delay: 4000, disableOnInteraction: false }}
-                pagination={{ clickable: true }}
-                navigation
-                spaceBetween={40}
-                centeredSlides
-                slidesPerView={1}
-                loop
-                speed={1200}
-                className="custom-swiper"
-              >
-                {galleries.map((gallery, index) => {
+          {/* ===== CATEGORIES SECTION ===== */}
+          <section id="gallery" className="w-full py-20 px-4">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl sm:text-5xl font-serif font-bold text-foreground mb-4">
+                  Categories
+                </h2>
+                <p className="text-foreground-muted text-lg">
+                  Explore my favorite collections
+                </p>
+              </div>
+
+              {/* Gallery Grid - Category Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                {galleries.map((gallery) => {
                   const preview = gallery.preview;
                   return (
-                    <SwiperSlide key={gallery.$id}>
-                      <Link
-                        href={`/gallery/${gallery.id}`}
-                        className="block rounded-2xl overflow-hidden ring-1 ring-secondary bg-background-alt hover:ring-accent transition relative"
-                      >
-                        <div className="relative aspect-[3/2] w-full flex items-center justify-center bg-background">
-                          {preview ? (
-                            <Image
-                              src={preview}
-                              alt={gallery.title}
-                              fill
-                              className="object-contain"
-                              priority={index === 0}
-                              sizes="(max-width: 768px) 100vw, 50vw"
-                            />
-                          ) : (
-                            <div className="flex items-center justify-center text-foreground-muted italic text-sm">No preview available</div>
-                          )}
+                    <Link
+                      key={gallery.$id}
+                      href={`/gallery/${gallery.id}`}
+                      className="group overflow-hidden rounded-xl border border-border hover:border-accent transition-all duration-300 hover:shadow-lg cursor-pointer"
+                    >
+                      {/* Image Container */}
+                      <div className="relative w-full aspect-[4/3] overflow-hidden bg-background-alt">
+                        {preview ? (
+                          <Image
+                            src={preview}
+                            alt={gallery.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center w-full h-full text-foreground-muted italic text-sm">
+                            No preview available
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card Content */}
+                      <div className="p-6 bg-background">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <h3 className="text-xl font-serif font-semibold text-foreground mb-2">
+                              {gallery.title}
+                            </h3>
+                            <p className="text-foreground-muted text-sm line-clamp-2">
+                              {gallery.description}
+                            </p>
+                          </div>
+                          <ArrowRight
+                            size={20}
+                            className="text-accent flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform duration-300"
+                          />
                         </div>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/40 opacity-0 hover:opacity-100 transition px-6">
-                          <h2 className="text-2xl font-semibold text-foreground">
-                            {gallery.title}
-                          </h2>
-                          <p className="mt-2 text-foreground-muted max-w-md text-sm">
-                            {gallery.description}
-                          </p>
-                        </div>
-                      </Link>
-                    </SwiperSlide>
+                      </div>
+                    </Link>
                   );
                 })}
-              </Swiper>
+              </div>
             </div>
           </section>
 
-          {/* ===== GALLERY GRID BELOW CAROUSEL ===== */}
-          <section className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleries.map((gallery) => {
-              const preview = gallery.preview;
-              return (
-                <Link
-                  key={gallery.$id}
-                  href={`/gallery/${gallery.id}`}
-                  className="block group rounded-2xl overflow-hidden border border-border bg-background-alt hover:ring-2 hover:ring-accent transition"
-                >
-                  <div className="relative aspect-[4/3] w-full flex items-center justify-center bg-background">
-                    {preview ? (
-                      <Image
-                        src={preview}
-                        alt={gallery.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    ) : (
-                       <div className="flex items-center justify-center text-foreground-muted italic text-sm">No preview</div>
-                    )}
-                  </div>
-                  <div className="p-4 text-center">
-                    <h3 className="text-lg font-semibold text-foreground">
-                      {gallery.title}
-                    </h3>
-                    <p className="text-foreground-muted text-sm mt-1 line-clamp-2">
-                      {gallery.description}
-                    </p>
-                  </div>
-                </Link>
-              );
-            })}
+          {/* ===== CTA SECTION ===== */}
+          <section className="w-full py-20 px-4 bg-background-alt">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="mb-8 flex justify-center">
+                <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center">
+                  <span className="text-3xl">📷</span>
+                </div>
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-serif font-bold text-foreground mb-6">
+                Like what you see?
+              </h2>
+              <p className="text-foreground-muted text-lg mb-10">
+                Discover and purchase prints and merchandise from my photography collection.
+              </p>
+              <Link
+                href="https://payhip.com/JRPhotoStore"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-8 py-4 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Shop Now
+              </Link>
+            </div>
           </section>
         </>
       )}
@@ -213,7 +224,7 @@ export default function HomePage() {
         }
         .swiper-button-prev:hover,
         .swiper-button-next:hover {
-          color: var(--foreground-muted) !important;
+          color: var(--accent) !important;
         }
       `}</style>
     </main>
