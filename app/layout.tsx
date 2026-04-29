@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Pacifico } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Clarity from "@/app/clarity";
+import MailerLite from "@/app/mailerlite";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const pacifico = Pacifico({
@@ -44,18 +44,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        {/* MailerLite Universal */}
-        <Script
-          src="https://assets.mailerlite.com/js/universal.js"
-          strategy="afterInteractive"
-        />
-        <Script strategy="afterInteractive">
-          {`ml('account', '2297236');`}
-        </Script>
-      </head>
+      <head></head>
       <body className={`${pacifico.variable} antialiased`}>
         <Clarity />
+        <MailerLite />
         <Header />
         {children}
         <Footer />
