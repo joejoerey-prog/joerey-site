@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Pacifico } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 import Header from "@/components/Header";
@@ -43,6 +44,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* MailerLite Universal */}
+        <Script
+          src="https://assets.mailerlite.com/js/universal.js"
+          strategy="afterInteractive"
+        />
+        <Script strategy="afterInteractive">
+          {`ml('account', '2297236');`}
+        </Script>
+      </head>
       <body className={`${pacifico.variable} antialiased`}>
         <Clarity />
         <Header />
