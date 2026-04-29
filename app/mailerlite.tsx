@@ -3,24 +3,32 @@ import { useEffect } from "react";
 
 export default function MailerLite() {
   useEffect(() => {
-    // Inject MailerLite Universal script once on client mount
+    // Guard against double-injection on React hot reload
     if (document.querySelector('script[src*="mailerlite.com/js/universal"]')) {
-      return; // already loaded
+      return;
     }
 
-    (function (w: any, d: Document, e: string, u: string, f: string, l?: HTMLScriptElement, r?: Element | null) {
-      w[f] = w[f] || function () {
-        (w[f].q = w[f].q || []).push(arguments);
+    // Pre-populate the ml queue so processQueue() has the account call
+    // ready before universal.js runs its init() → fetchPopupsAndPromotions()
+    (window as any).ml =
+      (window as any).ml ||
+      function (...args: unknown[]) {
+        ((window as any).ml.q = (window as any).ml.q || []).push(args);
       };
-      l = d.createElement(e) as HTMLScriptElement;
-      l.async = true;
-      l.src = u;
-      l.onload = function () {
-        w[f]("account", "2297236");
-      };
-      r = d.getElementsByTagName(e)[0];
-      if (r && r.parentNode) r.parentNode.insertBefore(l, r);
-    })(window, document, "script", "https://assets.mailerlite.com/js/universal.js", "ml");
+    (window as any).ml("account", "2297236");
+
+    // Inject universal.js — the #account= fragment also lets
+    // parseAccountIdFromSrcAttribute() pick it up synchronously during init()
+    const script = document.createElement("script");
+    script.async = true;
+    script.src =
+      "https://assets.mailerlite.com/js/universal.js#account=2297236";
+    const first = document.getElementsByTagName("script")[0];
+    if (first && first.parentNode) {
+      first.parentNode.insertBefore(script, first);
+    } else {
+      document.head.appendChild(script);
+    }
   }, []);
 
   return null;
