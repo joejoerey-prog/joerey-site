@@ -70,11 +70,17 @@ async function analyzeImage(filePath, galleries) {
 
   const galleryList = galleries.map(g => `${g.id}: ${g.title}`).join("\n");
 
-  const response = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "system",
-        content: `You are an expert photography curator. Analyze the image and provide:
+  // Add 30-second timeout for API calls
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("API timeout after 30 seconds")), 30000)
+  );
+
+  const response = await Promise.race([
+    openai.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: `You are an expert photography curator. Analyze the image and provide:
 1. A captivating, artistic description (max 150 words).
 2. The ID of the most suitable gallery from the following list:
 ${galleryList}
@@ -84,20 +90,23 @@ Return your response in JSON format:
   "description": "...",
   "gallery_id": "..."
 }`
-      },
-      {
-        role: "user",
-        content: [{ type: "image_url", image_url: { url: dataUrl } }]
-      }
-    ],
-    model: "gpt-4o-mini",
-    response_format: { type: "json_object" }
-  });
+        },
+        {
+          role: "user",
+          content: [{ type: "image_url", image_url: { url: dataUrl } }]
+        }
+      ],
+      model: "gpt-4o-mini",
+      response_format: { type: "json_object" }
+    }),
+    timeoutPromise
+  ]);
 
   return JSON.parse(response.choices[0].message.content);
 }
 
 const MAX_IMAGES = null; // Set to null for all images
+const SKIP_FILES = new Set(["B (151).jpg"]); // Files to skip (problematic images)
 
 async function processImages() {
   console.log("🚀 Starting Bulk Import...");
@@ -118,6 +127,13 @@ async function processImages() {
   for (let i = 0; i < files.length; i++) {
     const fileName = files[i];
     const filePath = path.join(IMAGES_DIR, fileName);
+    
+    // Skip problematic files
+    if (SKIP_FILES.has(fileName)) {
+      console.log(`\n[${i + 1}/${files.length}] Processing: ${fileName}`);
+      console.log(`⏭️ Skipping problematic file: ${fileName}`);
+      continue;
+    }
     
     console.log(`\n[${i + 1}/${files.length}] Processing: ${fileName}`);
 
