@@ -8,7 +8,7 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { Edit2, Loader2, Save, Trash2 } from "lucide-react";
-import { account, databases, APPWRITE_CONFIG } from "@/lib/appwrite";
+import { account, databases, APPWRITE_CONFIG, Query } from "@/lib/appwrite";
 import { 
   Dialog, 
   DialogContent, 
@@ -33,6 +33,11 @@ type Gallery = {
   images: GalleryImage[];
 };
 
+type GalleryOption = {
+  id: string;
+  title: string;
+};
+
 interface GalleryClientProps {
   gallery?: Gallery;
 }
@@ -46,12 +51,43 @@ export default function GalleryClient({ gallery: initialGallery }: GalleryClient
   const [newCaption, setNewCaption] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [galleries, setGalleries] = useState<GalleryOption[]>([]);
+  const [newGalleryId, setNewGalleryId] = useState("");
+
+  const fetchGalleries = async () => {
+    try {
+      const response = await databases.listDocuments(
+        APPWRITE_CONFIG.databaseId,
+        APPWRITE_CONFIG.galleriesCollectionId,
+        [Query.orderAsc('order'), Query.limit(100)]
+      );
+
+      // Deduplicate by the slug 'id'
+      const uniqueGalleriesMap = new Map();
+      response.documents.forEach(doc => {
+        const slugId = doc.id || doc.Id;
+        if (slugId && !uniqueGalleriesMap.has(slugId)) {
+          uniqueGalleriesMap.set(slugId, doc);
+        }
+      });
+
+      const uniqueGalleries = Array.from(uniqueGalleriesMap.values()).map(doc => ({
+        id: (doc.id || doc.Id || '').toLowerCase(),
+        title: doc.title
+      }));
+
+      setGalleries(uniqueGalleries);
+    } catch (err) {
+      console.error('Failed to fetch galleries:', err);
+    }
+  };
 
   useEffect(() => {
     const checkAdmin = async () => {
       try {
         await account.get();
         setIsAdmin(true);
+        await fetchGalleries();
       } catch (err) {
         setIsAdmin(false);
       }
@@ -59,26 +95,42 @@ export default function GalleryClient({ gallery: initialGallery }: GalleryClient
     checkAdmin();
   }, []);
 
-  const handleSaveCaption = async () => {
+  const handleSaveImageChanges = async () => {
     if (!editingImage || !gallery) return;
     setIsSaving(true);
     try {
+      const updateData: any = { caption: newCaption };
+      
+      // If gallery ID changed, include it in the update
+      if (newGalleryId && newGalleryId !== gallery.id) {
+        updateData.gallery_id = newGalleryId;
+      }
+      
       await databases.updateDocument(
         APPWRITE_CONFIG.databaseId,
         APPWRITE_CONFIG.imagesCollectionId,
         editingImage.id,
-        { caption: newCaption }
+        updateData
       );
       
       // Update local state for immediate feedback
-      const updatedImages = gallery.images.map(img => 
-        img.id === editingImage.id ? { ...img, caption: newCaption } : img
-      );
-      setGallery({ ...gallery, images: updatedImages });
+      if (newGalleryId && newGalleryId !== gallery.id) {
+        // Remove image from current gallery since it moved to a different page
+        const updatedImages = gallery.images.filter(img => img.id !== editingImage.id);
+        setGallery({ ...gallery, images: updatedImages });
+      } else {
+        // Update caption only
+        const updatedImages = gallery.images.map(img => 
+          img.id === editingImage.id ? { ...img, caption: newCaption } : img
+        );
+        setGallery({ ...gallery, images: updatedImages });
+      }
+      
       setEditingImage(null);
+      setNewGalleryId("");
     } catch (err) {
-      console.error("Failed to update caption:", err);
-      alert("Failed to update caption. Please try again.");
+      console.error("Failed to update image:", err);
+      alert("Failed to update image. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -160,6 +212,7 @@ export default function GalleryClient({ gallery: initialGallery }: GalleryClient
                         e.stopPropagation();
                         setEditingImage(img);
                         setNewCaption(img.caption || "");
+                        setNewGalleryId(gallery.id);
                       }}
                       className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
                       title="Edit Description"
@@ -215,22 +268,42 @@ export default function GalleryClient({ gallery: initialGallery }: GalleryClient
         />
       )}
 
-      {/* Edit Caption Dialog */}
+      {/* Edit Image Dialog */}
       <Dialog open={!!editingImage} onOpenChange={(open) => !open && setEditingImage(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Image Description</DialogTitle>
             <DialogDescription>
-              Update the caption for this photograph.
+              Update the caption and gallery for this photograph.
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
-            <Textarea
-              value={newCaption}
-              onChange={(e) => setNewCaption(e.target.value)}
-              placeholder="Enter description..."
-              className="min-h-[100px]"
-            />
+          <div className="py-4 space-y-4">
+            {/* Gallery Selection */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Gallery</label>
+              <select
+                value={newGalleryId}
+                onChange={(e) => setNewGalleryId(e.target.value)}
+                className="w-full bg-background border border-border rounded-lg p-2 text-foreground focus:ring-2 focus:ring-accent outline-none"
+              >
+                {galleries.map((gal) => (
+                  <option key={gal.id} value={gal.id}>
+                    {gal.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Caption Textarea */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Description</label>
+              <Textarea
+                value={newCaption}
+                onChange={(e) => setNewCaption(e.target.value)}
+                placeholder="Enter description..."
+                className="min-h-[100px]"
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button
@@ -241,7 +314,7 @@ export default function GalleryClient({ gallery: initialGallery }: GalleryClient
               Cancel
             </Button>
             <Button
-              onClick={handleSaveCaption}
+              onClick={handleSaveImageChanges}
               disabled={isSaving}
               className="bg-secondary hover:bg-primary text-foreground"
             >

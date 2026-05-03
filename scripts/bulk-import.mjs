@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import sharp from "sharp";
 
 // Load environment variables
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
@@ -64,15 +65,21 @@ async function getGalleries() {
 }
 
 async function analyzeImage(filePath, galleries) {
-  const buffer = fs.readFileSync(filePath);
-  const base64Image = buffer.toString("base64");
+  // Resize image for AI analysis to avoid 413/Timeout errors
+  // We keep the original for upload, but send a smaller version to GPT-4o
+  const resizedImageBuffer = await sharp(filePath)
+    .resize(1024, 1024, { fit: 'inside' })
+    .jpeg({ quality: 80 })
+    .toBuffer();
+    
+  const base64Image = resizedImageBuffer.toString("base64");
   const dataUrl = `data:image/jpeg;base64,${base64Image}`;
 
   const galleryList = galleries.map(g => `${g.id}: ${g.title}`).join("\n");
 
-  // Add 30-second timeout for API calls
+  // Add 60-second timeout for API calls
   const timeoutPromise = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("API timeout after 30 seconds")), 30000)
+    setTimeout(() => reject(new Error("API timeout after 60 seconds")), 60000)
   );
 
   const response = await Promise.race([
