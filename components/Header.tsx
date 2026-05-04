@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
+import { event as gaEvent } from '@/lib/gtag';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,6 +44,11 @@ export default function Header() {
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}
+                onClick={
+                  item.external && item.href.includes('payhip.com')
+                    ? () => gaEvent('payhip_click', { location: 'header' })
+                    : undefined
+                }
                 className={`text-sm font-medium transition-colors ${
                   !item.external && isActive(item.href)
                     ? 'text-foreground border-b-2 border-accent pb-1'
@@ -79,7 +85,13 @@ export default function Header() {
                       ? 'text-foreground bg-foreground/5'
                       : 'text-foreground-muted hover:text-foreground hover:bg-foreground/5'
                   }`}
-                  onClick={() => !item.external && setIsMenuOpen(false)}
+                  onClick={() => {
+                    if (!item.external) {
+                      setIsMenuOpen(false);
+                    } else if (item.href.includes('payhip.com')) {
+                      gaEvent('payhip_click', { location: 'header_mobile' });
+                    }
+                  }}
                 >
                   {item.label}
                 </Link>

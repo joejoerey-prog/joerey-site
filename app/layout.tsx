@@ -7,6 +7,9 @@ import Footer from "@/components/Footer";
 import Clarity from "@/app/clarity";
 import MailerLite from "@/app/mailerlite";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const pacifico = Pacifico({
   subsets: ["latin"],
@@ -52,6 +55,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <SpeedInsights />
+        {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
       </body>
     </html>
   );

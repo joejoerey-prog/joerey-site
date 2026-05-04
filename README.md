@@ -37,4 +37,17 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Analytics
 
-GA enabled. Check Realtime in GA after deploy.
+Google Analytics 4 is wired up via `@next/third-parties/google` in `app/layout.tsx`. To enable it:
+
+1. Create a GA4 property and Web data stream for `joereyphotography.com`.
+2. Set `NEXT_PUBLIC_GA_ID` in Vercel (Production + Preview) to the Measurement ID (`G-XXXXXXXXXX`).
+3. Redeploy. The GA script is only injected when `NEXT_PUBLIC_GA_ID` is set, so local/dev builds without the var stay clean.
+
+The same Measurement ID can be pasted into Payhip under Account → Settings → Advanced Settings → Google Analytics so store events flow into the same property.
+
+Custom events tracked from the UI:
+
+- `email_click` — mailto link in the footer and contact page
+- `payhip_click` — Store nav link, home Shop Now CTA, gallery Download buttons
+
+After deploy, check GA Realtime to confirm pageviews and events are firing.

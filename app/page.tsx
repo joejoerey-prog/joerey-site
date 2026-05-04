@@ -10,6 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { databases, Query, APPWRITE_CONFIG } from '@/lib/appwrite';
 import { Loader2, ArrowRight } from 'lucide-react';
+import { event as gaEvent } from '@/lib/gtag';
 
 export default function HomePage() {
   const [galleries, setGalleries] = useState<any[]>([]);
@@ -206,6 +207,7 @@ export default function HomePage() {
                 href="https://payhip.com/JRPhotoStore"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => gaEvent('payhip_click', { location: 'home_cta' })}
                 className="inline-block px-8 py-4 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 Shop Now
