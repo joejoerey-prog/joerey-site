@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { event as gaEvent } from "@/lib/gtag";
 
 type GalleryImage = {
   id: string;
@@ -244,6 +245,7 @@ export default function GalleryClient({ gallery: initialGallery }: GalleryClient
                   href="https://payhip.com/JRPhotoStore"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => gaEvent("payhip_click", { location: "gallery_image" })}
                   className="inline-block bg-secondary text-foreground text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary transition"
                 >
                   Download

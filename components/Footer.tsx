@@ -5,6 +5,7 @@ import { account } from "@/lib/appwrite";
 import { LogOut, Instagram, Facebook, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { event as gaEvent } from "@/lib/gtag";
 
 export default function Footer() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,6 +60,7 @@ export default function Footer() {
           href="mailto:joereyphotography@hotmail.com"
           className="text-foreground-muted hover:text-accent transition-colors"
           aria-label="Email"
+          onClick={() => gaEvent("email_click", { location: "footer" })}
         >
           <Mail size={20} />
         </Link>

@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Instagram, Globe } from "lucide-react";
 import { FaPinterestP } from "react-icons/fa";
+import EmailLink from "./EmailLink";
 
 export const metadata: Metadata = {
   title: "Contact | Joe Rey Photography",
@@ -20,12 +21,7 @@ export default function ContactPage() {
 
       <p className="mb-6 text-lg">
         If you’d like to get in touch, you can reach me directly at{" "}
-        <Link
-          href="mailto:joereyphotography@hotmail.com"
-          className="text-foreground-muted hover:text-foreground underline decoration-border underline-offset-4"
-        >
-          joereyphotography@hotmail.com
-        </Link>
+        <EmailLink />
         .
       </p>
 
