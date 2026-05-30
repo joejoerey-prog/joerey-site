@@ -1,86 +1,76 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 import { databases, Query, APPWRITE_CONFIG } from '@/lib/appwrite';
-import { Loader2, ArrowRight } from 'lucide-react';
-import { event as gaEvent } from '@/lib/gtag';
+import { ArrowRight } from 'lucide-react';
+import ShopButton from '@/components/ShopButton';
 
-export default function HomePage() {
-  const [galleries, setGalleries] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-  useEffect(() => {
-    const fetchPortfolio = async () => {
-      try {
-        const galleriesRes = await databases.listDocuments(
-          APPWRITE_CONFIG.databaseId,
-          APPWRITE_CONFIG.galleriesCollectionId,
-          [Query.orderAsc('order')]
-        );
-
-        // 1. Process documents to handle ID variations and standardize
-        const processedDocs = galleriesRes.documents.map(doc => {
-          const rawId = doc.id || doc.Id || doc.$id;
-          return {
-            ...doc,
-            id: String(rawId).toLowerCase()
-          };
-        });
-
-        // 2. Deduplicate by standardized ID (keeping the newest/first occurrence)
-        const uniqueGalleriesMap = new Map();
-        processedDocs.forEach(gallery => {
-          if (!uniqueGalleriesMap.has(gallery.id)) {
-            uniqueGalleriesMap.set(gallery.id, gallery);
-          }
-        });
-        
-        const deduplicatedGalleries = Array.from(uniqueGalleriesMap.values());
-
-        // 3. Fetch previews for deduplicated galleries
-        const galleriesWithPreviews = await Promise.all(
-          deduplicatedGalleries.map(async (gallery) => {
-            const imagesRes = await databases.listDocuments(
-              APPWRITE_CONFIG.databaseId,
-              APPWRITE_CONFIG.imagesCollectionId,
-              [
-                Query.equal('gallery_id', gallery.id),
-                Query.limit(1),
-                Query.orderDesc('created_at')
-              ]
-            );
-            return {
-              ...gallery,
-              preview: imagesRes.documents[0]?.image_url || null
-            };
-          })
-        );
-
-        setGalleries(galleriesWithPreviews);
-      } catch (err) {
-        console.error('Failed to fetch portfolio data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPortfolio();
-  }, []);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="animate-spin text-accent" size={48} />
-      </main>
+async function getGalleriesWithPreviews() {
+  try {
+    const galleriesRes = await databases.listDocuments(
+      APPWRITE_CONFIG.databaseId,
+      APPWRITE_CONFIG.galleriesCollectionId,
+      [Query.orderAsc('order')]
     );
+
+    // 1. Process documents to handle ID variations and standardize
+    const processedDocs = galleriesRes.documents.map(doc => {
+      const rawId = doc.id || doc.Id || doc.$id;
+      return {
+        ...doc,
+        id: String(rawId).toLowerCase()
+      };
+    });
+
+    // 2. Deduplicate by standardized ID (keeping the newest/first occurrence)
+    const uniqueGalleriesMap = new Map();
+    processedDocs.forEach(gallery => {
+      if (!uniqueGalleriesMap.has(gallery.id)) {
+        uniqueGalleriesMap.set(gallery.id, gallery);
+      }
+    });
+    
+    const deduplicatedGalleries = Array.from(uniqueGalleriesMap.values());
+
+    // 3. Fetch previews for deduplicated galleries
+    const galleriesWithPreviews = await Promise.all(
+      deduplicatedGalleries.map(async (gallery) => {
+        try {
+          const imagesRes = await databases.listDocuments(
+            APPWRITE_CONFIG.databaseId,
+            APPWRITE_CONFIG.imagesCollectionId,
+            [
+              Query.equal('gallery_id', gallery.id),
+              Query.limit(1),
+              Query.orderDesc('created_at')
+            ]
+          );
+          return {
+            ...gallery,
+            preview: imagesRes.documents[0]?.image_url || null
+          };
+        } catch (err) {
+          console.error(`Failed to fetch preview for gallery ${gallery.id}:`, err);
+          return {
+            ...gallery,
+            preview: null
+          };
+        }
+      })
+    );
+
+    return galleriesWithPreviews;
+  } catch (err) {
+    console.error('Failed to fetch portfolio data:', err);
+    return [];
   }
+}
+
+export default async function HomePage() {
+  const galleries = await getGalleriesWithPreviews();
 
   return (
     <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start">
@@ -203,32 +193,16 @@ export default function HomePage() {
               <p className="text-foreground-muted text-lg mb-10">
                 Discover and purchase prints and merchandise from my photography collection.
               </p>
-              <Link
+              <ShopButton
                 href="https://payhip.com/JRPhotoStore"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => gaEvent('payhip_click', { location: 'home_cta' })}
                 className="inline-block px-8 py-4 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 Shop Now
-              </Link>
+              </ShopButton>
             </div>
           </section>
         </>
       )}
-
-      {/* ===== SWIPER ARROW STYLES ===== */}
-      <style jsx global>{`
-        .swiper-button-prev,
-        .swiper-button-next {
-          color: var(--foreground) !important;
-          transition: color 0.3s ease;
-        }
-        .swiper-button-prev:hover,
-        .swiper-button-next:hover {
-          color: var(--accent) !important;
-        }
-      `}</style>
     </main>
   );
 }
