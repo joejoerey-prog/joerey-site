@@ -15,6 +15,21 @@ const nextConfig = {
     ]
   },
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.joereyphotography.com',
+          },
+        ],
+        destination: 'https://joereyphotography.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

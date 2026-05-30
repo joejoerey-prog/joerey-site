@@ -6,7 +6,7 @@ import { Client, Databases, Query } from 'appwrite';
 import { APPWRITE_CONFIG } from '@/lib/appwrite';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.joereyphotography.com';
+  const baseUrl = 'https://joereyphotography.com';
 
   // 1. Static Pages
   const staticPages: MetadataRoute.Sitemap = [
