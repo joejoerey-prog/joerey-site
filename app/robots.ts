@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://www.joereyphotography.com/sitemap.xml',
+    sitemap: 'https://joereyphotography.com/sitemap.xml',
   };
 }
