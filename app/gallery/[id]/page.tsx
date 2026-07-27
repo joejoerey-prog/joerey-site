@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { databases, Query, APPWRITE_CONFIG } from "@/lib/appwrite";
 import GalleryClient from "./GalleryClient";
 
@@ -72,10 +73,7 @@ export async function generateMetadata({
   const gallery = await getGalleryData(id);
 
   if (!gallery) {
-    return {
-      title: "Gallery Not Found | Joe Rey Photography",
-      description: "This gallery could not be found.",
-    };
+    notFound();
   }
 
   const previewImage = gallery.images[0]?.image || "/logo.svg";
@@ -116,14 +114,7 @@ export default async function GalleryPage({
   const gallery = await getGalleryData(id);
   
   if (!gallery) {
-    return (
-      <main className="min-h-screen flex items-center justify-center bg-background text-foreground">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Gallery Not Found</h1>
-          <a href="/" className="text-accent hover:underline">Return Home</a>
-        </div>
-      </main>
-    );
+    notFound();
   }
 
   return <GalleryClient gallery={gallery} />;

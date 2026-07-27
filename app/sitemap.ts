@@ -35,12 +35,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       [Query.orderAsc('order')]
     );
 
-    galleryPages = galleriesRes.documents.map((gallery) => ({
-      url: `${baseUrl}/gallery/${gallery.id}`,
-      lastModified: new Date(gallery.$updatedAt || new Date()),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    }));
+    const uniquePagesMap = new Map<string, MetadataRoute.Sitemap[number]>();
+
+    galleriesRes.documents.forEach((gallery) => {
+      const rawSlug = gallery.id || gallery.Id || gallery.slug || gallery.$id;
+      if (!rawSlug || String(rawSlug).toLowerCase() === 'undefined') {
+        return;
+      }
+
+      const slug = String(rawSlug).toLowerCase();
+      const url = `${baseUrl}/gallery/${slug}`;
+
+      if (!uniquePagesMap.has(url)) {
+        uniquePagesMap.set(url, {
+          url,
+          lastModified: new Date(gallery.$updatedAt || new Date()),
+          changeFrequency: 'monthly' as const,
+          priority: 0.8,
+        });
+      }
+    });
+
+    galleryPages = Array.from(uniquePagesMap.values());
   } catch (error) {
     console.error('Failed to generate dynamic sitemap:', error);
     // Fallback to empty gallery pages if Appwrite is unavailable during build
