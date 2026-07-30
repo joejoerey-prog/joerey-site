@@ -2,7 +2,7 @@
   "galleries": [
     {
       "id": "land-light",
-      "title": "Land & Light",
+      "title": "Land and Light",
       "description": "Wide skies, shifting light, and open fields. These are the moments where the landscape feels endless and human noise fades away. Taken across the UK, often in that quiet hour before or after the weather turns.",
       "images": [
         { "image": "/photos/land-light/rapeseed-gold.jpg", "caption": "Rapeseed gold under a fast-moving spring sky." },
@@ -25,8 +25,8 @@
     },
     {
       "id": "weather-drama",
-      "title": "Weather & Drama",
-      "description": "Nature showing off. Rain, lightning, and the kind of light that can’t decide what it wants to be.",
+      "title": "Weather and Drama",
+      "description": "Nature showing off. Rain, lightning, and the kind of light that can't decide what it wants to be.",
       "images": [
         { "image": "/photos/weather-drama/lightning.jpg", "caption": "Lightning over field." },
         { "image": "/photos/weather-drama/a-turbine.jpg", "caption": "Turbine under storm light." },
@@ -39,7 +39,7 @@
     },
     {
       "id": "human-stories",
-      "title": "Human Stories",
+      "title": "Aviation",
       "description": "People leave traces — footprints, laughter, the occasional Jeep restoration. This gallery catches the moments where we appear and vanish again.",
       "images": [
         { "image": "/photos/human-stories/mechanics-and-a-jeep.jpg", "caption": "Mechanics with Jeep." },
@@ -48,36 +48,13 @@
     },
     {
       "id": "coast-edge",
-      "title": "Coast & Edge",
+      "title": "Coastal Scenes",
       "description": "The meeting place of land and sea. Constant motion, constant erosion — calm one day, violent the next.",
       "images": [
         { "image": "/photos/coast-edge/black-and-white-beach-.jpg", "caption": "Black-and-white beach shadows." },
         { "image": "/photos/coast-edge/sea-marker.jpg", "caption": "Solitary sea marker." },
         { "image": "/photos/coast-edge/path-through-dunes.jpg", "caption": "Path through dunes." },
         { "image": "/photos/coast-edge/boat-resting-jpg.jpg", "caption": "Boats resting against stone." }
-      ]
-    },
-    {
-      "id": "light-time-memory",
-      "title": "Light, Time & Memory",
-      "description": "Faith, heritage, small life, and quiet beauty — a study of light and remembrance.",
-      "images": [
-        { "image": "/photos/light-time-memory/swans-at-sunset.jpg", "caption": "Swans at sunset." },
-        { "image": "/photos/light-time-memory/porter’s-bell-.jpg", "caption": "Porter’s Bell." },
-        { "image": "/photos/light-time-memory/church-cross-.jpg", "caption": "Church cross and stained glass." },
-        { "image": "/photos/light-time-memory/gravestones-.jpg", "caption": "Gravestones with morning light." },
-        { "image": "/photos/light-time-memory/candle-by-the-window.jpg", "caption": "Candle by window." },
-        { "image": "/photos/light-time-memory/leaf-on-moss.jpg", "caption": "Leaf on moss." },
-        { "image": "/photos/light-time-memory/a-power-pole.jpg", "caption": "Power pole minimalism." },
-        { "image": "/photos/light-time-memory/the-moon.jpg", "caption": "Moon close-up." },
-        { "image": "/photos/light-time-memory/cannon-under-autumn-leaves.jpg", "caption": "Cannon and autumn leaves." },
-        { "image": "/photos/light-time-memory/cemetery-path-in-autumn-light.jpg", "caption": "Autumn cemetery path." },
-        { "image": "/photos/light-time-memory/sunset-tree-silhouette.jpg", "caption": "Sunset tree silhouette." },
-        { "image": "/photos/light-time-memory/forest-path-burning-orange.jpg", "caption": "Autumn forest path." },
-        { "image": "/photos/light-time-memory/cow-parsley.jpg", "caption": "Cow parsley at dusk." },
-        { "image": "/photos/light-time-memory/black-and-white-dandelion.jpg", "caption": "Black-and-white dandelion." },
-        { "image": "/photos/light-time-memory/stone-window-and-gravestone-.jpg", "caption": "Stone window and gravestone." },
-        { "image": "/photos/light-time-memory/bee-on-lavender-.jpeg", "caption": "Bee on lavender." }
       ]
     }
   ]
