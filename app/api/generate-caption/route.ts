@@ -10,7 +10,8 @@ export async function POST(req: Request) {
   console.log("[AI API] Request received");
   
   try {
-    const { imageUrl } = await req.json();
+    const body = (await req.json()) as { imageUrl?: string };
+    const imageUrl = body.imageUrl || "";
     
     // Fallback: Manually load .env.local if GITHUB_TOKEN is missing
     if (!process.env.GITHUB_TOKEN) {

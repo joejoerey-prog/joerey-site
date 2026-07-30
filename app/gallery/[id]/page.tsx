@@ -1,67 +1,31 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { databases, Query, APPWRITE_CONFIG } from "@/lib/appwrite";
+import galleriesData from "@/data/galleries.json";
 import GalleryClient from "./GalleryClient";
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export async function generateStaticParams() {
+  return galleriesData.galleries.map((gallery) => ({
+    id: gallery.id,
+  }));
+}
 
-async function getGalleryData(id: string) {
-  try {
-    // Robust ID matching: try both 'id' and 'Id'
-    const galleryRes = await databases.listDocuments(
-      APPWRITE_CONFIG.databaseId,
-      APPWRITE_CONFIG.galleriesCollectionId,
-      [
-        Query.or([
-            Query.equal('Id', id),
-            Query.equal('Id', id.toLowerCase()),
-            Query.equal('$id', id)
-        ]),
-        Query.limit(1)
-      ]
-    );
+function getGalleryData(id: string) {
+  const gallery = galleriesData.galleries.find(
+    (g) => g.id.toLowerCase() === id.toLowerCase()
+  );
 
-    if (galleryRes.documents.length === 0) {
-      console.warn(`[Gallery] No document found for ID: ${id}`);
-      return null;
-    }
-
-    const gallery = galleryRes.documents[0];
-    // Standardize to lowercase 'id' for the app's internal logic
-    const actualId = String(gallery.id || gallery.Id || gallery.$id).toLowerCase();
-    
-    // Server-side Log
-    console.log(`[Gallery Page] Requested URL ID: '${id}' -> Resolved DB gallery_id: '${actualId}'`);
-
-    const imagesRes = await databases.listDocuments(
-      APPWRITE_CONFIG.databaseId,
-      APPWRITE_CONFIG.imagesCollectionId,
-      [Query.equal('gallery_id', actualId), Query.orderDesc('created_at'), Query.limit(100)]
-    );
-
-    // Deduplicate images by image_url (in case migration was run multiple times)
-    const uniqueImagesMap = new Map();
-    imagesRes.documents.forEach(doc => {
-      if (!uniqueImagesMap.has(doc.image_url)) {
-        uniqueImagesMap.set(doc.image_url, {
-          id: doc.$id,
-          image: doc.image_url,
-          caption: doc.caption
-        });
-      }
-    });
-
-    return {
-      id: actualId,
-      title: gallery.title,
-      description: gallery.description,
-      images: Array.from(uniqueImagesMap.values())
-    };
-  } catch (err) {
-    console.error('Error fetching gallery data:', err);
+  if (!gallery) {
     return null;
   }
+
+  return {
+    ...gallery,
+    images: gallery.images.map((img, idx) => ({
+      id: `${gallery.id}-${idx}`,
+      image: img.image,
+      caption: img.caption,
+    })),
+  };
 }
 
 export async function generateMetadata({
@@ -70,7 +34,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const gallery = await getGalleryData(id);
+  const gallery = getGalleryData(id);
 
   if (!gallery) {
     notFound();
@@ -111,8 +75,8 @@ export default async function GalleryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const gallery = await getGalleryData(id);
-  
+  const gallery = getGalleryData(id);
+
   if (!gallery) {
     notFound();
   }
