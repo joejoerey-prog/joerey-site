@@ -3,7 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ShopButton from '@/components/ShopButton';
-import galleriesData from '@/data/galleries.json';
+import galleriesDataRaw from '@/data/galleries.json';
+
+type GalleryImage = { image: string; caption: string };
+type GalleryItem = { id: string; title: string; description: string; images: GalleryImage[] };
+type GalleriesData = { galleries: GalleryItem[] };
+
+const galleriesData = galleriesDataRaw as GalleriesData;
 
 function getGalleriesWithPreviews() {
   return galleriesData.galleries.map((gallery) => ({
