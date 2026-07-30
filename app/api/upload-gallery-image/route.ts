@@ -93,7 +93,19 @@ export async function POST(req: Request) {
       );
     }
 
-    const gallery = jsonContent.galleries.find((g: any) => g.id === galleryId);
+    const GALLERY_ID_MAP: Record<string, string> = {
+      "weather-and-drama": "weather-drama",
+      "weather-drama": "weather-drama",
+      "coastal-scenes": "coast-edge",
+      "coast-edge": "coast-edge",
+      "aviation": "human-stories",
+      "human-stories": "human-stories",
+      "land-light": "land-light",
+      "stillness": "stillness",
+    };
+
+    const targetGalleryId = GALLERY_ID_MAP[galleryId] || galleryId;
+    const gallery = jsonContent.galleries.find((g: any) => g.id === targetGalleryId || g.id === galleryId);
     if (!gallery) {
       return NextResponse.json(
         { error: `Gallery not found for ID: ${galleryId}` },
