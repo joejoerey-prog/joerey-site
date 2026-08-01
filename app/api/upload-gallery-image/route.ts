@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
+import os from "os";
 import dotenv from "dotenv";
 
 export const dynamic = "force-dynamic";
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
 
     const captionText = typeof caption === "string" ? caption : "";
 
-    // 3. Process image bytes
+    // 3. Process image bytes & save to writeable dir (/tmp on Vercel or public/gallery-images/ locally)
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -69,24 +70,27 @@ export async function POST(req: Request) {
       .replace(/[^a-z0-9_-]/g, "_");
     const uniqueFilename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}-${sanitizedBase}${ext}`;
 
-    const uploadDir = path.join(process.cwd(), "public", "gallery-images");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
+    const isVercel = !!process.env.VERCEL;
+    const baseUploadDir = isVercel
+      ? path.join(os.tmpdir(), "gallery-images")
+      : path.join(process.cwd(), "public", "gallery-images");
 
-    const filePath = path.join(uploadDir, uniqueFilename);
     try {
+      if (!fs.existsSync(baseUploadDir)) {
+        fs.mkdirSync(baseUploadDir, { recursive: true });
+      }
+      const filePath = path.join(baseUploadDir, uniqueFilename);
       await fs.promises.writeFile(filePath, buffer);
     } catch (e) {
-      // On Vercel serverless ephemerality, catch write error if public dir is restricted
+      console.warn("Image write warning:", e);
     }
 
     const imageRelativePath = `/gallery-images/${uniqueFilename}`;
 
     // 4. Update data/galleries.json if file exists
-    const jsonPath = path.join(process.cwd(), "data", "galleries.json");
-    if (fs.existsSync(jsonPath)) {
-      try {
+    try {
+      const jsonPath = path.join(process.cwd(), "data", "galleries.json");
+      if (fs.existsSync(jsonPath)) {
         const fileData = await fs.promises.readFile(jsonPath, "utf-8");
         const jsonContent = JSON.parse(fileData);
 
@@ -112,12 +116,16 @@ export async function POST(req: Request) {
               image: imageRelativePath,
               caption: captionText,
             });
-            await fs.promises.writeFile(jsonPath, JSON.stringify(jsonContent, null, 2), "utf-8");
+            try {
+              await fs.promises.writeFile(jsonPath, JSON.stringify(jsonContent, null, 2), "utf-8");
+            } catch (wErr) {
+              console.warn("JSON write warning on serverless environment:", wErr);
+            }
           }
         }
-      } catch (e) {
-        console.error("Failed updating galleries.json:", e);
       }
+    } catch (e) {
+      console.warn("Galleries JSON processing warning:", e);
     }
 
     // 5. Return success response
