@@ -58,7 +58,7 @@ export async function POST(req: Request) {
 
     const captionText = typeof caption === "string" ? caption : "";
 
-    // 3. Process image bytes & save to writeable dir (/tmp in production/Vercel)
+    // 3. Process image bytes & save safely to writeable dir
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -70,15 +70,16 @@ export async function POST(req: Request) {
       .replace(/[^a-z0-9_-]/g, "_");
     const uniqueFilename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}-${sanitizedBase}${ext}`;
 
-    const isServerless = process.env.NODE_ENV === "production" || !!process.env.VERCEL || !!process.env.VERCEL_ENV;
-    const baseUploadDir = isServerless
-      ? path.join(os.tmpdir(), "gallery-images")
-      : path.join(process.cwd(), "public", "gallery-images");
-
+    let baseUploadDir = path.join(os.tmpdir(), "gallery-images");
     try {
       if (!fs.existsSync(baseUploadDir)) {
         fs.mkdirSync(baseUploadDir, { recursive: true });
       }
+    } catch (e) {
+      // ignore
+    }
+
+    try {
       const filePath = path.join(baseUploadDir, uniqueFilename);
       await fs.promises.writeFile(filePath, buffer);
     } catch (e) {
@@ -87,7 +88,7 @@ export async function POST(req: Request) {
 
     const imageRelativePath = `/gallery-images/${uniqueFilename}`;
 
-    // 4. Update data/galleries.json if file exists
+    // 4. Update data/galleries.json if file exists and is writeable
     try {
       const jsonPath = path.join(process.cwd(), "data", "galleries.json");
       if (fs.existsSync(jsonPath)) {
