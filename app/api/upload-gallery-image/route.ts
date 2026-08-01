@@ -58,7 +58,7 @@ export async function POST(req: Request) {
 
     const captionText = typeof caption === "string" ? caption : "";
 
-    // 3. Process image bytes & save to writeable dir (/tmp on Vercel or public/gallery-images/ locally)
+    // 3. Process image bytes & save to writeable dir (/tmp in production/Vercel)
     const bytes = await imageFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -70,8 +70,8 @@ export async function POST(req: Request) {
       .replace(/[^a-z0-9_-]/g, "_");
     const uniqueFilename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}-${sanitizedBase}${ext}`;
 
-    const isVercel = !!process.env.VERCEL;
-    const baseUploadDir = isVercel
+    const isServerless = process.env.NODE_ENV === "production" || !!process.env.VERCEL || !!process.env.VERCEL_ENV;
+    const baseUploadDir = isServerless
       ? path.join(os.tmpdir(), "gallery-images")
       : path.join(process.cwd(), "public", "gallery-images");
 
