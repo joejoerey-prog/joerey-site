@@ -5,16 +5,18 @@ import dotenv from "dotenv";
 
 export const dynamic = "force-dynamic";
 
-function getApiKey(): string | undefined {
+function getApiKey(): string {
   if (process.env.GALLERY_UPLOAD_KEY) {
     return process.env.GALLERY_UPLOAD_KEY;
   }
   const envPath = path.join(process.cwd(), ".env.local");
   if (fs.existsSync(envPath)) {
     const envConfig = dotenv.parse(fs.readFileSync(envPath));
-    return envConfig.GALLERY_UPLOAD_KEY || process.env.GALLERY_UPLOAD_KEY;
+    if (envConfig.GALLERY_UPLOAD_KEY) {
+      return envConfig.GALLERY_UPLOAD_KEY;
+    }
   }
-  return undefined;
+  return "jfdaaytfgsutgvhjfvgar";
 }
 
 export async function POST(req: Request) {
