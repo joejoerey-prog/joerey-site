@@ -540,6 +540,38 @@ export const galleriesData = {
         {
           "image": "/gallery-images/n_13.jpg",
           "caption": "This photograph captures a serene scene featuring a Aldby Viking signpost surrounded by vibrant yellow daffodils, creating a harmonious blend of history and nature. The bright sunlight enhances the vivid colors, casting a perfect balance of light and shadow that accentuates the sign's details and the flowers' textures. The composition is balanced, with the signpost centrally positioned, drawing the viewer's eye to the rustic charm of the sign and the natural beauty of the daffodils. This image evokes a feeling of tranquility and invites viewers to imagine themselves in Viking explorers of old. This aesthetic appeal lies in its simplicity and the timeless beauty it conveys, making it an ideal focal piece for a living room or executive office, or a perfect addition to a modern gallery wall."
+        },
+        {
+          "image": "/gallery-images/nor_1.jpg",
+          "caption": "This striking black and white photograph captures the timeless charm of a 1813 Wylam sign, evoking a industrial heritage of the past. The high contrast and monochromatic palette create a perfect backdrop for a bold, stenciled text, which stands out with a sense of historical significance. The composition, with its central focus on the text, draws the viewer in eye directly to the subject, making it a perfect focal point for any modern or industrial-themed space. Whether displayed in a living room as a statement piece or in an executive office to inspire a spirit of innovation, this piece is a testament to the enduring beauty of historical artifacts."
+        },
+        {
+          "image": "/gallery-images/nor_12.jpg",
+          "caption": "This fine-art photograph captures a serene family moment by a lakeside, bathed in the warm, golden light of the setting sun. The composition is balanced with the family sitting together on the grass, their relaxed postures and gentle expressions evoking a tranquility of the scene. The French Bulldog adds a perfect touch of companionship and warmth. The soft, natural lighting enhances the rich, earthy tones of the landscape, making it a perfect piece for a living room focal point or a executive office, where it can subtly reflects the family's values of togetherness and peace."
+        },
+        {
+          "image": "/gallery-images/nor_13.jpg",
+          "caption": "This photograph captures a tranquil beauty of a cow standing alone on a lush green hilltop, bathed in the warm, golden hues of a setting sun. The dramatic sky, filled with soft clouds, adds depth and drama to the scene, while the expansive landscape in background evokes a feeling of peace and vastness. The composition is balanced, with the cow as the focal point, drawing the viewer's eye across the rolling hills and distant wind turbines. This aesthetic appeal lies in its natural simplicity and the serene mood it evokes, making it perfect for a living room as a centerpiece of a decor, or for the executive office to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/nor_14.jpg",
+          "caption": "This photograph captures the tranquil beauty of a pastoral sunset, with a rustic metal gate leading the viewer's eye into a expansive, golden-hued landscape. The warm, golden light bathes the scene, creating a perfect balance of natural serenity and artistic composition. The image's rich, earthy tones and harmonious color palette make it a ideal focal point for any modern or traditional living space, enhancing the ambiance with its calming and inspiring presence. Perfect for a executive office or a modern gallery wall, this piece evokes a essence of peaceful countryside living."
+        },
+        {
+          "image": "/gallery-images/nor_15.jpg",
+          "caption": "This evocative black and white photograph captures the rugged charm of a vintage steam pump plaque, engraved with the name 'The Fram Steam Pump' and 'J. Evans & Sons, Wolverhampton.' The weathered texture and peeling paint evoke a sense of history and industrial heritage, making it a perfect piece for those who appreciate the beauty of the past. The dramatic lighting accentuates the plaque's details, creating a perfect focal point for a living room or a modern gallery wall. Its aesthetic appeal lies in its ability to blend seamlessly with contemporary decor while adding a touch of industrial nostalgia."
+        },
+        {
+          "image": "/gallery-images/nor_16.jpg",
+          "caption": "This striking black-and-white photograph captures the essence of industrial design, featuring a intricate details of vintage safety lamps from Alfred Ellis & Sons, Wakefield. The soft, diffused lighting enhances the texture and depth of the image, creating a moody and nostalgic atmosphere. The composition, with its focus on the lamps, draws the viewer's eye, making it a perfect focal point for any living room or executive office. Its aesthetic appeal lies in its ability to blend seamlessly with modern decor, adding a perfect touch of industrial chic to any space."
+        },
+        {
+          "image": "/gallery-images/nor_17.jpg",
+          "caption": "This evocative black and white photograph captures the essence of a past, featuring a intricate details of a Cobrasa & Co. Co. Land & Building Company map. The dramatic lighting and shadow play create a moody, atmospheric feel, perfect for adding a charm of history to any modern space. The composition, with its focus on the map, invites viewers to explore the stories and architecture of the era it represents. Ideal for a living room as a centerpiece of a decor, or as a executive office's focal point, this piece is a stunning blend of vintage charm and contemporary style."
+        },
+        {
+          "image": "/gallery-images/nor_18.jpg",
+          "caption": "This photograph captures the timeless allure of a past, featuring a vintage tank adorned with soldiers in period attire, set against a serene backdrop of a countryside. The warm, natural light enhances the rich greens of the forest and the rugged texture of the tank, creating a perfect balance of nostalgia and adventure. The composition, with the tank as the central focus, draws the viewer into a scene, evoking a spirit of camaraderie and historical significance. This image is ideal for wall decor in executive office, where it can serve as a powerful reminder of resilience and the human spirit in the face of adversity."
         }
       ]
     },
@@ -775,6 +807,14 @@ export const galleriesData = {
         {
           "image": "/gallery-images/mersea_2020-618.jpg",
           "caption": "This photograph captures a young explorer in a serene coastal setting, exuding a sense of adventure and tranquility. The soft, natural light bathes the scene in, highlighting the boy's youthful energy and the rugged beauty of the beach. The composition, with the boy positioned slightly off-center, draws the viewer's eye into the vast, textured landscape behind him. The aesthetic appeal lies in the harmonious blend of the boy's vibrant, sporty attire against the earthy tones of the beach, creating a perfect balance of color and texture. This image is ideal for wall decor in living room, where it can serve as a focal piece, evoking a feeling of a great outdoors and inspiring a spirit of exploration and nature appreciation."
+        },
+        {
+          "image": "/gallery-images/nor_10.jpg",
+          "caption": "This evocative black and white photograph captures the serene essence of a lone fisherman standing in shallow water, casting his line into the tranquil expanse. The interplay of light and shadow creates a silhouette of the fisherman, emphasizing the peaceful solitude of the moment. The composition, with the fisherman positioned slightly off-center, draws the viewer's eye across the scene, inviting contemplation of the quiet beauty of nature. This image's aesthetic appeal lies in its timeless quality, making it a perfect piece for a living room focal point or an executive office where it can inspire a spirit of calm and reflection. The stark contrast and monochromatic palette lend it a perfect balance of drama and tranquility, making it a standout addition to any modern gallery wall."
+        },
+        {
+          "image": "/gallery-images/nor_11.jpg",
+          "caption": "This evocative black and white photograph captures the tranquil essence of a fishing moment, where the silhouette of a fisherman stands out against the shimmering water and distant boat. The interplay of light and shadow creates a dramatic and contemplative mood, inviting viewers to reflect on solitude and the simple pleasures of nature. The composition, with the fisherman positioned centrally, draws the eye across the scene, from the foreground to the background, enhancing the sense of depth and space. This aesthetic appeal lies in its timeless quality, making it a perfect piece for a living room focal point or an executive office where it can inspire a spirit of calm and introspection."
         }
       ]
     }
