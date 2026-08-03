@@ -280,6 +280,22 @@ export const galleriesData = {
         {
           "image": "/gallery-images/a_408.jpg",
           "caption": "This stunning photograph captures the vibrant essence of a tulip in moment of full bloom, with its petals radiating a warmth of golden sunlight. The deep red background contrasts beautifully with the bright yellow and purple hues of the flower's center, creating a perfect balance of color and light. The composition is meticulously centered, drawing the viewer's eye directly to the flower's intricate details. This image evokes a feeling of a sun's warmth and the beauty of nature, making it a perfect piece for any living room focal point or an executive office to inspire creativity and positivity. Hang it in a modern gallery wall to add a perfect pop of color and artistic flair."
+        },
+        {
+          "image": "/gallery-images/img_6890.jpg",
+          "caption": "This photograph captures the tranquil beauty of a bird's nest nestled among tall grasses, evoking a sense of peace and natural harmony. The soft, diffused lighting enhances the earthy tones of the nest and surrounding foliage, creating a perfect backdrop for a subtle interplay of light and shadow. The composition, with the nest centrally framed, draws the viewer's eye into the scene, inviting contemplation and a appreciation of nature's intricate details. This aesthetic appeal lies in its simplicity and the raw, unfiltered beauty of the natural world. This photograph would make a perfect focal piece in a living room, adding a perfect touch of nature to an executive office, or serve as a stunning addition to a modern gallery wall, showcasing the serene beauty of the natural world."
+        },
+        {
+          "image": "/gallery-images/img_8253.jpg",
+          "caption": "This captivating photograph captures the serene beauty of a bird peeking out from a entrance of a rustic wooden birdhouse. The interplay of natural textures and the soft, diffused light creates a perfect harmony, evoking a tranquility of nature. The composition, with the birdhouse's weathered wood and the bird's curious eyes, invites viewers to pause and reflect. This image is ideal for wall decor in spaces that embrace a natural and serene aesthetic, such as a living room focal piece or an executive office that aims to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/img_8259.jpg",
+          "caption": "This photograph captures the serene moment of a blue tit bird as it perches on the edge of a wooden birdhouse, its vibrant blue and yellow plumage contrasting beautifully with the rustic texture of the wood. The soft, natural lighting enhances the bird's delicate features and the rough, organic lines of the wood, creating a perfect balance of nature and art. The composition, with the bird slightly off-center, adds a dynamic element of movement, making it a perfect focal point for any living room or executive office. Hang it in a corner of your living room to bring a touch of nature and tranquility into your home, or in wall of your office to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/img_8266.jpg",
+          "caption": "This beautifully crafted birdhouse wall art captures the essence of nature's tranquility, featuring a charming blue tit perched on its rustic wooden perch. The soft pink wall backdrop enhances the natural tones, creating a perfect balance of warmth and serenity. The composition, with its subtle lighting and rich textures, invites viewers to pause and appreciate the simple beauty of wildlife. Ideal for a living room focal piece, it adds a touch of nature to any executive office or modern gallery wall, making it a conversation starter and a perfect addition to any home or office decor."
         }
       ]
     },
@@ -451,6 +467,10 @@ export const galleriesData = {
         {
           "image": "/gallery-images/2025_08_28251456.jpg",
           "caption": "This evocative black and white photograph captures the serene beauty of a coastal landscape, where the calm sea meets the horizon. The composition is balanced with a vertical line of wind turbines in horizon, creating a illusion of a sea extending infinitely. The central focus is a weathered wooden post emerging from the water, adding a rustic charm and a sense of history. The soft, diffused lighting enhances the tranquil mood, making it perfect for a living room as a focal piece or for the executive office to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/img_6928.jpg",
+          "caption": "This striking black and white photograph captures the tranquil essence of a swan gliding across a water's surface. The high contrast and soft lighting evoke a sense of calm and introspection, making it a perfect piece for any space seeking a touch of nature's serenity. The composition, with the swan positioned slightly off-center, adds a dynamic element that draws the viewer's eye across the frame. Its aesthetic appeal lies in the timeless beauty of the swan, making it an ideal focal point for a living room or a executive office, where it can inspire a sense of peace and reflection."
         }
       ]
     }
