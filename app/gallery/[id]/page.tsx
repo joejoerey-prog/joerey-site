@@ -1,34 +1,21 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import fs from "fs";
-import path from "path";
+import galleriesDataRaw from "@/data/galleries.json";
 import GalleryClient from "./GalleryClient";
 
 type GalleryImage = { image: string; caption: string };
 type GalleryItem = { id: string; title: string; description: string; images: GalleryImage[] };
 type GalleriesData = { galleries: GalleryItem[] };
 
-export const revalidate = 0;
-
-function loadGalleriesData(): GalleriesData {
-  try {
-    const jsonPath = path.join(process.cwd(), "data", "galleries.json");
-    const content = fs.readFileSync(jsonPath, "utf-8");
-    return JSON.parse(content) as GalleriesData;
-  } catch {
-    return { galleries: [] };
-  }
-}
+const galleriesData = galleriesDataRaw as GalleriesData;
 
 export async function generateStaticParams() {
-  const galleriesData = loadGalleriesData();
   return galleriesData.galleries.map((gallery) => ({
     id: gallery.id,
   }));
 }
 
 function getGalleryData(id: string) {
-  const galleriesData = loadGalleriesData();
   const gallery = galleriesData.galleries.find(
     (g) => g.id.toLowerCase() === id.toLowerCase()
   );
