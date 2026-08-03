@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  outputFileTracingExcludes: {
+    '*': ['public/gallery-images/**', 'public/gallery-images/*'],
+  },
   images: {
     unoptimized: true,
     formats: ["image/avif", "image/webp"],
