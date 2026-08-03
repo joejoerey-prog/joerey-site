@@ -520,6 +520,26 @@ export const galleriesData = {
         {
           "image": "/gallery-images/sulphur_tuff.jpg",
           "caption": "This captivating fine-art print captures the serene beauty of two mushrooms nestled against a decaying log, bathed in soft, natural light. The warm, earthy tones and the delicate interplay of light and shadow evoke a quiet majesty of a forest floor. The composition, with its balanced symmetry and rich textures, invites viewers to lose themselves in the tranquil ambiance of nature. Perfect for enhancing any space with a calming presence of the wild, this print is ideal for living room focal pieces, executive offices, or modern gallery walls where it can serve as a thought-provoking conversation starter."
+        },
+        {
+          "image": "/gallery-images/n_1.jpg",
+          "caption": "Capture the essence of tranquility and warmth with this serene cabin photograph. The soft, natural light filtering through the trees and the rich, earthy tones of the cabin create a perfect backdrop for a calm and inviting atmosphere. The composition, with its symmetrical arrangement of the cabin and surrounding greenery, offers a perfect balance of nature and architecture. This aesthetic appeal of this image is ideal for creating a cozy, relaxing environment in your living room or as a focal piece in an executive office. Hang this photograph in a space where you want to evoke a feeling of peace and comfort, whether it's a living room, bedroom, or home office."
+        },
+        {
+          "image": "/gallery-images/n_10.jpg",
+          "caption": "This photograph captures the serene beauty of a church interior, bathed in soft, natural light that filters through the stained glass windows, casting a space in a warm, inviting glow. The high, arched ceiling and wooden beams add a charm of traditional craftsmanship, while the rows of wooden pews lead the eye towards the altar, creating a perfect focal point. The composition, with its balanced symmetry and rich textures, evokes a sense of peace and reverence. This image is ideal for use as a living room focal piece, adding a touch of timeless elegance and spiritual ambiance to any home or office space."
+        },
+        {
+          "image": "/gallery-images/n_11.jpg",
+          "caption": "This evocative black and white photograph captures the serene beauty of a Gothic church window, bathed in soft, diffused light that filters through its intricate tracery. The interplay of light and shadow creates a dramatic and contemplative mood, highlighting the window's architectural details and the delicate patterns of the stained glass. The composition, with the hymn board in only other element in the frame, adds a perfect touch of human presence, suggesting a quiet reverence of a space. This image is ideal for wall decor in spaces that seek a ambiance of tranquility and historical elegance, such as a living room, executive office, or a modern gallery wall where it can serve as a focal piece, inspiring reflection and admiration."
+        },
+        {
+          "image": "/gallery-images/n_12.jpg",
+          "caption": "This exquisite vintage stained glass panel, with its intricate diamond pattern and aged patina, evokes a sense of history and timeless beauty. The soft, diffused light filtering through the glass creates a serene and mystical atmosphere, perfect for adding a perfect focal point to any room. Its unique aesthetic appeal makes it a ideal choice for modern gallery walls, executive offices, or living rooms where it can serve as a statement piece, enhancing the overall ambiance with its rich, vintage charm."
+        },
+        {
+          "image": "/gallery-images/n_13.jpg",
+          "caption": "This photograph captures a serene scene featuring a Aldby Viking signpost surrounded by vibrant yellow daffodils, creating a harmonious blend of history and nature. The bright sunlight enhances the vivid colors, casting a perfect balance of light and shadow that accentuates the sign's details and the flowers' textures. The composition is balanced, with the signpost centrally positioned, drawing the viewer's eye to the rustic charm of the sign and the natural beauty of the daffodils. This image evokes a feeling of tranquility and invites viewers to imagine themselves in Viking explorers of old. This aesthetic appeal lies in its simplicity and the timeless beauty it conveys, making it an ideal focal piece for a living room or executive office, or a perfect addition to a modern gallery wall."
         }
       ]
     },
