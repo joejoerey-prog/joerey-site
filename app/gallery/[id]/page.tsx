@@ -1,13 +1,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import galleriesDataRaw from "@/data/galleries.json";
+import { galleriesData } from "@/data/galleries";
 import GalleryClient from "./GalleryClient";
 
 type GalleryImage = { image: string; caption: string };
 type GalleryItem = { id: string; title: string; description: string; images: GalleryImage[] };
-type GalleriesData = { galleries: GalleryItem[] };
-
-const galleriesData = galleriesDataRaw as GalleriesData;
 
 export async function generateStaticParams() {
   return galleriesData.galleries.map((gallery) => ({
