@@ -296,6 +296,46 @@ export const galleriesData = {
         {
           "image": "/gallery-images/img_8266.jpg",
           "caption": "This beautifully crafted birdhouse wall art captures the essence of nature's tranquility, featuring a charming blue tit perched on its rustic wooden perch. The soft pink wall backdrop enhances the natural tones, creating a perfect balance of warmth and serenity. The composition, with its subtle lighting and rich textures, invites viewers to pause and appreciate the simple beauty of wildlife. Ideal for a living room focal piece, it adds a touch of nature to any executive office or modern gallery wall, making it a conversation starter and a perfect addition to any home or office decor."
+        },
+        {
+          "image": "/gallery-images/c_1.jpg",
+          "caption": "This striking photograph captures a juxtaposition of urban decay and classical grandeur, with a dilapidated building and trash bags in the foreground, set against the backdrop of a stately, ornate structure. The monochromatic tones and selective color highlights create a dramatic and thought-provoking mood, evoking themes of history, neglect, and resilience. The composition, with its strong leading lines and balanced elements, draws the viewer's eye across the scene, inviting contemplation. This aesthetic appeal lies in its raw, unfiltered beauty, making it a perfect piece for a living room focal point or an executive office to inspire reflection and conversation. The image's powerful narrative makes it a ideal addition to a walls of a modern gallery, where it can serve as a centerpiece of a thoughtfully collection."
+        },
+        {
+          "image": "/gallery-images/c_12.jpg",
+          "caption": "Capture the tranquil beauty of a sunset with this stunning photograph, where the sky is painted in hues of deep purple and vibrant orange, creating a mesmerizing contrast. The composition beautifully frames the horizon, with silhouettes of distant buildings and trees adding depth and context. This soft, diffused lighting enhances the ethereal quality, making it perfect for a living room as a focal piece, or for the executive office to inspire calm and creativity."
+        },
+        {
+          "image": "/gallery-images/c_32.jpg",
+          "caption": "This striking black and white photograph captures the ethereal beauty of a interior of a tunnel, where the interplay of light and shadow creates a mesmerizing, almost otherworldly atmosphere. The composition, with its curved ceiling and linear perspective, draws the viewer into a depth of the tunnel, evoking a feeling of a unknown and the infinite. The stark contrast between light and dark enhances the dramatic mood, making it a perfect piece for a modern art enthusiast or those who appreciate the power of minimalism. Ideal for a living room as a focal point of a space, or as a statement piece in an executive office, this image adds a touch of sophistication and contemplation to any decor."
+        },
+        {
+          "image": "/gallery-images/c_33.jpg",
+          "caption": "This photograph captures the essence of a serene urban journey, where a a vibrant mural backdrop contrasts beautifully with the motion blur of a cyclist. The soft, diffused lighting enhances the dreamy, nostalgic mood, making it perfect for a living room as a focal piece. The composition, with the bench and the bicycle, creates a perfect balance, making it ideal for a executive office or a modern gallery wall. The aesthetic appeal lies in its ability to evoke a feeling of freedom and creativity, making it a versatile piece for any space."
+        },
+        {
+          "image": "/gallery-images/c_34.jpg",
+          "caption": "This striking black and white photograph captures the essence of urban motion and freedom. The cyclist, blurred in background, creates a dynamic sense of speed and movement, while the sharp focus on the cyclist adds a element of stillness and calm. The composition, with the cyclist positioned slightly off-center, draws the viewer's eye across the frame, enhancing the sense of journey and exploration. The high contrast and monochromatic palette lend a image a timeless quality of fine art, making it a perfect piece for a modern gallery wall or a focal point of a living room. The image evokes a feeling of adventure and the simple joy of a ride, making it a versatile addition to any space seeking to infuse a spirit of the city into its decor."
+        },
+        {
+          "image": "/gallery-images/c_35.jpg",
+          "caption": "This photograph captures the timeless beauty of a brick facade, bathed in warm, golden light that accentuates its intricate architectural details. The symmetrical composition and the play of light and shadow create a perfect balance, evoking a feeling of history and sophistication. The rich, earthy tones of the bricks make it a perfect focal point for any modern gallery wall, or as a centerpiece in executive office, where it can inspire a sense of timeless elegance and professionalism."
+        },
+        {
+          "image": "/gallery-images/c_36.jpg",
+          "caption": "This striking black and white photograph captures the vibrant energy of Kingston Street Record Store, featuring bold, iconic symbols and a dynamic composition that evokes a sense of nostalgia and urban cool. The high-contrast lighting accentuates the textures and details of the brick wall, making it a perfect focal point for any modern art enthusiast. Ideal for a living room, it adds a perfect touch of urban sophistication and artistic flair to any space, transforming it into a a statement piece that speaks volumes about the owner's personality and taste."
+        },
+        {
+          "image": "/gallery-images/c_37.jpg",
+          "caption": "This photograph captures the timeless charm of a 'Chomee' store, established in 1989, with its inviting storefront and bustling street life. The warm, golden lighting enhances the nostalgic feel, while the composition draws the viewer's eye through the glass doors and into the inviting interior. The aesthetic appeal lies in its retro vibe, perfect for adding character of a living room or as a focal piece in executive office. The image evokes a essence of a past, making it a perfect addition to a modern gallery wall, where it can inspire a soul and spark conversations."
+        },
+        {
+          "image": "/gallery-images/c_38.jpg",
+          "caption": "This evocative photograph captures the quiet charm of an urban bicycle parking area, bathed in soft glow of ambient light. The monochromatic palette enhances the timeless aesthetic, inviting viewers to reflect on the rhythm of city life. The composition, with its overlapping lines of bicycles, creates a illusion of depth and movement, drawing the eye into the scene. Perfect for a executive office or modern gallery wall, this piece evokes a calmness of a city's pulse, making it a ideal focal point for any space seeking a perfect balance of urban sophistication and artistic flair."
+        },
+        {
+          "image": "/gallery-images/c_39.jpg",
+          "caption": "This evocative black and white photograph captures the timeless charm of a Victorian-era building, its architectural details and intricate woodwork standing out against the stark contrast of the monochrome palette. The composition, with its symmetrical facade and prominent gabled window, invites the viewer to explore the rich history and craftsmanship of the era. The soft, diffused lighting enhances the texture of the brick and wood, creating a perfect backdrop for a bold, modern lettering of 'H GEE'. This image's aesthetic appeal lies in its ability to evoke a past while resonating with contemporary tastes, making it an ideal focal piece for a living room or a executive office, where it can inspire a sense of history and sophistication."
         }
       ]
     },
@@ -329,6 +369,10 @@ export const galleriesData = {
         {
           "image": "/gallery-images/a_114.jpg",
           "caption": "This striking black and white photograph captures the intricate beauty of a weathered wood grain, with a soft, blurred background creating a perfect contrast. The composition draws the eye to the subtle texture and the lone knot, evoking a timeless and serene atmosphere of nature. Its minimalist aesthetic makes it a perfect focal point for any modern interior, whether it be a living room, executive office, or a centerpiece of a modern gallery wall. The monochromatic palette ensures it complements a most diverse color schemes, making it a ultimate versatile decor piece."
+        },
+        {
+          "image": "/gallery-images/c_24.jpg",
+          "caption": "This photograph captures the vibrant energy of a city, where the interplay of light and shadow creates a dynamic and inviting atmosphere. The composition, with its bustling street life and historic architecture, evokes a charm of a urban landscape. The warm tones and soft lighting add a sense of calm and nostalgia, making it perfect for a living room as a a focal piece, or for an executive office to inspire creativity and a sense of community. The image's aesthetic appeal lies in its ability to transport viewers to a lively yet serene urban setting, making it a ideal choice for those who appreciate the beauty of everyday life."
         }
       ]
     },
