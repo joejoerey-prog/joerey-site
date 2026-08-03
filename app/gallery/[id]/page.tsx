@@ -8,6 +8,8 @@ type GalleryItem = { id: string; title: string; description: string; images: Gal
 type GalleriesData = { galleries: GalleryItem[] };
 
 const galleriesData = galleriesDataRaw as GalleriesData;
+export const revalidate = 0;
+
 
 export async function generateStaticParams() {
   return galleriesData.galleries.map((gallery) => ({
