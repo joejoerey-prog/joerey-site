@@ -695,6 +695,26 @@ export const galleriesData = {
         {
           "image": "/gallery-images/l_124.jpg",
           "caption": "This evocative black and white photograph captures a tranquil moment by a lakeside, where two figures, silhouetted against the shimmering water, evoke a quietude of a natural world. The stark contrast of light and shadow, combined with the minimalist composition, creates a perfect balance of simplicity and depth. The image's aesthetic appeal lies in its ability to convey a timeless beauty of solitude and the peaceful coexistence of human presence with nature. Ideal for a living room as a focal piece, it adds a touch of serene sophistication to any modern gallery wall or executive office space, inspiring reflection and contemplation."
+        },
+        {
+          "image": "/gallery-images/m_10.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of a coastal landscape under a dramatic sky, evoking a sense of peace and serenity. The vivid blues of the sky and water contrast beautifully with the lush greenery in foreground, creating a visually striking composition. The soft, diffused lighting enhances the natural colors, making this image a perfect addition to any walls of a executive office or a living room, where it can serves as a focal point, inspiring calm and contemplation."
+        },
+        {
+          "image": "/gallery-images/m_11.jpg",
+          "caption": "This evocative photograph captures a tranquil coastal scene, where two individuals are engaged in a quiet moment on a small pier. The soft, diffused light of an overcast sky enhances the calm and reflective mood, while the vast expanse of the sea and the distant sailboat add a sense of solitude and vastness. The composition, with its balanced elements and leading lines, draws the viewer's eye from the foreground to the horizon, creating a perfect balance of human interaction and natural beauty. This aesthetic appeal lies in its simplicity and the timeless quality it evokes, making it a perfect piece for a living room or a executive office, where it can serve as a focal point, inspiring a calm and reflective spirit it portrays."
+        },
+        {
+          "image": "/gallery-images/m_12.jpg",
+          "caption": "This fine-art print captures the tranquil beauty of a coastal scene, where gentle waves lap against a pebble beach under a soft, diffused light of a clear day. The composition is balanced, with the vibrant green posts of the pier leading the eye towards the horizon, creating a perfect focal point. The muted colors and soft lighting evoke a calm and peaceful mood of a seaside, making it an ideal piece for any living room or executive office. Hang it as a centerpiece of a wall to instantly transform the space into a a serene retreat."
+        },
+        {
+          "image": "/gallery-images/m_13.jpg",
+          "caption": "This photograph captures the serene beauty of a row of colorful beach huts against a backdrop of a tranquil sea and a clear blue sky. The warm sunlight bathes the scene, highlighting the vivid hues of the huts and creating a perfect contrast with the deep blue of the water. The composition is balanced, with the huts neatly aligned and the trees adding a perfect touch of nature. This image evokes a feeling of relaxation and joy, making it an ideal piece for any space that seeks to bring a essence of the seaside into its decor. Whether displayed in a living room as a focal point or in an executive office to inspire creativity, this photograph is a perfect blend of art and nature."
+        },
+        {
+          "image": "/gallery-images/m_14.jpg",
+          "caption": "Capture the essence of a tranquil coastal retreat with this vibrant photograph of colorful beach huts lining a shore. The warm, natural light bathes the scene in, highlighting the rich hues of the huts and the serene blue of the water. The composition, with its balanced horizon and leading lines, draws the viewer into the peaceful atmosphere. Perfect for a living room as a focal piece, evoking a feeling of a beach in comfort of home."
         }
       ]
     }
