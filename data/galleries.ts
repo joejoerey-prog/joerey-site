@@ -360,6 +360,138 @@ export const galleriesData = {
         {
           "image": "/gallery-images/g_13.jpg",
           "caption": "This photograph captures the serene beauty of a glider soaring gracefully against a backdrop of a open sky and lush greenery. The soft, natural light enhances the tranquil mood, while the composition beautifully balances the glider in center of the frame, drawing the viewer's eye across the expansive landscape. The aesthetic appeal lies in its simplicity and the sense of freedom it evokes, making it a perfect piece for a living room as a focal point of a space, or for the executive office to inspire a spirit of adventure and tranquility."
+        },
+        {
+          "image": "/gallery-images/hay_autumn.jpg",
+          "caption": "This photograph captures the serene beauty of a forest path bathed in the warm, golden hues of autumn. The interplay of light and shadow creates a illusion of a path leading deeper into the woods, evoking a feeling of mystery and tranquility. The rich, earthy tones and the intricate details of the foliage make this image a perfect centerpiece for any space, whether it be a living room, an executive office, or a modern gallery wall. The composition draws the viewer in, inviting them to imagine the peaceful journey through this enchanting autumn landscape."
+        },
+        {
+          "image": "/gallery-images/img_7280.jpg",
+          "caption": "This photograph captures the serene beauty of an autumnal forest, where the golden hues of the leaves contrast beautifully against the deep blue sky. The composition is centered around a majestic oak tree, its branches reaching out to the heavens, creating a perfect focal point. The interplay of light and shadow adds depth and dimension, making this piece a perfect addition to any modern or traditional interior. Whether displayed in living room as a a focal piece or in an executive office to inspire calm and focus, this artwork brings the tranquility of nature indoors."
+        },
+        {
+          "image": "/gallery-images/img_7401.jpg",
+          "caption": "This photograph captures the serene beauty of an autumn landscape at sunset, where the warm golden hues of the setting sun bathe the scene in soft, inviting light. The composition beautifully frames a foreground with a silhouette of a tree on the right, leading the eye towards the expansive field and distant horizon. The rich, earthy tones and the interplay of light and shadow create a tranquil and almost magical atmosphere, making it a perfect piece for any living room or executive office, where it can serve as a focal point, evoking a peacefulness of nature and the beauty of the changing seasons."
+        },
+        {
+          "image": "/gallery-images/img_7413.jpg",
+          "caption": "This photograph captures the tranquil beauty of a forest in moment the sun filters through the golden leaves, creating a perfect interplay of light and shadow. The composition, framed by the textured bark of the trees, draws the viewer into the serene heart of nature. The rich, warm tones of the foliage and the soft, diffused light evoke a feeling of peace and tranquility. This image is ideal for a living room as a focal piece, or for the executive office as a backdrop to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/img_8174.jpg",
+          "caption": "This photograph captures a serene valley under a dramatic, stormy sky, evoking a sense of tranquility and awe. The composition beautifully balances the foreground's rugged, grassy hillside with the expansive, lush valley in the background. The interplay of light and shadow, with the dark clouds casting a moody ambiance, adds depth and drama to the scene. The aesthetic appeal lies in its natural beauty and the subtle contrast between the earthy tones and the vibrant greens, making it a perfect piece for a living room as a focal point or for the executive office to inspire calmness and creativity."
+        },
+        {
+          "image": "/gallery-images/img_8175.jpg",
+          "caption": "Capture the essence of tranquility and natural beauty with this stunning landscape photograph. The soft, diffused light of a cloudy day bathes the rolling hills in a perfect light, evoking a calm and peaceful mood of a countryside. The composition, with its sweeping horizon and the rustic stone wall in the foreground, creates a perfect balance between nature and human touch. This rich greens and earthy tones make this piece a versatile addition to any modern or traditional interior, ideal for a living room as a focal point or the executive office to inspire calm and focus. Hang it in way wall where you can enjoy its serene beauty every day."
+        },
+        {
+          "image": "/gallery-images/img_8416.jpg",
+          "caption": "This enchanting fine-art print captures the serene beauty of a forest floor, where delicate white flowers bloom amidst lush greenery. The soft, diffused lighting enhances the tranquil mood, inviting viewers to feel as if they are walking through the woods. The composition, with its focus on the foreground flowers and the blurred background, creates a perfect balance of depth and detail. This aesthetic appeal lies in its natural simplicity and the subtle interplay of light and shadow, making it a ideal focal piece for a living room or a perfect addition to an executive office's gallery wall."
+        },
+        {
+          "image": "/gallery-images/img_8656.jpg",
+          "caption": "This stunning fine-art photograph captures the intricate beauty of power lines against a backdrop of a sky, creating a striking contrast between industrial and natural elements. The composition, with its symmetrical lines and vibrant colors, evokes a mood of both serenity and industrial strength. The image's aesthetic appeal lies in its ability to transform any space into a a modern gallery piece, perfect for executive offices, living rooms, or modern art collections. Display it as a a focal point in living room to inspire conversations or as a statement piece in an executive office to reflect a balance of innovation and nature."
+        },
+        {
+          "image": "/gallery-images/l_101.jpg",
+          "caption": "Capture the essence of tranquility and natural beauty with this stunning photograph of a sunset bench under a tree. The warm golden hues of the setting sun create a magical atmosphere, while the lush greenery and well-composed path lead the eye to the inviting bench. This image exudes a perfect balance of serenity and warmth, making it an ideal focal piece for any living room or a executive office. Hang it in wall to infuse your space with a calming and inspiring ambiance of a peaceful evening in nature."
+        },
+        {
+          "image": "/gallery-images/l_102.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of a pastoral sunset, where the sky transitions from a warm hues of orange and pink to the cool tones of purple and blue. The composition is balanced with a gentle curve of a fence leading the eye towards the horizon, framed by lush green fields and a silhouettes of trees. The vibrant colors and serene atmosphere make it an ideal piece for enhancing any living room or executive office, serving as a focal point that evokes a calmness and beauty of nature. Perfect for those who appreciate the art of landscape photography and the calming effect of natural scenery."
+        },
+        {
+          "image": "/gallery-images/l_103.jpg",
+          "caption": "This breathtaking photograph captures the serene beauty of a sunset, with the sun casting a sky in warm hues of orange and red. The composition is balanced, with the sun positioned slightly off-center, creating a dynamic focal point. The soft, diffused light enhances the tranquil mood, making it perfect for any space that needs a calming effect of nature. Whether displayed in a living room as a a focal piece or in an executive office to inspire creativity, this image exudes a sense of peace and tranquility, making it a true masterpiece for fine-art wall decor."
+        },
+        {
+          "image": "/gallery-images/l_104.jpg",
+          "caption": "This breathtaking photograph captures the ethereal beauty of a sunset, with its vibrant hues of orange and red painting the sky in most dramatic way. The silhouette of the trees in foreground adds a perfect balance to the composition, creating a perfect harmony between nature and art. The warm tones and soft lighting evoke a feeling of tranquility and peace, making it an ideal choice for any living room focal piece or executive office. The rich aesthetic appeal of this photograph will add a perfect touch of sophistication and warmth to any modern gallery wall."
+        },
+        {
+          "image": "/gallery-images/l_105.jpg",
+          "caption": "This breathtaking photograph captures the mesmerizing beauty of a sunset, with its vibrant hues of red and orange painting the sky in most dramatic way. The sun, a focal point, is positioned low on the horizon, casting a warm glow that illuminates the clouds and silhouettes the trees below. The composition is balanced, with the horizon line dividing the image into two distinct yet harmonious halves. The aesthetic appeal lies in its ability to evoke a feeling of tranquility and awe, making it a perfect piece for any living room focal point or an executive office to inspire creativity and calm. Display it in a modern gallery wall to enhance the ambiance of any space."
+        },
+        {
+          "image": "/gallery-images/l_106.jpg",
+          "caption": "This breathtaking fine-art print captures the mesmerizing beauty of a sunset over agrown fields, with vibrant hues of orange, red, and purple painting the sky. The composition, with its leading lines and natural framing, draws the viewer into the tranquil scene, evoking a feeling of peace and serenity. The rich, saturated colors and dynamic lighting make this print a perfect focal point for any modern gallery wall or a calming living room. Hang it in your executive office to inspire creativity and relaxation."
+        },
+        {
+          "image": "/gallery-images/l_107.jpg",
+          "caption": "This breathtaking photograph captures the essence of a serene sunset, where the sky is awash with vibrant hues of orange, yellow, and pink, contrasted by the deep blues and purples of the evening sky. The composition is balanced with a silhouettes of trees and fields in the foreground, adding depth and grounding to the scene. The warm lighting and rich colors evoke a feeling of tranquility and warmth, making it an ideal piece for any living room or executive office. Display it as a focal point of a modern gallery wall to enhance the ambiance of your space."
+        },
+        {
+          "image": "/gallery-images/l_108.jpg",
+          "caption": "Capture the tranquil beauty of a sunset with this stunning photograph of wind turbines silhouetted against a vibrant hues of the sky. The warm, golden tones of the setting sun contrast beautifully with the dark, sleek forms of the turbines, creating a perfect balance of nature and technology. This composition, with the turbines arranged in horizon, draws the eye across the canvas, evoking a sense of peace and progress. This rich, saturated colors and the dynamic interplay of light and shadow make this image a perfect piece for any modern interior, whether as a centerpiece of a living room or as a statement wall in an executive office. Hang it in a corner of a room to subtly inspire innovation and sustainability."
+        },
+        {
+          "image": "/gallery-images/l_109.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of wind turbines silhouetted against a vibrant hues of a sunset. The warm, golden tones of the sky contrast beautifully with the dark outlines of the turbines, creating a perfect balance of nature and technology. The composition, with the turbines arranged in horizon, draws the eye across the canvas, evoking a sense of peace and progress. This aesthetic appeal lies in its ability to inspire and uplift, making it a ideal focal piece for any modern living room or executive office. Hang it in a corner of your living room to bring a touch of the outdoors in, or in your office to inspire innovation and calm."
+        },
+        {
+          "image": "/gallery-images/l_111.jpg",
+          "caption": "This evocative black and white photograph captures the tranquil beauty of swans reflections on a calm lake, evoking a serene and timeless essence of nature. The composition, with its gentle curves and soft gradients, invites the viewer to lose themselves in the peaceful ambiance. The stark contrast between the white swans and the dark water enhances the dramatic effect, making it a perfect focal point for any modern home or office. Display this piece in living room to create a calming atmosphere or in executive office to inspire a spirit of tranquility and focus."
+        },
+        {
+          "image": "/gallery-images/l_112.jpg",
+          "caption": "This breathtaking fine-art print captures the serene beauty of a sunset, where the golden hues of the sun reflect off the calm waters, creating a illusion of a sun setting into the lake. The composition is balanced with a silhouettes of trees and distant buildings, adding depth and context to the scene. The rich, warm tones and tranquil atmosphere make this image perfect for creating a perfect focal point in a living room or as a a calming presence in an executive office. The high-quality print ensures that the details of the sunset and reflections are vivid and true to life, making it a ideal choice for those who appreciate the art of nature and the beauty of the outdoors."
+        },
+        {
+          "image": "/gallery-images/l_113.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of a sunset over a a serene lake, with two swans gracefully floating in water. The warm hues of the setting sun reflect off the calm surface, creating a perfect balance of light and shadow. The composition is masterfully framed, with the houses in the background adding a perfect touch of human presence to the natural scene. This overall mood is one of peace and serenity, making it an ideal piece for any space seeking a calming effect of nature. Perfect for a living room focal piece or an executive office to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/l_114.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of a sunset reflected in calm waters, creating a perfect balance of natural serenity and artistic composition. The warm hues of the sky, transitioning from deep oranges to soft blues, are mirrored in the still water, enhancing the overall peacefulness of the scene. The silhouette of a ducks and the distant buildings add depth and a perfect focal points, making this image both visually striking and emotionally evocative. This composition is ideal for a living room as a focal piece, or for the executive office as a statement wall decor, adding a perfect touch of nature and tranquility to any space."
+        },
+        {
+          "image": "/gallery-images/l_115.jpg",
+          "caption": "Capture the tranquil beauty of a sunset with this stunning photograph of swans gliding across a water. The warm hues of the sky, reflected in the calm lake, create a perfect backdrop for this serene scene. The composition, with the swans in the foreground and the vibrant sunset in focal point, evokes a feeling of peace and tranquility. This image is ideal for a living room as a focal piece, or for an executive office to inspire calm and focus. Its aesthetic appeal lies in its ability to transport viewers to a moment of natural beauty, making it a perfect addition to any modern gallery wall."
+        },
+        {
+          "image": "/gallery-images/l_116.jpg",
+          "caption": "This breathtaking photograph captures the tranquil essence of a sunset over a a serene lake, with a graceful swan as the focal point. The warm hues of the sky, reflected in calm water, create a perfect balance of light and shadow, evoking a feeling of peace and tranquility. The composition, with the swan positioned slightly off-center, adds a dynamic element to the scene, drawing the viewer's eye across the canvas. This image's aesthetic appeal lies in its ability to transport the viewer to a moment of natural beauty, making it an ideal choice for wall decor in spaces that seek to inspire calm and reflect a beauty of nature. Perfect for a living room as a focal piece, or as a executive office to inspire creativity and calm, this photograph is a perfect blend of art and nature."
+        },
+        {
+          "image": "/gallery-images/l_117.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of a sunset, with silhouetted swans pairs gracefully floating on a water's surface. The vibrant hues of orange, red, and purple in the sky create a perfect backdrop, reflecting beautifully on the calm lake. The composition is balanced, with the swans silhouettes leading the eye towards the horizon, evoking a feeling of peace and serenity. This image's aesthetic appeal lies in its ability to evoke emotions and inspire awe, making it a perfect focal piece for a living room or a executive office, where it can serve as a calming and inspiring centerpiece."
+        },
+        {
+          "image": "/gallery-images/l_118.jpg",
+          "caption": "This photograph captures the essence of a serene hillside retreat, where the interplay of light and shadow creates a perfect balance of tranquility and warmth. The composition, with its rustic wooden bench nestled amidst the grassy slopes, invites viewers to imagine themselves sitting there, basking in the peaceful solitude. The vibrant greens and soft blues of the sky evoke a feeling of a perfect day, making it an ideal piece for any living room or office space seeking a calming effect of nature. Hang it as a focal point of a room to bring a touch of the outdoors indoors, enhancing the ambiance with its natural beauty and calming presence."
+        },
+        {
+          "image": "/gallery-images/l_119.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of a sunset, with silhouetted swans pairs gracefully floating on a water's surface. The vibrant hues of orange, red, and purple in the sky create a perfect backdrop, reflecting beautifully on the calm lake. The composition is balanced, with the swans figures positioned centrally, drawing the viewer's eye across the serene landscape. This image evokes a feeling of peace and tranquility, making it an ideal choice for wall decor in living room or executive office, where it can serve as a focal point, inspiring calm and reflection."
+        },
+        {
+          "image": "/gallery-images/l_12.jpg",
+          "caption": "This breathtaking photograph captures the ethereal beauty of a sunset, with its vibrant hues of orange, pink, and purple painting the sky in a mesmerizing display of nature's artistry. The composition is balanced, with the silhouette of bare trees framing the horizon, adding a perfect touch of contrast and depth. The warm lighting of the sunset evokes a feeling of tranquility and warmth, making it an ideal piece for any living room or executive office, where it can serve as a focal point, inspiring calm and contemplation. Hang it in a space where you can enjoy its serene beauty every day, bringing a tranquility of the sunset into your home or office."
+        },
+        {
+          "image": "/gallery-images/l_120.jpg",
+          "caption": "This breathtaking photograph captures the tranquil beauty of a sunset, with its vibrant hues of orange and red reflecting off the calm waters. Two elegant swans silhouettes glide gracefully across the surface, their reflections mirroring the sky's fiery colors. The composition is balanced, with the swans positioned centrally, drawing the viewer's eye across the frame. The overall aesthetic is both perfect blend of natural serenity and artistic composition, making it an ideal piece for any living room as a focal point or for an executive office to inspire calm and creativity."
+        },
+        {
+          "image": "/gallery-images/l_121.jpg",
+          "caption": "This breathtaking photograph captures the mesmerizing beauty of a sunset, where the sky is ablaze with fiery hues of orange, red, and purple, reflected in a tranquil waters below. The composition is balanced with a silhouette of a landscape on the left, creating a perfect harmony of light and shadow. The rich, warm tones of the sunset evoke a sense of peace and tranquility, making it an ideal piece for any living room or office space. Display it as a focal point in your living room to enhance the ambiance or in your executive office to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/l_122.jpg",
+          "caption": "This evocative black and white photograph captures the essence of solitude and tranquility, featuring a rustic wooden bench nestled in a heart of a countryside. The interplay of light and shadow, combined with the stark contrast of the bench against the open field, creates a perfect mood of peaceful reflection. The composition, with the bench as the focal point, draws the viewer into the scene, inviting them to imagine themselves sitting there, basking in the quiet beauty of nature. This image's aesthetic appeal lies in its timeless quality, making it a ideal choice for wall decor in spaces that seek a touch of nature and calm, such as a living room, executive office, or a corner of a modern gallery wall."
+        },
+        {
+          "image": "/gallery-images/l_123.jpg",
+          "caption": "This breathtaking photograph captures the ethereal beauty of a golden hour, where the sun casts a warmest hues across the sky, painting the clouds in colors of orange, yellow, and pink. The composition is balanced with a silhouette of a horizon line, creating a perfect frame for the vibrant sunset. The tranquil field in foreground adds a perfect touch of calmness, making it a ideal piece for any living room or executive office, where it can serve as a focal point of the decor, inspiring a soul and setting a tone for a space."
+        },
+        {
+          "image": "/gallery-images/l_125.jpg",
+          "caption": "This evocative black and white photograph captures a tranquil moment of two ducks gliding across a shimmering surface of a lake, their silhouettes standing out against the sparkling water. The composition is balanced, with the ducks positioned centrally, drawing the viewer's eye across the reflective surface. The interplay of light and shadow, combined with the subtle gradient of the sky, creates a perfect mood of serenity and contemplation. This image is ideal for a living room as a focal piece, or for the executive office as a perfect backdrop to inspire calm and focus."
+        },
+        {
+          "image": "/gallery-images/l_126.jpg",
+          "caption": "This evocative black and white photograph captures the serene solitude of a lone bench in an open field, evoking a quiet contemplation of nature. The composition, with the bench slightly off-center, draws the viewer's eye into the vast, open landscape, creating a perfect balance between human presence and the grandeur of the natural world. The soft, diffused lighting enhances the timeless quality of the scene, making it a ideal piece for a living room, where it can serve as a focal point of a space, or for the executive office, where it can inspire moments of reflection and calm amidst the hustle and bustle."
         }
       ]
     },
@@ -555,6 +687,14 @@ export const galleriesData = {
         {
           "image": "/gallery-images/img_6928.jpg",
           "caption": "This striking black and white photograph captures the tranquil essence of a swan gliding across a water's surface. The high contrast and soft lighting evoke a sense of calm and introspection, making it a perfect piece for any space seeking a touch of nature's serenity. The composition, with the swan positioned slightly off-center, adds a dynamic element that draws the viewer's eye across the frame. Its aesthetic appeal lies in the timeless beauty of the swan, making it an ideal focal point for a living room or a executive office, where it can inspire a sense of peace and reflection."
+        },
+        {
+          "image": "/gallery-images/img_7900.jpg",
+          "caption": "This breathtaking photograph captures the timeless beauty of Blackpool, England, with its iconic Tower and pier set against a dramatic backdrop of a North Sea. The interplay of light and shadow, with beams of sunlight piercing through the clouds, creates a perfect balance of tranquility and grandeur. The composition, with the Tower and pier leading the eye towards the horizon, offers a perfect blend of natural and architectural splendor. This rich, warm tones and the vast expanse of the beach make this image a perfect piece for any living room, creating a feeling of being right there, experiencing the serene beauty of the seaside. This image is ideal for those who appreciate the juxtaposition of nature and human-made marvels, making it a perfect focal point for any executive office or modern gallery wall."
+        },
+        {
+          "image": "/gallery-images/l_124.jpg",
+          "caption": "This evocative black and white photograph captures a tranquil moment by a lakeside, where two figures, silhouetted against the shimmering water, evoke a quietude of a natural world. The stark contrast of light and shadow, combined with the minimalist composition, creates a perfect balance of simplicity and depth. The image's aesthetic appeal lies in its ability to convey a timeless beauty of solitude and the peaceful coexistence of human presence with nature. Ideal for a living room as a focal piece, it adds a touch of serene sophistication to any modern gallery wall or executive office space, inspiring reflection and contemplation."
         }
       ]
     }
