@@ -6,6 +6,9 @@ import GalleryClient from "./GalleryClient";
 type GalleryImage = { image: string; caption: string };
 type GalleryItem = { id: string; title: string; description: string; images: GalleryImage[] };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function generateStaticParams() {
   return galleriesData.galleries.map((gallery) => ({
     id: gallery.id,
