@@ -30,7 +30,9 @@ const FILE_ID = 'galleries_master_json';
 
 function getAppwriteStorage() {
   const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || '69dd1f32003b7e825311';
-  const apiKey = process.env.APPWRITE_API_KEY || '';
+  const apiKey =
+    process.env.APPWRITE_API_KEY ||
+    'standard_c0d43568566f9a8e6e838a7d49b5e805320d755a691a66eedd9023a7fe72f5bb1e776a83ad4f85275b4bc2689b71ec38cc76453eca33c8e46c250a78d6643d7076aa06cbf1588f44f281db73de30999657feaeafc86ed22a9153eda11882e1cce0f5ea70109ef1ccafbb4eb51830a2433d93a2155b86c0ca2886739aa183e979';
   const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1';
 
   if (!projectId || !apiKey) {
