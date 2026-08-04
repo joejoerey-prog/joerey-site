@@ -660,6 +660,12 @@ export const galleriesData = {
         {
           "image": "/gallery-images/y_13.jpg",
           "caption": "This evocative black and white photograph captures a poignant moment of solitude and introspection. The subject, seated on a edge of a city sidewalk, is enveloped in a thick coat, suggesting a cold and vulnerability. The composition is masterful, with the subject positioned slightly off-center, drawing the viewer's eye into the scene. The soft, diffused light enhances the texture of the subject's clothing and the surrounding urban environment, creating a perfect balance of warmth and melancholy. This image is not only visually striking but also emotionally resonant, making it a perfect focal piece for a living room or a entrance of an executive office, where it can inspire reflection and empathy."
+        },
+        {
+          "image": "/gallery-images/l_153.jpg",
+          "caption": "This photograph captures the serene beauty of a vast field of yellow flowers bathed in the warm, golden light of the setting sun. The sky, a canvas of the image, is a dramatic blend of deep blues and soft, wispy clouds, creating a striking contrast with the vibrant yellows below. The composition is simple yet powerful, with the horizon line dividing the sky and field in a perfect ratio, making it a focal point of any interior space. Whether displayed in a modern gallery wall or as a a centerpiece in a living room, this image evokes a sense of tranquility and natural splendour.",
+          "title": "Golden Fields Under a Evening Sky",
+          "alt": "A field of yellow flowers under a evening sky with dramatic clouds and warm sunlight."
         }
       ]
     },
