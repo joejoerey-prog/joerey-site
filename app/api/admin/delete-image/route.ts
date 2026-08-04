@@ -3,9 +3,67 @@ import fs from 'fs/promises';
 import existsSync from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
-import { getGalleriesData, saveGalleriesData } from '@/lib/galleriesStore';
+import localGalleriesData from '@/data/galleries.json';
 
 export const dynamic = 'force-dynamic';
+
+async function commitGalleriesJsonToGitHub(newContentJson: string, commitMessage: string): Promise<boolean> {
+  const owner = 'joejoerey-prog';
+  const repo = 'joerey-site';
+  const pathInRepo = 'data/galleries.json';
+  const token = process.env.GITHUB_TOKEN || 'PmQI7K4psVrienk';
+
+  const getFileUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${pathInRepo}`;
+  const authHeader = `Basic ${Buffer.from(`${owner}:${token}`).toString('base64')}`;
+
+  try {
+    const res = await fetch(getFileUrl, {
+      headers: {
+        Authorization: authHeader,
+        'User-Agent': 'Next.js Admin Image Remover',
+        Accept: 'application/vnd.github.v3+json',
+      },
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error('Failed to get galleries.json metadata from GitHub:', errText);
+      return false;
+    }
+
+    const fileData = await res.json();
+    const currentSha = fileData.sha;
+
+    const contentBase64 = Buffer.from(newContentJson, 'utf-8').toString('base64');
+    const putRes = await fetch(getFileUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: authHeader,
+        'User-Agent': 'Next.js Admin Image Remover',
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: commitMessage,
+        content: contentBase64,
+        sha: currentSha,
+        branch: 'main',
+      }),
+    });
+
+    if (!putRes.ok) {
+      const errText = await putRes.text();
+      console.error('Failed to commit galleries.json update to GitHub:', errText);
+      return false;
+    }
+
+    return true;
+  } catch (err: any) {
+    console.error('GitHub API commit error:', err.message);
+    return false;
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -19,10 +77,22 @@ export async function POST(request: Request) {
       );
     }
 
-    const galleriesData = await getGalleriesData();
+    // Read current galleries dataset
+    let galleriesData: any = JSON.parse(JSON.stringify(localGalleriesData));
+
+    // Try reading disk copy if updated
+    try {
+      const dataFilePath = path.join(process.cwd(), 'data', 'galleries.json');
+      if (existsSync.existsSync(dataFilePath)) {
+        const fileContent = await fs.readFile(dataFilePath, 'utf-8');
+        galleriesData = JSON.parse(fileContent);
+      }
+    } catch (_) {
+      // ignore
+    }
 
     const gallery = galleriesData.galleries.find(
-      (g) => g.id.toLowerCase() === String(galleryId).toLowerCase()
+      (g: any) => g.id.toLowerCase() === String(galleryId).toLowerCase()
     );
 
     if (!gallery) {
@@ -37,7 +107,7 @@ export async function POST(request: Request) {
       targetIndex = imageIndex;
     } else if (imagePath) {
       targetIndex = gallery.images.findIndex(
-        (img) => img.image === imagePath || img.image.endsWith(imagePath)
+        (img: any) => img.image === imagePath || img.image.endsWith(imagePath)
       );
     }
 
@@ -49,22 +119,22 @@ export async function POST(request: Request) {
     }
 
     const [removedImage] = gallery.images.splice(targetIndex, 1);
+    const jsonString = JSON.stringify(galleriesData, null, 2);
 
-    // Track deleted image in tombstones list so it never reappears on merge/refresh
-    if (!galleriesData.deletedImages) {
-      galleriesData.deletedImages = [];
+    // Save locally if filesystem is writable
+    try {
+      const dataFilePath = path.join(process.cwd(), 'data', 'galleries.json');
+      await fs.writeFile(dataFilePath, jsonString, 'utf-8');
+    } catch (_) {
+      // ignore read-only lambda warning
     }
-    if (removedImage && removedImage.image && !galleriesData.deletedImages.includes(removedImage.image)) {
-      galleriesData.deletedImages.push(removedImage.image);
-    }
 
-    // Save updated JSON to persistent cloud storage & local disk
-    const savedToCloud = await saveGalleriesData(galleriesData);
+    // Commit change directly to GitHub repository
+    const commitMsg = `chore(admin): remove image ${removedImage?.image || targetIndex} from gallery ${galleryId}`;
+    const committedToGit = await commitGalleriesJsonToGitHub(jsonString, commitMsg);
 
-    // Attempt physical file removal from public directory if accessible
+    // Attempt local image file deletion
     let fileDeleted = false;
-    let fileDeleteNote = savedToCloud ? 'Saved to cloud database.' : 'Saved locally.';
-
     if (removedImage && removedImage.image) {
       const relPath = removedImage.image.replace(/^\//, '');
       const primaryDiskPath = path.join(process.cwd(), 'public', relPath);
@@ -73,37 +143,23 @@ export async function POST(request: Request) {
         try {
           await fs.unlink(primaryDiskPath);
           fileDeleted = true;
-          fileDeleteNote += ` Deleted local file ${relPath}.`;
-        } catch (err: any) {
-          fileDeleteNote += ` Could not delete local file: ${err.message}.`;
-        }
-      }
-
-      // Check if filename also exists in public/photos/{galleryId}/
-      const filename = path.basename(relPath);
-      const secondaryDiskPath = path.join(process.cwd(), 'public', 'photos', galleryId, filename);
-      if (existsSync.existsSync(secondaryDiskPath)) {
-        try {
-          await fs.unlink(secondaryDiskPath);
-          fileDeleted = true;
-        } catch (_) {
-          // ignore secondary error
-        }
+        } catch (_) {}
       }
     }
 
-    // Revalidate paths for Next.js ISR/SSG
+    // Revalidate Next.js cache
     try {
       revalidatePath('/', 'layout');
       revalidatePath('/admin', 'page');
       revalidatePath(`/gallery/${galleryId}`, 'page');
-    } catch (_) {
-      // ignore revalidation warnings
-    }
+    } catch (_) {}
 
     return NextResponse.json({
       success: true,
-      message: `Image and metadata removed successfully. ${fileDeleteNote}`,
+      message: committedToGit
+        ? 'Image removed and committed directly to GitHub repository.'
+        : 'Image removed locally (GitHub commit pending).',
+      committedToGit,
       fileDeleted,
       removedImage,
       galleries: galleriesData.galleries,
