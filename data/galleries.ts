@@ -644,6 +644,22 @@ export const galleriesData = {
         {
           "image": "/gallery-images/w_22.jpg",
           "caption": "This breathtaking photograph captures the tranquil beauty of a sunset, where the sky is painted with hues of orange, yellow, and deep blue, creating a perfect canvas for the silhouettes of two majestic trees. The composition is balanced, with the trees framing the horizon and the expansive field leading the viewer's eye into the distance. The dramatic clouds add depth and texture, enhancing the overall mood of serenity and awe. This aesthetic appeal lies in its ability to evoke a feeling of peace and connection with nature, making it a perfect focal piece for any living room or executive office, where it can inspire and uplift the spirit."
+        },
+        {
+          "image": "/gallery-images/y_10.jpg",
+          "caption": "This evocative black and white photograph captures the timeless beauty of an urban Gothic setting, where the interplay of light and shadow creates a illusion of a sun setting behind the ancient stone walls. The composition, with its curved street leading the eye towards the cathedral's intricate window, evokes a feeling of a past merging with the present. The aesthetic appeal lies in its stark contrast and the dramatic interplay of light and shadow, making it a perfect focal piece for a living room or a executive office, where it can adds a perfect touch of sophistication and historical charm."
+        },
+        {
+          "image": "/gallery-images/y_11.jpg",
+          "caption": "This photograph captures the essence of a vintage apothecary, where the warm, ambient lighting accentuates the rich, dark wood tones and the array of antique jars and bottles. The composition is meticulously arranged, with each shelf and cabinet showcasing a intricate details of the items, evoking a charm of a past. The aesthetic appeal lies in its ability to transport viewers to a bygone era, making it a perfect focal piece for a living room or a executive office, where it can adds a touch of sophistication and historical intrigue. The image is ideal for those who appreciate the beauty of craftsmanship and the allure of nostalgia."
+        },
+        {
+          "image": "/gallery-images/y_12.jpg",
+          "caption": "This vibrant and thought-provoking photograph captures a essence of resilience and community spirit in the aftermath of a tragic event. The use of bold purple hues and the intricate details of the street art piece, adorned with flowers and a poignant message, evoke a spirit of unity and hope. The composition, with its dynamic placement of the bicycle and the statue, draws the viewer's eye, creating a perfect focal point for any wall. Ideal for a living room to inspire conversation and reflection, or for the executive office to symbolize strength and determination."
+        },
+        {
+          "image": "/gallery-images/y_13.jpg",
+          "caption": "This evocative black and white photograph captures a poignant moment of solitude and introspection. The subject, seated on a edge of a city sidewalk, is enveloped in a thick coat, suggesting a cold and vulnerability. The composition is masterful, with the subject positioned slightly off-center, drawing the viewer's eye into the scene. The soft, diffused light enhances the texture of the subject's clothing and the surrounding urban environment, creating a perfect balance of warmth and melancholy. This image is not only visually striking but also emotionally resonant, making it a perfect focal piece for a living room or a entrance of an executive office, where it can inspire reflection and empathy."
         }
       ]
     },
@@ -697,6 +713,10 @@ export const galleriesData = {
         {
           "image": "/gallery-images/w_2.jpg",
           "caption": "This striking black and white photograph captures the timeless grandeur of a historic castle, its rugged stone walls and crenellated towers standing as a testament to medieval architecture. The dramatic interplay of light and shadow, accentuated by the overcast sky, evokes a mood of mystery and historical depth. The composition, with its strong vertical lines and symmetrical balance, creates a perfect focal point for any modern or traditional interior. Ideal for a living room as a dramatic statement piece or an executive office to inspire a spirit of leadership and resilience."
+        },
+        {
+          "image": "/gallery-images/y_1.jpg",
+          "caption": "This fine-art print captures the haunting beauty of a medieval castle under a stormy sky, evoking a mood of mystery and history. The dramatic lighting and composition highlight the textures of the brick wall and the castle's stone structure, creating a perfect piece for a modern gallery wall or a executive office. The dark, moody tones make it a ideal focal point for any living room, adding a perfect touch of sophistication and intrigue to any space."
         }
       ]
     },
