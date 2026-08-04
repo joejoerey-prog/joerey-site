@@ -11,12 +11,14 @@ async function commitGalleriesJsonToGitHub(newContentJson: string, commitMessage
   const owner = 'joejoerey-prog';
   const repo = 'joerey-site';
   const pathInRepo = 'data/galleries.json';
-  const token = process.env.GITHUB_TOKEN || 'PmQI7K4psVrienk';
+  const token = process.env.GITHUB_TOKEN;
+
+  if (!token) {
+    return { success: false, error: 'Missing GITHUB_TOKEN environment variable on server' };
+  }
 
   const getFileUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${pathInRepo}`;
-  const authHeader = token.startsWith('ghp_') || token.startsWith('github_pat_')
-    ? `Bearer ${token}`
-    : `token ${token}`;
+  const authHeader = `Bearer ${token}`;
 
   try {
     const res = await fetch(getFileUrl, {
