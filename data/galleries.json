@@ -663,12 +663,7 @@
         }
       ]
     },
-    {
-      "id": "stillness",
-      "title": "Stillness",
-      "description": "Silence has a texture. Water, wind, and distance \u2014 nothing much happens here, which is the point.",
-      "images": []
-    },
+
     {
       "id": "weather-drama",
       "title": "Weather and Drama",

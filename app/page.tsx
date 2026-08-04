@@ -42,7 +42,7 @@ export default async function HomePage() {
             Preserving Moments.
           </h1>
           <p className="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto drop-shadow-md">
-            A curated selection of landscapes, weather, stillness, and memory.
+            A curated selection of landscapes, weather, aviation, and coastal scenes.
           </p>
           <Link
             href="#gallery"
@@ -54,26 +54,26 @@ export default async function HomePage() {
       </section>
 
       {/* ===== CATEGORIES SECTION ===== */}
-      <section id="gallery" className="w-full py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section id="gallery" className="w-full py-20 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-serif font-bold text-foreground mb-4">
               Categories
             </h2>
             <p className="text-foreground-muted text-lg">
-              Explore my favorite collections
+              Explore my fine-art collections
             </p>
           </div>
 
-          {/* Gallery Grid - Category Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {/* Gallery Grid - 2x2 Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {galleries.map((gallery) => {
               const preview = gallery.preview;
               return (
                 <Link
                   key={gallery.id}
                   href={`/gallery/${gallery.id}`}
-                  className="group overflow-hidden rounded-xl border border-border hover:border-accent transition-all duration-300 hover:shadow-lg cursor-pointer"
+                  className="group flex flex-col h-full overflow-hidden rounded-xl border border-border hover:border-accent transition-all duration-300 hover:shadow-xl cursor-pointer bg-background"
                 >
                   {/* Image Container */}
                   <div className="relative w-full aspect-[4/3] overflow-hidden bg-background-alt">
@@ -82,8 +82,8 @@ export default async function HomePage() {
                         src={preview}
                         alt={gallery.title}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 50vw"
                       />
                     ) : (
                       <div className="flex items-center justify-center w-full h-full text-foreground-muted italic text-sm">
@@ -93,19 +93,19 @@ export default async function HomePage() {
                   </div>
 
                   {/* Card Content */}
-                  <div className="p-6 bg-background">
+                  <div className="p-6 flex flex-col justify-between flex-1 bg-background">
                     <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h3 className="text-xl font-serif font-semibold text-foreground mb-2">
+                      <div className="flex-1">
+                        <h3 className="text-xl sm:text-2xl font-serif font-semibold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
                           {gallery.title}
                         </h3>
-                        <p className="text-foreground-muted text-sm line-clamp-2">
+                        <p className="text-foreground-muted text-sm sm:text-base line-clamp-2 leading-relaxed">
                           {gallery.description}
                         </p>
                       </div>
                       <ArrowRight
-                        size={20}
-                        className="text-accent flex-shrink-0 mt-1 group-hover:translate-x-1 transition-transform duration-300"
+                        size={22}
+                        className="text-accent flex-shrink-0 mt-1 group-hover:translate-x-1.5 transition-transform duration-300"
                       />
                     </div>
                   </div>

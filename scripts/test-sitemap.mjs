@@ -55,8 +55,6 @@ async function testSitemap() {
   const expectedSlugs = [
     'land-light',
     'weather-drama',
-    'light-time-memory',
-    'stillness',
     'coast-edge',
     'human-stories'
   ];

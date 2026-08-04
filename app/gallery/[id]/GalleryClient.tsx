@@ -13,6 +13,8 @@ type GalleryImage = {
   id?: string;
   image: string;
   caption?: string;
+  title?: string;
+  alt?: string;
 };
 
 type Gallery = {
@@ -65,7 +67,7 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
               >
                 <Image
                   src={img.image}
-                  alt={img.caption || gallery.title}
+                  alt={img.alt || img.title || img.caption || gallery.title}
                   fill
                   className="object-cover transition-transform duration-200 hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -77,6 +79,11 @@ export default function GalleryClient({ gallery }: GalleryClientProps) {
                 />
               </div>
 
+              {img.title && (
+                <h3 className="px-3 pt-3 text-sm font-semibold text-center text-foreground">
+                  {img.title}
+                </h3>
+              )}
               {img.caption && (
                 <figcaption className="p-3 text-sm text-center text-foreground-muted bg-background/70">
                   {img.caption}
