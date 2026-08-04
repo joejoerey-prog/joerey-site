@@ -981,6 +981,12 @@ export const galleriesData = {
           "caption": "This photograph captures the tranquil beauty of a seaside landscape, where the golden sands meet the deep blue sea under a vast, lightly clouded sky. The composition draws the eye from the foreground's textured grass and earthy tones to the expansive horizon, creating a perfect balance between land and sea. The soft, natural light enhances the serene atmosphere, making it an ideal focal point for a living room or a executive office, where it can inspire a sense of calm and connection with nature.",
           "title": "Seaside Serenity",
           "alt": "A serene seaside scene with golden sands, deep blue sea, and a lightly clouded sky, ideal for interior decor."
+        },
+        {
+          "image": "/gallery-images/nor_53.jpg",
+          "caption": "This evocative black and white photograph captures a a tranquil scene of four small rowing boats resting on a calm lake under a dramatic sky. The interplay of light and shadow, with the boats silhouetted against the dark clouds, creates a perfect balance of mood and atmosphere. The composition, with the boats aligned in a neat row, draws the eye across the frame, making it a ideal focal point for a modern gallery wall or a living room, where it can evoke a sense of peaceful solitude and contemplation.",
+          "title": "Moored Serenity",
+          "alt": "Four small rowing boats moored on a calm lake under a dramatic sky, creating a serene and contemplative scene."
         }
       ]
     }
