@@ -663,7 +663,6 @@
         }
       ]
     },
-
     {
       "id": "weather-drama",
       "title": "Weather and Drama",
@@ -712,6 +711,12 @@
         {
           "image": "/gallery-images/y_1.jpg",
           "caption": "This fine-art print captures the haunting beauty of a medieval castle under a stormy sky, evoking a mood of mystery and history. The dramatic lighting and composition highlight the textures of the brick wall and the castle's stone structure, creating a perfect piece for a modern gallery wall or a executive office. The dark, moody tones make it a ideal focal point for any living room, adding a perfect touch of sophistication and intrigue to any space."
+        },
+        {
+          "image": "/gallery-images/l_341.jpg",
+          "caption": "This photograph captures the raw power and beauty of nature, with a dramatic storm cloud dominating the sky and a vibrant green field below. The interplay of light and shadow creates a dynamic tension, while the lightning bolt adds a element of surprise and drama. The composition is striking, with the storm cloud as the focal point, making it perfect for a living room or a executive office where it can inspire and awe. The image evokes a feeling of being in centre of a tempest, a storm's embrace, and the resilience of the land beneath.",
+          "title": "The Storm's Embrace",
+          "alt": "A dramatic storm cloud with a lightning bolt striking over a a vibrant green field, symbolizing the raw power and beauty of nature."
         }
       ]
     },
