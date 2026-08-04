@@ -729,6 +729,12 @@ export const galleriesData = {
           "caption": "This evocative photograph captures the serene yet mysterious beauty of a natural world, where the interplay of light and shadow creates a illusion of a tree standing as a silent sentinel in a mist. The branches, stark and intricate, reach out into the fog, their silhouettes softened by the diffused light. The composition, with the tree as the central focal point, invites the viewer to lose themselves in the tranquil atmosphere, making it a perfect piece for a living room, where it can serve as a calming and contemplative centerpiece.",
           "title": "Mist and Shadows",
           "alt": "A misty forest scene with a prominent tree in the foreground, its branches reaching out into the foggy atmosphere."
+        },
+        {
+          "image": "/gallery-images/l_92.jpg",
+          "caption": "This evocative photograph captures a a lone marker standing in the calm, expansive waters under a brooding sky. The interplay of light and shadow, with the marker's silhouette sharply defined against the horizon, evokes a quiet solitude of nature. The composition, with the marker as the focal point, invites viewers to contemplate the vastness of the sea and the subtle beauty of the natural world. This image would make a perfect centerpiece for a living room, where it can inspire reflection and conversation about the power of minimalism and the sublime.",
+          "title": "The Solitary Marker",
+          "alt": "A solitary marker stands in calm waters under a dramatic, overcast sky, creating a contemplative and serene scene."
         }
       ]
     },
