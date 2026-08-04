@@ -642,6 +642,12 @@ export const galleriesData = {
           "caption": "This photograph captures the serene beauty of a vast field of yellow flowers bathed in the warm, golden light of the setting sun. The sky, a canvas of the image, is a dramatic blend of deep blues and soft, wispy clouds, creating a striking contrast with the vibrant yellows below. The composition is simple yet powerful, with the horizon line dividing the sky and field in a perfect ratio, making it a focal point of any interior space. Whether displayed in a modern gallery wall or as a a centerpiece in a living room, this image evokes a sense of tranquility and natural splendour.",
           "title": "Golden Fields Under a Evening Sky",
           "alt": "A field of yellow flowers under a evening sky with dramatic clouds and warm sunlight."
+        },
+        {
+          "image": "/gallery-images/l_169.jpg",
+          "caption": "This evocative photograph captures the serene beauty of a sunset, with the sun partially obscured by the horizon, casting a sky in warm hues of orange and yellow. Three wind turbines stand silhouetted against this vibrant backdrop, their blades poised as if frozen in time. The composition is both tranquil and dynamic, with the interplay of light and shadow creating a sense of depth and atmosphere. This image would make a perfect focal point in a living room, evoking a feeling of calm and the promise of sustainable energy.",
+          "title": "Sunset Turbines",
+          "alt": "A sunset scene featuring wind turbines silhouetted against a vibrant orange and yellow sky, with the sun partially hidden behind the horizon."
         }
       ]
     },
