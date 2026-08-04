@@ -138,10 +138,6 @@ export const galleriesData = {
           "caption": "This enchanting fine-art print captures the serene beauty of a garden gate, framed by lush greenery and bathed in soft, natural light. The composition invites viewers into a tranquil world beyond the gate, where a whimsical metal sculpture adds a perfect touch of artistic intrigue. The image's rich, earthy tones and delicate interplay of light and shadow make it a perfect focal piece for any living room or executive office, evoking a sense of calm and inspiration."
         },
         {
-          "image": "/gallery-images/2025_08_27251541.jpg",
-          "caption": "This stunning photograph captures the intricate beauty of a hornet in its natural habitat, showcasing the delicate interplay of light and shadow that highlights the insect's glossy exoskeleton and vibrant colors. The composition, framed by the lush green leaves, creates a perfect balance between the subject and its environment, evoking a mood of a wild. The rich, earthy tones and the detailed textures make this image a perfect piece for any modern gallery wall, adding a perfect touch of nature to any executive office or a living room focal point, enhancing the space with a raw beauty of the natural world."
-        },
-        {
           "image": "/gallery-images/2025_08_27251553.jpg",
           "caption": "Capture the essence of nature's beauty with this stunning fine-art print of a vibrant purple cosmos flower. The soft, diffused lighting enhances the delicate texture of the petals, creating a serene and inviting atmosphere. The composition, with its symmetrical arrangement of petals and the subtle yellow stamens, offers a perfect balance of color and form. This rich purple hue is both perfect focal point for any modern or contemporary interior, making it a versatile piece for living rooms, executive offices, or as a standout element in a modern gallery wall."
         },
@@ -494,14 +490,6 @@ export const galleriesData = {
           "caption": "This evocative black and white photograph captures the serene solitude of a lone bench in an open field, evoking a quiet contemplation of nature. The composition, with the bench slightly off-center, draws the viewer's eye into the vast, open landscape, creating a perfect balance between human presence and the grandeur of the natural world. The soft, diffused lighting enhances the timeless quality of the scene, making it a ideal piece for a living room, where it can serve as a focal point of a space, or for the executive office, where it can inspire moments of reflection and calm amidst the hustle and bustle."
         },
         {
-          "image": "/gallery-images/mersea_2020-677.jpg",
-          "caption": "This photograph captures a tranquil essence of a horseback riding lesson, with riders and their horses in a serene, rural setting. The soft, natural light enhances the earthy tones of the scene, creating a perfect balance of calm and activity. The composition, with riders and horses positioned in the foreground and background, draws the viewer into the peaceful atmosphere. The aesthetic appeal lies in its ability to evoke a feeling of connection with nature and the timeless beauty of equestrian sports. This image would make a perfect focal piece for a living room, evoking a tranquility and elegance of the countryside within your home."
-        },
-        {
-          "image": "/gallery-images/mersea_2020-683.jpg",
-          "caption": "This photograph captures a serene essence of a young rider atop a majestic horse, set against the backdrop of a tranquil campsite. The warm golden hour light bathes the scene, highlighting the rich textures of the horse's coat and the rider's vibrant attire. The composition, with the horse and rider positioned centrally, draws the viewer's eye into the peaceful interaction between human and animal. The rustic charm of the campsite and the soft, diffused light create a perfect mood for a piece, making it ideal for a living room as a focal point or for the executive office as a calming, motivational piece."
-        },
-        {
           "image": "/gallery-images/baby_velvet.jpg",
           "caption": "This mesmerizing fine-art print captures the ethereal beauty of a forest floor, where a soft, golden light of mushrooms illuminates the dark, mossy surroundings. The composition, with its delicate balance of light and shadow, evokes a sense of wonder and tranquility. The rich, earthy tones and intricate details make it a perfect focal piece for any modern living room or executive office, adding a touch of nature's magic to your space. Hang it in a corner of your living room to create a captivating conversation starter, or in your office to inspire creativity and calmness."
         },
@@ -544,10 +532,6 @@ export const galleriesData = {
         {
           "image": "/gallery-images/nor_1.jpg",
           "caption": "This striking black and white photograph captures the timeless charm of a 1813 Wylam sign, evoking a industrial heritage of the past. The high contrast and monochromatic palette create a perfect backdrop for a bold, stenciled text, which stands out with a sense of historical significance. The composition, with its central focus on the text, draws the viewer in eye directly to the subject, making it a perfect focal point for any modern or industrial-themed space. Whether displayed in a living room as a statement piece or in an executive office to inspire a spirit of innovation, this piece is a testament to the enduring beauty of historical artifacts."
-        },
-        {
-          "image": "/gallery-images/nor_12.jpg",
-          "caption": "This fine-art photograph captures a serene family moment by a lakeside, bathed in the warm, golden light of the setting sun. The composition is balanced with the family sitting together on the grass, their relaxed postures and gentle expressions evoking a tranquility of the scene. The French Bulldog adds a perfect touch of companionship and warmth. The soft, natural lighting enhances the rich, earthy tones of the landscape, making it a perfect piece for a living room focal point or a executive office, where it can subtly reflects the family's values of togetherness and peace."
         },
         {
           "image": "/gallery-images/nor_13.jpg",
@@ -652,14 +636,6 @@ export const galleriesData = {
         {
           "image": "/gallery-images/y_11.jpg",
           "caption": "This photograph captures the essence of a vintage apothecary, where the warm, ambient lighting accentuates the rich, dark wood tones and the array of antique jars and bottles. The composition is meticulously arranged, with each shelf and cabinet showcasing a intricate details of the items, evoking a charm of a past. The aesthetic appeal lies in its ability to transport viewers to a bygone era, making it a perfect focal piece for a living room or a executive office, where it can adds a touch of sophistication and historical intrigue. The image is ideal for those who appreciate the beauty of craftsmanship and the allure of nostalgia."
-        },
-        {
-          "image": "/gallery-images/y_12.jpg",
-          "caption": "This vibrant and thought-provoking photograph captures a essence of resilience and community spirit in the aftermath of a tragic event. The use of bold purple hues and the intricate details of the street art piece, adorned with flowers and a poignant message, evoke a spirit of unity and hope. The composition, with its dynamic placement of the bicycle and the statue, draws the viewer's eye, creating a perfect focal point for any wall. Ideal for a living room to inspire conversation and reflection, or for the executive office to symbolize strength and determination."
-        },
-        {
-          "image": "/gallery-images/y_13.jpg",
-          "caption": "This evocative black and white photograph captures a poignant moment of solitude and introspection. The subject, seated on a edge of a city sidewalk, is enveloped in a thick coat, suggesting a cold and vulnerability. The composition is masterful, with the subject positioned slightly off-center, drawing the viewer's eye into the scene. The soft, diffused light enhances the texture of the subject's clothing and the surrounding urban environment, creating a perfect balance of warmth and melancholy. This image is not only visually striking but also emotionally resonant, making it a perfect focal piece for a living room or a entrance of an executive office, where it can inspire reflection and empathy."
         },
         {
           "image": "/gallery-images/l_153.jpg",
@@ -923,16 +899,8 @@ export const galleriesData = {
           "caption": "Capture the essence of a tranquil coastal retreat with this vibrant photograph of colorful beach huts lining a shore. The warm, natural light bathes the scene in, highlighting the rich hues of the huts and the serene blue of the water. The composition, with its balanced horizon and leading lines, draws the viewer into the peaceful atmosphere. Perfect for a living room as a focal piece, evoking a feeling of a beach in comfort of home."
         },
         {
-          "image": "/gallery-images/mersea_2020-1.jpg",
-          "caption": "This photograph captures a tender bond between a father and daughter as they walk hand in hand along a pebbled beach. The soft, natural light enhances the warm tones of their clothing and the earthy textures of the rocks, creating a perfect balance of serenity and connection. The composition, with the father slightly ahead, guides the viewer's eye through the scene, emphasizing their shared journey. This image's aesthetic appeal lies in its simplicity and emotional depth, making it a ideal focal piece for a living room or a executive office, where it can inspire reflection and appreciation for the simple joys of life."
-        },
-        {
           "image": "/gallery-images/mersea_2020-608.jpg",
           "caption": "This evocative fine-art photograph captures the tranquil beauty of a seaside at low tide, where the vast expanse of the wetlands meets the horizon under a soft, diffused light of a setting sun. The composition is masterfully balanced, with a solitary figure on the left adding a human element, while the rugged concrete structure on the right provides a stark contrast to the natural landscape. The rich, warm tones and the interplay of light and shadow create a perfect mood of peaceful solitude. This image is ideal for wall decor in living room, creating a perfect focal point that invites contemplation and relaxation."
-        },
-        {
-          "image": "/gallery-images/mersea_2020-618.jpg",
-          "caption": "This photograph captures a young explorer in a serene coastal setting, exuding a sense of adventure and tranquility. The soft, natural light bathes the scene in, highlighting the boy's youthful energy and the rugged beauty of the beach. The composition, with the boy positioned slightly off-center, draws the viewer's eye into the vast, textured landscape behind him. The aesthetic appeal lies in the harmonious blend of the boy's vibrant, sporty attire against the earthy tones of the beach, creating a perfect balance of color and texture. This image is ideal for wall decor in living room, where it can serve as a focal piece, evoking a feeling of a great outdoors and inspiring a spirit of exploration and nature appreciation."
         },
         {
           "image": "/gallery-images/nor_10.jpg",
