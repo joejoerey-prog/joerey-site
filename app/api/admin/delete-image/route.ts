@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import existsSync from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
-import localGalleriesData from '@/data/galleries.json';
+import { getGalleriesData } from '@/lib/galleries';
 
 export const dynamic = 'force-dynamic';
 
@@ -77,19 +77,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Read current galleries dataset
-    let galleriesData: any = JSON.parse(JSON.stringify(localGalleriesData));
-
-    // Try reading disk copy if updated
-    try {
-      const dataFilePath = path.join(process.cwd(), 'data', 'galleries.json');
-      if (existsSync.existsSync(dataFilePath)) {
-        const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-        galleriesData = JSON.parse(fileContent);
-      }
-    } catch (_) {
-      // ignore
-    }
+    // Read current live galleries dataset
+    const galleriesData: any = await getGalleriesData();
 
     const gallery = galleriesData.galleries.find(
       (g: any) => g.id.toLowerCase() === String(galleryId).toLowerCase()

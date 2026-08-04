@@ -3,13 +3,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ShopButton from '@/components/ShopButton';
-import galleriesData from '@/data/galleries.json';
+import { getGalleriesData } from '@/lib/galleries';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 async function getGalleriesWithPreviews() {
-  return galleriesData.galleries.map((gallery) => ({
+  const data = await getGalleriesData();
+  return data.galleries.map((gallery) => ({
     ...gallery,
     preview: gallery.images[0]?.image || null,
   }));

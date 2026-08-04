@@ -1,13 +1,14 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import galleriesData from "@/data/galleries.json";
+import { getGalleriesData } from "@/lib/galleries";
 import GalleryClient from "./GalleryClient";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getGalleryData(id: string) {
-  const gallery = galleriesData.galleries.find(
+  const data = await getGalleriesData();
+  const gallery = data.galleries.find(
     (g) => g.id.toLowerCase() === id.toLowerCase()
   );
 
