@@ -654,6 +654,12 @@ export const galleriesData = {
           "caption": "This photograph captures the tranquil beauty of a wheat field at sunset, with the sun casting a warm, golden glow across the landscape. The composition is masterful, with the wheat stalks leading the eye towards the radiant horizon. The interplay of light and shadow creates a perfect balance, highlighting the textures of the wheat and the serene atmosphere. This image would be a perfect focal point for a living room, evoking a feeling of calm and natural splendour.",
           "title": "Sunset Serenade",
           "alt": "A wheat field bathed in the golden light of a setting sun, creating a serene and picturesque scene."
+        },
+        {
+          "image": "/gallery-images/l_59.jpg",
+          "caption": "This photograph captures the tranquil beauty of a sunset, where the sun's golden rays pierce through the clouds, casting a landscape in a warm, inviting glow. The silhouette of a lone tree and a distant vehicle add a perfect touch of solitude and scale, making the scene both intimate and expansive. The composition, with the sun positioned centrally, draws the viewer's eye across the horizon, creating a sense of depth and vastness. This image would be a perfect focal point for a modern gallery wall, enhancing any room with its serene and contemplative atmosphere.",
+          "title": "Sunset Serenity",
+          "alt": "A serene sunset scene with a lone tree and a distant vehicle silhouetted against a vibrant sky, creating a perfect balance of light and shadow."
         }
       ]
     },
