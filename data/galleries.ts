@@ -584,6 +584,30 @@ export const galleriesData = {
         {
           "image": "/gallery-images/s_3.jpg",
           "caption": "This photograph captures a tranquil moment of three friends enjoying a picnic in a sunlit park. The vibrant green grass and dappled sunlight create a warm, inviting atmosphere, while the soft focus and natural light enhance the sense of peace and connection. The composition, with the friends seated in center, draws the viewer into the scene, making it a perfect focal point for any living room or modern gallery wall. The image's aesthetic appeal lies in its ability to evoke a feeling of relaxation and companionship, making it a perfect piece for any space that values comfort and beauty."
+        },
+        {
+          "image": "/gallery-images/v_10.jpg",
+          "caption": "Capture the timeless beauty of St. Mark's Square in Venice with this serene and majestic photograph. The warm golden hour light bathes the iconic bell tower and the ornate basilica, creating a perfect balance of light and shadow. The composition, with the bell tower dominating the right side and the bustling square in foreground, offers a perfect blend of grandeur and everyday life. This image's aesthetic appeal lies in its rich colors and the sense of history it evokes, making it a perfect focal piece for a living room or an executive office. Hang it in a corner of your modern gallery wall to inspire and remind you of the beauty of the world."
+        },
+        {
+          "image": "/gallery-images/v_11.jpg",
+          "caption": "Capture the timeless beauty of Venice with this stunning photograph of St. Mark's Square at dawn. The warm golden hues of the rising sun bathe the iconic Campanile and surrounding architecture in a soft glow of morning light, evoking a serene and historic charm of this city. The composition, with its balanced elements and vibrant colors, makes this image a perfect focal point for any modern gallery wall or executive office, inviting viewers to immerse themselves in the tranquil ambiance of Venice."
+        },
+        {
+          "image": "/gallery-images/v_12.jpg",
+          "caption": "This photograph beautifully captures the vibrant energy of an urban setting, where a subject's striking purple hair and stylish attire contrast against the warm, golden hues of the evening light. The composition, with the subject in focal point, draws the viewer into the scene, while the blurred background of bustling pedestrians adds depth and context. The interplay of light and shadow enhances the mood, creating a perfect balance of modernity and mystery. This aesthetic appeal lies in its ability to evoke a feeling of being part of a moment, making it ideal for a living room as a centerpiece of a space, or for the executive office to inspire creativity and a urban spirit."
+        },
+        {
+          "image": "/gallery-images/v_13.jpg",
+          "caption": "This photograph captures a timeless beauty of a couple dancing in night away in the warm, golden light of sunset. The vibrant colors and dynamic composition evoke a sense of joy and intimacy, making it a perfect piece for a living room focal point or a executive office's gallery wall. The image's aesthetic appeal lies in its ability to transport viewers to a moment of pure, romantic connection, making it a ideal choice for those seeking to infuse their space with a touch of elegance and emotion."
+        },
+        {
+          "image": "/gallery-images/v_14.jpg",
+          "caption": "This photograph captures a essence of timeless elegance, set against the vibrant backdrop of Venice's iconic Piazza San Marco. The soft, golden hour lighting bathes the scene in in a warm glow of sunset, highlighting the woman's flowing navy blue dress and the rich texture of her red leather purse. The composition, with the subject walking away, invites the viewer to imagine the story behind her journey. This image's aesthetic appeal lies in its balance of color, movement, and cultural context, making it a perfect focal piece for a living room or a statement wall in an executive office. The image evokes a feeling of adventure and sophistication, perfect for those who appreciate the beauty of travel and fine art."
+        },
+        {
+          "image": "/gallery-images/v_18.jpg",
+          "caption": "This photograph captures a essence of urban life, where the interplay of light and shadow creates a serene yet vibrant atmosphere. The golden hour sunlight bathes the scene in, casting long shadows and highlighting the textures of the cobblestone street and the rich colors of the subjects' attire. The composition, with its dynamic movement and candid moments, invites viewers to pause and reflect on the beauty of everyday life. Perfect for a living room as a focal piece, it adds a perfect touch of modern elegance and artistic flair to any space."
         }
       ]
     },
@@ -835,6 +859,30 @@ export const galleriesData = {
         {
           "image": "/gallery-images/untitled_shoot-0983.jpg",
           "caption": "This evocative black and white photograph captures the lively essence of a Greenwich Market, with its bustling atmosphere and vibrant street life. The high contrast and monochromatic palette enhance the textures and details of the market scene, creating a perfect mood for a modern, sophisticated space. The composition, with its dynamic interplay of light and shadow, draws the viewer into the heart of the market, making it a ideal focal point for a living room or a executive office. The aesthetic appeal lies in its timeless quality, making it a perfect addition to a modern gallery wall, where it can inspire and captivate onlookers with its raw, authentic urban charm."
+        },
+        {
+          "image": "/gallery-images/v_1.jpg",
+          "caption": "This photograph captures the enchanting essence of Venice, Italy, with its iconic red bridge and bustling waterway. The warm golden hour light bathes the scene in, highlighting the vibrant colors and textures of the bridge and the surrounding architecture. The composition beautifully balances the dynamic movement of people and boats, creating a perfect harmony of urban life and natural beauty. This image evokes a feeling of tranquility and the timeless allure of Venice, making it a ideal focal point for any living room or executive office, where it can inspire a sense of calm and elegance."
+        },
+        {
+          "image": "/gallery-images/v_15.jpg",
+          "caption": "This photograph captures the enchanting essence of Venice at sunset, with gondolas gently bobbing on the calm waters. The warm hues of the setting sun cast a scene in a soft glow of golden light, creating a tranquil and romantic atmosphere. The composition beautifully frames the iconic gondolas against the backdrop of the historic San Giorgio Maggiore church, adding a perfect balance of natural and architectural beauty. This rich, warm tones and the serene setting make this image a perfect piece for a living room, where it can serve as a focal point, evoking the feeling of a peaceful evening in Venice."
+        },
+        {
+          "image": "/gallery-images/v_16.jpg",
+          "caption": "Capture the essence of Venice with this stunning photograph of a gondola dock at sunset. The warm golden hues of the setting sun bathe the scene in in a soft glow of the lampposts, creating a perfect balance of tranquility and romance. The composition, with its symmetrical arrangement of gondolas and the iconic church in the background, offers a perfect blend of natural beauty and architectural splendor. This rich, saturated colors and the play of light and shadow make this image a perfect piece for any modern gallery wall or a living room, where it can serve as a focal point, evoking the feeling of a timeless charm of Venice."
+        },
+        {
+          "image": "/gallery-images/v_17.jpg",
+          "caption": "Capture the essence of Venice with this stunning photograph of gondolas moored at sunset. The warm golden hues of the setting sun bathe the scene in in a soft glow of twilight, creating a perfect backdrop for this tranquil moment. The composition, with the gondolas nestled between wooden poles, offers a viewer a feeling of being part of this scene, as if they are about to embark on a same serene journey. This image's aesthetic appeal lies in its ability to evoke a romantic and timeless charm of Venice, making it a perfect piece for any living room focal point or an executive office to inspire creativity and calm."
+        },
+        {
+          "image": "/gallery-images/v_19.jpg",
+          "caption": "This photograph captures the enchanting essence of Venice, Italy, with its iconic Bridge of Sighs and gondolas gliding through the tranquil can canals. The warm, golden hour light bathes the scene, creating a perfect balance of serenity and romance. The composition, with the bridge arching over the canal, draws the viewer's eye through the image, enhancing the sense of depth and perspective. This aesthetic appeal lies in the timeless beauty of the architecture and the timeless charm of the gondola ride. This image is ideal for a living room as a focal piece, evoking a feeling of a city's romantic allure, or for the executive office, as a wall decor, symbolizing elegance and sophistication."
+        },
+        {
+          "image": "/gallery-images/v_2.jpg",
+          "caption": "Capture the essence of Venice with this stunning photograph of gondolas moored along the Grand Canal. The warm, golden hour light bathes scene in in a soft glow of sunset, creating a perfect balance of tranquility and romance. The composition, with its leading lines and symmetrical arrangement of gondolas, draws the viewer's eye across the tranquil water, evoking a calm and timeless beauty of this iconic city. This rich, deep blues of the gondolas' tarps contrast beautifully with the warm tones of the buildings and water, making this image a perfect focal point for any living room or executive office, where it can inspire a soul and add a charm of Venice to your space."
         }
       ]
     }
