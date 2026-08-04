@@ -50,6 +50,14 @@ export async function POST(request: Request) {
 
     const [removedImage] = gallery.images.splice(targetIndex, 1);
 
+    // Track deleted image in tombstones list so it never reappears on merge/refresh
+    if (!galleriesData.deletedImages) {
+      galleriesData.deletedImages = [];
+    }
+    if (removedImage && removedImage.image && !galleriesData.deletedImages.includes(removedImage.image)) {
+      galleriesData.deletedImages.push(removedImage.image);
+    }
+
     // Save updated JSON to persistent cloud storage & local disk
     const savedToCloud = await saveGalleriesData(galleriesData);
 

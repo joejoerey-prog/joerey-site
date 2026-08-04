@@ -22,6 +22,7 @@ export interface Gallery {
 
 export interface GalleriesData {
   galleries: Gallery[];
+  deletedImages?: string[];
 }
 
 const BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_BUCKET_ID || '69e4ded8000b9ee50c85';
@@ -45,16 +46,23 @@ function getAppwriteStorage() {
 }
 
 /**
- * Merges local galleries.json (from git commits) with cloud storage data (from admin API).
- * Any new images present in localGalleriesData that are missing in cloud storage are added,
- * ensuring git-pushed images from the uploader app always appear on the website.
+ * Retrieves gallery data from Appwrite Storage cloud backup.
+ * Filters out any images explicitly added to deletedImages tombstones,
+ * ensuring deleted images NEVER return upon page refresh.
  */
 export async function getGalleriesData(): Promise<GalleriesData> {
   const localData = localGalleriesData as GalleriesData;
   const storage = getAppwriteStorage();
 
   if (!storage) {
-    return localData;
+    const deletedSet = new Set(localData.deletedImages || []);
+    return {
+      ...localData,
+      galleries: localData.galleries.map((g) => ({
+        ...g,
+        images: g.images.filter((img) => !deletedSet.has(img.image)),
+      })),
+    };
   }
 
   try {
@@ -71,41 +79,55 @@ export async function getGalleriesData(): Promise<GalleriesData> {
       }
 
       if (cloudData && Array.isArray(cloudData.galleries)) {
+        const deletedPaths = new Set<string>(cloudData.deletedImages || []);
+
         let hasNewLocalImages = false;
 
-        // Merge local git data into cloud data to include newly uploaded photos
+        // Merge local git data into cloud data ONLY for non-deleted images
         const mergedGalleries = cloudData.galleries.map((cloudGal: Gallery) => {
           const localGal = localData.galleries.find(
             (g) => g.id.toLowerCase() === cloudGal.id.toLowerCase()
           );
-          if (!localGal) return cloudGal;
 
-          const cloudImagePaths = new Set(cloudGal.images.map((img) => img.image));
+          // Clean cloud images of any deleted paths
+          const cleanCloudImages = cloudGal.images.filter(
+            (img) => !deletedPaths.has(img.image)
+          );
+
+          if (!localGal) return { ...cloudGal, images: cleanCloudImages };
+
+          const cloudImagePaths = new Set(cleanCloudImages.map((img) => img.image));
           const newLocalImages = localGal.images.filter(
-            (img) => !cloudImagePaths.has(img.image)
+            (img) => !cloudImagePaths.has(img.image) && !deletedPaths.has(img.image)
           );
 
           if (newLocalImages.length > 0) {
             hasNewLocalImages = true;
             return {
               ...cloudGal,
-              images: [...cloudGal.images, ...newLocalImages],
+              images: [...cleanCloudImages, ...newLocalImages],
             };
           }
-          return cloudGal;
+
+          return { ...cloudGal, images: cleanCloudImages };
         });
 
         // Also check for any new local gallery IDs not present in cloud
         localData.galleries.forEach((localGal) => {
           if (!mergedGalleries.some((g: Gallery) => g.id.toLowerCase() === localGal.id.toLowerCase())) {
-            mergedGalleries.push(localGal);
+            const cleanLocalImages = localGal.images.filter(
+              (img) => !deletedPaths.has(img.image)
+            );
+            mergedGalleries.push({ ...localGal, images: cleanLocalImages });
             hasNewLocalImages = true;
           }
         });
 
-        const result: GalleriesData = { galleries: mergedGalleries };
+        const result: GalleriesData = {
+          galleries: mergedGalleries,
+          deletedImages: Array.from(deletedPaths),
+        };
 
-        // If new git-pushed images were found, sync merged dataset to Appwrite Cloud Storage
         if (hasNewLocalImages) {
           saveGalleriesData(result).catch((err) =>
             console.error('Failed to sync merged galleries to Appwrite:', err.message)
@@ -119,7 +141,14 @@ export async function getGalleriesData(): Promise<GalleriesData> {
     console.warn('Could not load galleries from Appwrite storage, using local fallback:', err.message);
   }
 
-  return localData;
+  const deletedSet = new Set(localData.deletedImages || []);
+  return {
+    ...localData,
+    galleries: localData.galleries.map((g) => ({
+      ...g,
+      images: g.images.filter((img) => !deletedSet.has(img.image)),
+    })),
+  };
 }
 
 /**
