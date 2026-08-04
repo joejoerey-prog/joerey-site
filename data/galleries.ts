@@ -648,6 +648,12 @@ export const galleriesData = {
           "caption": "This evocative photograph captures the serene beauty of a sunset, with the sun partially obscured by the horizon, casting a sky in warm hues of orange and yellow. Three wind turbines stand silhouetted against this vibrant backdrop, their blades poised as if frozen in time. The composition is both tranquil and dynamic, with the interplay of light and shadow creating a sense of depth and atmosphere. This image would make a perfect focal point in a living room, evoking a feeling of calm and the promise of sustainable energy.",
           "title": "Sunset Turbines",
           "alt": "A sunset scene featuring wind turbines silhouetted against a vibrant orange and yellow sky, with the sun partially hidden behind the horizon."
+        },
+        {
+          "image": "/gallery-images/l_238.jpg",
+          "caption": "This photograph captures the tranquil beauty of a wheat field at sunset, with the sun casting a warm, golden glow across the landscape. The composition is masterful, with the wheat stalks leading the eye towards the radiant horizon. The interplay of light and shadow creates a perfect balance, highlighting the textures of the wheat and the serene atmosphere. This image would be a perfect focal point for a living room, evoking a feeling of calm and natural splendour.",
+          "title": "Sunset Serenade",
+          "alt": "A wheat field bathed in the golden light of a setting sun, creating a serene and picturesque scene."
         }
       ]
     },
