@@ -7,14 +7,16 @@ import { getGalleriesData } from '@/lib/galleries';
 
 export const dynamic = 'force-dynamic';
 
-async function commitGalleriesJsonToGitHub(newContentJson: string, commitMessage: string): Promise<boolean> {
+async function commitGalleriesJsonToGitHub(newContentJson: string, commitMessage: string): Promise<{ success: boolean; error?: string }> {
   const owner = 'joejoerey-prog';
   const repo = 'joerey-site';
   const pathInRepo = 'data/galleries.json';
   const token = process.env.GITHUB_TOKEN || 'PmQI7K4psVrienk';
 
   const getFileUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${pathInRepo}`;
-  const authHeader = `Basic ${Buffer.from(`${owner}:${token}`).toString('base64')}`;
+  const authHeader = token.startsWith('ghp_') || token.startsWith('github_pat_')
+    ? `Bearer ${token}`
+    : `token ${token}`;
 
   try {
     const res = await fetch(getFileUrl, {
@@ -29,7 +31,7 @@ async function commitGalleriesJsonToGitHub(newContentJson: string, commitMessage
     if (!res.ok) {
       const errText = await res.text();
       console.error('Failed to get galleries.json metadata from GitHub:', errText);
-      return false;
+      return { success: false, error: `GitHub GET failed: ${res.status} ${errText}` };
     }
 
     const fileData = await res.json();
@@ -55,13 +57,13 @@ async function commitGalleriesJsonToGitHub(newContentJson: string, commitMessage
     if (!putRes.ok) {
       const errText = await putRes.text();
       console.error('Failed to commit galleries.json update to GitHub:', errText);
-      return false;
+      return { success: false, error: `GitHub PUT commit failed: ${putRes.status} ${errText}` };
     }
 
-    return true;
+    return { success: true };
   } catch (err: any) {
     console.error('GitHub API commit error:', err.message);
-    return false;
+    return { success: false, error: err.message };
   }
 }
 
@@ -120,7 +122,7 @@ export async function POST(request: Request) {
 
     // Commit change directly to GitHub repository
     const commitMsg = `chore(admin): remove image ${removedImage?.image || targetIndex} from gallery ${galleryId}`;
-    const committedToGit = await commitGalleriesJsonToGitHub(jsonString, commitMsg);
+    const commitResult = await commitGalleriesJsonToGitHub(jsonString, commitMsg);
 
     // Attempt local image file deletion
     let fileDeleted = false;
@@ -145,10 +147,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: committedToGit
+      message: commitResult.success
         ? 'Image removed and committed directly to GitHub repository.'
-        : 'Image removed locally (GitHub commit pending).',
-      committedToGit,
+        : `Image removed locally, but GitHub commit failed: ${commitResult.error}`,
+      committedToGit: commitResult.success,
+      gitError: commitResult.error || null,
       fileDeleted,
       removedImage,
       galleries: galleriesData.galleries,
