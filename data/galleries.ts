@@ -957,6 +957,12 @@ export const galleriesData = {
         {
           "image": "/gallery-images/w_10.jpg",
           "caption": "This enchanting photograph captures the essence of a tranquil garden scene, beautifully framed within a white walls of a charming house. The vibrant colors of the flowers\u2014purple, yellow, and white\u2014contrast beautifully with the soft, lace curtains and the pristine white walls, creating a perfect balance of nature and elegance. The composition is both simple and striking, with the window acting as a focal point, drawing the viewer's eye into the scene. This image evokes a feeling of peace and warmth, making it an ideal piece for a living room or executive office, where it can serve as a perfect centerpiece, inspiring a soul and adding a touch of natural beauty to any space."
+        },
+        {
+          "image": "/gallery-images/l_258.jpg",
+          "caption": "This photograph captures the tranquil beauty of a seaside landscape, where the golden sands meet the deep blue sea under a vast, lightly clouded sky. The composition draws the eye from the foreground's textured grass and earthy tones to the expansive horizon, creating a perfect balance between land and sea. The soft, natural light enhances the serene atmosphere, making it an ideal focal point for a living room or a executive office, where it can inspire a sense of calm and connection with nature.",
+          "title": "Seaside Serenity",
+          "alt": "A serene seaside scene with golden sands, deep blue sea, and a lightly clouded sky, ideal for interior decor."
         }
       ]
     }
