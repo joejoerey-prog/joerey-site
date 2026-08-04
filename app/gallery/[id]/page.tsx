@@ -1,22 +1,21 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { galleriesData } from "@/data/galleries";
+import { getGalleriesData } from "@/lib/galleriesStore";
 import GalleryClient from "./GalleryClient";
-
-type GalleryImage = { image: string; caption: string };
-type GalleryItem = { id: string; title: string; description: string; images: GalleryImage[] };
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function generateStaticParams() {
-  return galleriesData.galleries.map((gallery) => ({
+  const data = await getGalleriesData();
+  return data.galleries.map((gallery) => ({
     id: gallery.id,
   }));
 }
 
-function getGalleryData(id: string) {
-  const gallery = galleriesData.galleries.find(
+async function getGalleryData(id: string) {
+  const data = await getGalleriesData();
+  const gallery = data.galleries.find(
     (g) => g.id.toLowerCase() === id.toLowerCase()
   );
 
@@ -30,6 +29,8 @@ function getGalleryData(id: string) {
       id: `${gallery.id}-${idx}`,
       image: img.image,
       caption: img.caption,
+      title: img.title,
+      alt: img.alt,
     })),
   };
 }
@@ -40,7 +41,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const gallery = getGalleryData(id);
+  const gallery = await getGalleryData(id);
 
   if (!gallery) {
     notFound();
@@ -81,7 +82,7 @@ export default async function GalleryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const gallery = getGalleryData(id);
+  const gallery = await getGalleryData(id);
 
   if (!gallery) {
     notFound();

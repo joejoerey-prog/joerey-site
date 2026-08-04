@@ -3,6 +3,9 @@ import fs from 'fs/promises';
 import existsSync from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
+import { getGalleriesData, saveGalleriesData } from '@/lib/galleriesStore';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
@@ -16,12 +19,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const dataFilePath = path.join(process.cwd(), 'data', 'galleries.json');
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    const galleriesData = JSON.parse(fileContent);
+    const galleriesData = await getGalleriesData();
 
     const gallery = galleriesData.galleries.find(
-      (g: { id: string }) => g.id.toLowerCase() === String(galleryId).toLowerCase()
+      (g) => g.id.toLowerCase() === String(galleryId).toLowerCase()
     );
 
     if (!gallery) {
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
       targetIndex = imageIndex;
     } else if (imagePath) {
       targetIndex = gallery.images.findIndex(
-        (img: { image: string }) => img.image === imagePath || img.image.endsWith(imagePath)
+        (img) => img.image === imagePath || img.image.endsWith(imagePath)
       );
     }
 
@@ -49,12 +50,12 @@ export async function POST(request: Request) {
 
     const [removedImage] = gallery.images.splice(targetIndex, 1);
 
-    // Save updated JSON
-    await fs.writeFile(dataFilePath, JSON.stringify(galleriesData, null, 2), 'utf-8');
+    // Save updated JSON to persistent cloud storage & local disk
+    const savedToCloud = await saveGalleriesData(galleriesData);
 
-    // Attempt physical file removal from public directory
+    // Attempt physical file removal from public directory if accessible
     let fileDeleted = false;
-    let fileDeleteNote = '';
+    let fileDeleteNote = savedToCloud ? 'Saved to cloud database.' : 'Saved locally.';
 
     if (removedImage && removedImage.image) {
       const relPath = removedImage.image.replace(/^\//, '');
@@ -64,12 +65,10 @@ export async function POST(request: Request) {
         try {
           await fs.unlink(primaryDiskPath);
           fileDeleted = true;
-          fileDeleteNote = `Deleted file at ${relPath}`;
+          fileDeleteNote += ` Deleted local file ${relPath}.`;
         } catch (err: any) {
-          fileDeleteNote = `Failed to delete file: ${err.message}`;
+          fileDeleteNote += ` Could not delete local file: ${err.message}.`;
         }
-      } else {
-        fileDeleteNote = `File did not exist on disk at ${relPath}`;
       }
 
       // Check if filename also exists in public/photos/{galleryId}/
@@ -79,7 +78,6 @@ export async function POST(request: Request) {
         try {
           await fs.unlink(secondaryDiskPath);
           fileDeleted = true;
-          fileDeleteNote += ` (also deleted from photos/${galleryId}/${filename})`;
         } catch (_) {
           // ignore secondary error
         }
@@ -89,9 +87,10 @@ export async function POST(request: Request) {
     // Revalidate paths for Next.js ISR/SSG
     try {
       revalidatePath('/', 'layout');
+      revalidatePath('/admin', 'page');
       revalidatePath(`/gallery/${galleryId}`, 'page');
     } catch (_) {
-      // ignore revalidation warnings in dev mode
+      // ignore revalidation warnings
     }
 
     return NextResponse.json({
@@ -99,6 +98,7 @@ export async function POST(request: Request) {
       message: `Image and metadata removed successfully. ${fileDeleteNote}`,
       fileDeleted,
       removedImage,
+      galleries: galleriesData.galleries,
     });
   } catch (error: any) {
     console.error('Error deleting image:', error);

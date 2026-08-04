@@ -1,19 +1,16 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { getGalleriesData } from '@/lib/galleriesStore';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function GET() {
   try {
-    const dataFilePath = path.join(process.cwd(), 'data', 'galleries.json');
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    const galleriesData = JSON.parse(fileContent);
+    const data = await getGalleriesData();
 
     return NextResponse.json({
       success: true,
-      galleries: galleriesData.galleries || [],
+      galleries: data.galleries || [],
     });
   } catch (error: any) {
     return NextResponse.json(

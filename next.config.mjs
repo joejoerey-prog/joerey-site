@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   outputFileTracingExcludes: {
-    '*': ['public/gallery-images/**', 'public/gallery-images/*'],
+    '*': [
+      'public/gallery-images/**',
+      'public/photos/**',
+      'public/**',
+    ],
   },
   images: {
     unoptimized: true,

@@ -3,18 +3,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ShopButton from '@/components/ShopButton';
-import { galleriesData } from '@/data/galleries';
+import { getGalleriesData } from '@/lib/galleriesStore';
 
-function getGalleriesWithPreviews() {
-  return galleriesData.galleries.map((gallery) => ({
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+async function getGalleriesWithPreviews() {
+  const data = await getGalleriesData();
+  return data.galleries.map((gallery) => ({
     ...gallery,
     preview: gallery.images[0]?.image || null,
   }));
 }
 
-
 export default async function HomePage() {
-  const galleries = getGalleriesWithPreviews();
+  const galleries = await getGalleriesWithPreviews();
 
   return (
     <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start">
