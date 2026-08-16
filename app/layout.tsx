@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     siteName: "Joe Rey Photography",
     images: [
       {
-        url: "/photos/land-light/rapeseed-gold.jpg",
+        url: "/photos/joe-rey-portrait.jpg",
         alt: "Joe Rey Photography portfolio cover",
       },
     ],

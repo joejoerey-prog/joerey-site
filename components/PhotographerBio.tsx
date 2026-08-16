@@ -40,11 +40,12 @@ export default function PhotographerBio() {
             <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden glass-card p-3">
               <div className="relative w-full h-full rounded-xl overflow-hidden">
                 <Image
-                  src="/photos/land-light/rapeseed-gold.jpg"
-                  alt="Joe Rey Photography Portfolio"
+                  src="/photos/joe-rey-portrait.jpg"
+                  alt="Joe Rey"
                   fill
-                  className="object-cover"
+                  className="object-cover object-center"
                   sizes="(max-width: 1024px) 100vw, 40vw"
+                  priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80" />
                 

@@ -27,10 +27,10 @@ export default function PrintCTA() {
           {/* Background Ambient Glow & Image Overlay */}
           <div className="absolute inset-0 z-0 opacity-20">
             <Image
-              src="/photos/land-light/rapeseed-gold.jpg"
+              src="/gallery-images/2025_06_06250048.jpg"
               alt="Digital Download Background"
               fill
-              className="object-cover filter blur-sm scale-105"
+              className="object-cover filter blur-sm scale-105 opacity-40"
             />
             <div className="absolute inset-0 bg-background/90" />
           </div>
