@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Pacifico } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/Header";
@@ -10,12 +9,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-
-const pacifico = Pacifico({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-pacifico",
-});
 
 export const metadata: Metadata = {
   title: "Joe Rey Photography",
@@ -48,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head></head>
-      <body className={`${pacifico.variable} antialiased`}>
+      <body className="antialiased">
         <Clarity />
         <MailerLite />
         <Header />
@@ -60,3 +53,4 @@ export default function RootLayout({
     </html>
   );
 }
+

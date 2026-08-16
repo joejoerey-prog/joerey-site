@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingBag } from 'lucide-react';
 import { event as gaEvent } from '@/lib/gtag';
 
 export default function Header() {
@@ -21,19 +20,26 @@ export default function Header() {
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
-    { href: 'https://payhip.com/JRPhotoStore', label: 'Store', external: true },
+    { href: 'https://payhip.com/JRPhotoStore', label: 'Digital Store', external: true },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border shadow-sm">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/60 shadow-lg shadow-black/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 flex-shrink-0">
-            <div className="flex items-center justify-center w-10 h-10 rounded-md border border-foreground/20 bg-background-alt hover:bg-foreground/5 transition">
-              <span className="font-serif font-bold text-lg text-foreground">JR</span>
+          <Link href="/" className="flex items-center gap-3.5 group">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl border border-accent/40 bg-accent/15 text-accent font-serif font-bold text-lg group-hover:scale-105 group-hover:bg-accent group-hover:text-background transition-all duration-300 shadow-sm">
+              JR
             </div>
-            <span className="hidden sm:inline font-serif text-lg font-semibold text-foreground">Joe Rey Photography</span>
+            <div className="flex flex-col">
+              <span className="font-serif text-lg font-bold text-foreground tracking-tight group-hover:text-accent transition-colors">
+                Joe Rey Photography
+              </span>
+              <span className="text-[10px] font-mono tracking-widest text-foreground-muted uppercase">
+                Fine Art & Digital Licenses
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -49,13 +55,16 @@ export default function Header() {
                     ? () => gaEvent('payhip_click', { location: 'header' })
                     : undefined
                 }
-                className={`text-sm font-medium transition-colors ${
-                  !item.external && isActive(item.href)
-                    ? 'text-foreground border-b-2 border-accent pb-1'
+                className={`text-sm font-medium transition-all duration-300 flex items-center gap-1.5 ${
+                  item.external
+                    ? 'px-4 py-2 rounded-full glass-pill border-accent/30 text-accent hover:bg-accent hover:text-background font-semibold'
+                    : isActive(item.href)
+                    ? 'text-foreground font-semibold relative after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-accent after:rounded-full'
                     : 'text-foreground-muted hover:text-foreground'
                 }`}
               >
-                {item.label}
+                {item.external && <ShoppingBag size={14} />}
+                <span>{item.label}</span>
               </Link>
             ))}
           </nav>
@@ -63,27 +72,29 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-md text-foreground hover:bg-foreground/5 transition"
+            className="md:hidden p-2.5 rounded-xl border border-border bg-background-alt text-foreground hover:bg-foreground/10 transition"
             aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation Drawer */}
         {isMenuOpen && (
-          <nav className="md:hidden border-t border-border bg-background-alt">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+          <nav className="md:hidden border-t border-border/60 bg-background-alt/95 backdrop-blur-xl rounded-b-2xl mb-4 overflow-hidden">
+            <div className="px-3 pt-3 pb-4 space-y-2">
               {menuItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   target={item.external ? '_blank' : undefined}
                   rel={item.external ? 'noopener noreferrer' : undefined}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    !item.external && isActive(item.href)
-                      ? 'text-foreground bg-foreground/5'
-                      : 'text-foreground-muted hover:text-foreground hover:bg-foreground/5'
+                  className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                    item.external
+                      ? 'text-accent bg-accent/15 border border-accent/30 font-semibold'
+                      : isActive(item.href)
+                      ? 'text-foreground bg-white/10 font-semibold'
+                      : 'text-foreground-muted hover:text-foreground hover:bg-white/5'
                   }`}
                   onClick={() => {
                     if (!item.external) {
@@ -93,7 +104,10 @@ export default function Header() {
                     }
                   }}
                 >
-                  {item.label}
+                  <div className="flex items-center justify-between">
+                    <span>{item.label}</span>
+                    {item.external && <ShoppingBag size={16} className="text-accent" />}
+                  </div>
                 </Link>
               ))}
             </div>
@@ -103,4 +117,5 @@ export default function Header() {
     </header>
   );
 }
+
 
