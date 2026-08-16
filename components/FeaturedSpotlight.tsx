@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Camera, Sparkles, ArrowRight, Eye } from 'lucide-react';
 import Lightbox from 'yet-another-react-lightbox';
-import 'yet-another-react-lightbox/styles.css';
 import { Gallery } from '@/lib/galleries';
 
 export interface SpotlightItem {
