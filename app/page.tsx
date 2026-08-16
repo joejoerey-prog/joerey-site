@@ -21,19 +21,20 @@ export default async function HomePage() {
   const galleries = await getGalleriesWithPreviews();
 
   // Construct hero slides from top preview image of each gallery
-  const heroSlides: HeroSlide[] = galleries
-    .map((gallery) => {
-      const topImage = gallery.images[0];
-      if (!topImage || !topImage.image) return null;
-      return {
+  const heroSlides: HeroSlide[] = [];
+  galleries.forEach((gallery) => {
+    const topImage = gallery.images[0];
+    if (topImage && topImage.image) {
+      heroSlides.push({
         image: topImage.image,
         title: topImage.caption || gallery.title,
         galleryTitle: gallery.title,
         galleryId: gallery.id,
         location: gallery.title,
-      };
-    })
-    .filter((slide): slide is HeroSlide => slide !== null);
+      });
+    }
+  });
+
 
   return (
     <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-start overflow-x-hidden">
