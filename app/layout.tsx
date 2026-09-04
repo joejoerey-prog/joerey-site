@@ -6,9 +6,10 @@ import Footer from "@/components/Footer";
 import Clarity from "@/app/clarity";
 import MailerLite from "@/app/mailerlite";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 export const metadata: Metadata = {
   title: "Joe Rey Photography",
@@ -40,7 +41,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+        {/* Umami Cloud Analytics */}
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="c497ce05-8146-4b84-bd17-164820bb26fa"
+        ></script>
+      </head>
       <body className="antialiased">
         <Clarity />
         <MailerLite />
@@ -48,7 +56,8 @@ export default function RootLayout({
         {children}
         <Footer />
         <SpeedInsights />
-        {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
+        {GTM_ID ? <GoogleTagManager gtmId={GTM_ID} /> : null}
+        {GA_ID && !GTM_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
       </body>
     </html>
   );
